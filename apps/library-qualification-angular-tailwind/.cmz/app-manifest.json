@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "application-shell-manifest",
+  "app_name": "library-qualification-angular-tailwind",
+  "profile": "angular-pwa",
+  "design_ref": {
+    "path": "designs/library-qualification-bench.application-design.json",
+    "sha256": "f7b13669b3f644fff3850a8289030910db948880fdab53b162a7f32f1bb42e50"
+  },
+  "experience_id": "visitor-web",
+  "generated_files": [
+    {
+      "path": ".cmz/libraries.json",
+      "bytes": 110,
+      "sha256": "cda5c67b852885ad3f90d4a3f57dc792337c6a5dc45715ac351978cbe2587dd5"
+    },
+    {
+      "path": ".cmz/pages/page_a11ca71000000001.json",
+      "bytes": 3885,
+      "sha256": "e8e5099f928922fc3cd760418ac38cf7964be1c3e5c46663011d7dc044522384"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "bytes": 605,
+      "sha256": "6e51440b2998db6419e541c5a300bb995a8453c6e758e85fa7447715173f7cda"
+    },
+    {
+      "path": "project.json",
+      "bytes": 2946,
+      "sha256": "9b02e887d704d97dba8dd25d44589bb260e9b6bbdbf35233d164fb274cea1e34"
+    },
+    {
+      "path": "public/icon.svg",
+      "bytes": 439,
+      "sha256": "db6df63fae45c9d31f8fe150cffc13da1e410939ffae255d715e66c4494c03bc"
+    },
+    {
+      "path": "public/manifest.webmanifest",
+      "bytes": 402,
+      "sha256": "6cc21dad7d620f04a8dc38fc35627d7d8ca9d9a7f0de7d4916c88c2a5eac785a"
+    },
+    {
+      "path": "public/sw.js",
+      "bytes": 1370,
+      "sha256": "6935457689be13ebdb56f11bcadb9567e08ac1ca0486bbe9493cc4021f2434b8"
+    },
+    {
+      "path": "src/app/access.guard.spec.ts",
+      "bytes": 3078,
+      "sha256": "327581a0bef78e5deb0bd2b98ca8a649e68eda5c753d8511ea0192018a5ce3df"
+    },
+    {
+      "path": "src/app/access.guard.ts",
+      "bytes": 2695,
+      "sha256": "61b8615133ed6a36c0a9a17f7374326646150684eb21bc1f24288755f5d04043"
+    },
+    {
+      "path": "src/app/app.config.ts",
+      "bytes": 429,
+      "sha256": "d5e1e35f01cd5c8c6cdf227e45e3a79b149e51ac31b89a51015042a396902eb4"
+    },
+    {
+      "path": "src/app/app.routes.ts",
+      "bytes": 377,
+      "sha256": "700e0493f883cfaec7c4d30fc54da26d8b062b48f8ba14c3d63c8fcd82a3309a"
+    },
+    {
+      "path": "src/app/app.ts",
+      "bytes": 218,
+      "sha256": "ab7d994b80e6ca15707505697e65b8cf51f996416ef0abe0fcd0889f1e971a5d"
+    },
+    {
+      "path": "src/app/pages/page_a11ca71000000001/page.component.ts",
+      "bytes": 538,
+      "sha256": "eeab3d7825bbd9a7d0f626177944f24a6a9d1dcfe19efe35a3f07f6b57e699f0"
+    },
+    {
+      "path": "src/index.html",
+      "bytes": 656,
+      "sha256": "84e0bf1094172ee801134c4a7514c7a3f2a5d22c5800e1cd5b93de2a52d64867"
+    },
+    {
+      "path": "src/main.ts",
+      "bytes": 378,
+      "sha256": "edc7fe56bc4aaece3356c113ed01058eac65dbe75c6eb8d8805eabb158a6f701"
+    },
+    {
+      "path": "src/styles.scss",
+      "bytes": 177,
+      "sha256": "c767a4c3638dccd4e7fe96a871c36a278201246aeff87c52c6a9c3e45a4ec6d4"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 219,
+      "sha256": "fd91d3ea094da3e090d850653996b55c62ea94c3a16011aad5bf76c1c9f02755"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 525,
+      "sha256": "b28ac4c581cb0561319bbf7b3d2ceab425c43177cd020a6efeba447cf3e5afb6"
+    },
+    {
+      "path": "tsconfig.spec.json",
+      "bytes": 204,
+      "sha256": "199c00abd5c5721eed4cb46fca6ba37f8883bf891e7242273d9c46e92d751b34"
+    }
+  ],
+  "tree_sha256": "0850b00324a02fde0e9943eeecff46c4f6dfae1e298cf7df4e314d8f32a21dcd"
+}

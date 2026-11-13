@@ -1,0 +1,100 @@
+{
+  "name": "library-qualification-angular-tailwind",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/library-qualification-angular-tailwind/src",
+  "i18n": {
+    "sourceLocale": "fr"
+  },
+  "tags": ["type:app", "experience:visitor-web"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/library-qualification-angular-tailwind",
+        "browser": "apps/library-qualification-angular-tailwind/src/main.ts",
+        "polyfills": ["@angular/localize/init"],
+        "tsConfig": "apps/library-qualification-angular-tailwind/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/library-qualification-angular-tailwind/public"
+          }
+        ],
+        "styles": [
+          "apps/library-qualification-angular-tailwind/src/styles.scss"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "750kb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "readyWhen": {
+        "signal": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "library-qualification-angular-tailwind:build:production"
+        },
+        "development": {
+          "buildTarget": "library-qualification-angular-tailwind:build:development"
+        }
+      }
+    },
+    "lint": {
+      "options": {
+        "lintFilePatterns": [
+          "apps/library-qualification-angular-tailwind/**/*.ts",
+          "apps/library-qualification-angular-tailwind/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "watch": false,
+        "runnerConfig": "tools/generator-platform/page-realization-vitest.config.mjs"
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "library-qualification-angular-tailwind:build",
+        "staticFilePath": "dist/apps/library-qualification-angular-tailwind/browser",
+        "spa": true
+      },
+      "readyWhen": {
+        "signal": true
+      },
+      "dependsOn": ["build"]
+    }
+  }
+}
