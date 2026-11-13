@@ -8,10 +8,10 @@
   },
   "operations": [
     {
-      "id": "list-home-block-infos",
+      "id": "list-editorial-blocks",
       "description": "Loads generic editorial blocks.",
       "item": {
-        "id": "home-block-info",
+        "id": "editorial-block",
         "description": "A generic editorial block.",
         "fields": [
           {
@@ -37,7 +37,7 @@
       "access": { "mode": "public" },
       "http": {
         "method": "GET",
-        "path": "cms/home-block-infos/actives/pwa",
+        "path": "editorial/blocks",
         "authentication": "none",
         "response_envelope": "simple"
       }

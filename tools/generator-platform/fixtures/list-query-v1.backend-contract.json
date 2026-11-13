@@ -15,7 +15,7 @@
       "authority": "declared",
       "status": "planned",
       "snapshot_uri": "tools/generator-platform/fixtures/editorial-blocks.v1.definition.json",
-      "sha256": "600fcf0341b266caa3cb20f4b160b4a0d458c3d13110a138d79945397ed39546"
+      "sha256": "9fb26fa4f6bb417f9115b58eed3395f77e84795b279823c4d21d59d9d1d51f12"
     }
   ],
   "services": [
@@ -37,7 +37,7 @@
   "security_schemes": [],
   "models": [
     {
-      "id": "home-block-info-wire",
+      "id": "editorial-block-wire",
       "kind": "object",
       "status": "planned",
       "description": "Generic wire item retained solely for the migration proof.",
@@ -77,11 +77,11 @@
       ]
     },
     {
-      "id": "home-block-info-list-wire",
+      "id": "editorial-block-list-wire",
       "kind": "array",
       "status": "planned",
       "description": "Generic wire collection retained solely for the migration proof.",
-      "items": { "kind": "model", "model_id": "home-block-info-wire" },
+      "items": { "kind": "model", "model_id": "editorial-block-wire" },
       "evidence": [
         {
           "source_id": "list-query-v1-source",
@@ -92,12 +92,12 @@
   ],
   "operations": [
     {
-      "id": "cms.list-home-block-infos",
+      "id": "editorial.list-blocks",
       "service_id": "settings-api",
       "status": "planned",
       "description": "Loads the generic list-query migration fixture.",
       "method": "GET",
-      "path": "/cms/home-block-infos/actives/pwa",
+      "path": "/editorial/blocks",
       "access": {
         "mode": "public",
         "security_scheme_ids": [],
@@ -111,7 +111,7 @@
           "description": "List available.",
           "body": {
             "media_type": "application/json",
-            "model_id": "home-block-info-list-wire",
+            "model_id": "editorial-block-list-wire",
             "envelope": {
               "kind": "object",
               "data_field": "data",

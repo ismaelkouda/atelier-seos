@@ -113,20 +113,20 @@ test('compile un contrat v2 en modèle d’exécution neutre et déterministe', 
     const query = first.queries[0];
     assert.deepEqual(query.port, {
         input: { kind: 'none' },
-        output: { kind: 'list', item_model_id: 'home-block-info' },
+        output: { kind: 'list', item_model_id: 'editorial-block' },
     });
     assert.deepEqual(query.request_policy, {
         authentication: { mode: 'omit' },
         cache: { mode: 'host', scope: 'public', refresh: 'bypass' },
     });
     assert.deepEqual(query.transport, {
-        operation_id: 'cms.list-home-block-infos',
+        operation_id: 'editorial.list-blocks',
         service_id: 'settings-api',
         method: 'GET',
-        path: '/cms/home-block-infos/actives/pwa',
+        path: '/editorial/blocks',
         success_response_status: 200,
         media_type: 'application/json',
-        collection_model_id: 'home-block-info-list-wire',
+        collection_model_id: 'editorial-block-list-wire',
         envelope: {
             kind: 'object',
             data_field: 'data',
@@ -206,7 +206,7 @@ test('conserve séparément le DTO wire et le read model renommé', () => {
     const definition = structuredClone(canonicalDefinition);
     const backendContract = structuredClone(canonicalBackend);
     const item = backendContract.models.find(
-        (model) => model.id === 'home-block-info-wire'
+        (model) => model.id === 'editorial-block-wire'
     );
     item.fields.push({
         name: 'description',
@@ -673,7 +673,7 @@ test('projette les échecs backend sans inventer leur modèle métier', () => {
         description: 'Rejected request.',
         body: {
             media_type: 'application/json',
-            model_id: 'home-block-info-wire',
+            model_id: 'editorial-block-wire',
             envelope: { kind: 'none' },
             evidence: backendContract.operations[0].responses[0].body.evidence,
         },
@@ -690,7 +690,7 @@ test('projette les échecs backend sans inventer leur modèle métier', () => {
         http_responses: [
             {
                 status: 422,
-                body_model_id: 'home-block-info-wire',
+                body_model_id: 'editorial-block-wire',
                 body_model_kind: 'object',
             },
         ],
@@ -709,7 +709,7 @@ test('refuse les paramètres non liés et les modèles imbriqués non prouvés',
     const nested = structuredClone(canonicalBackend);
     nested.models[0].fields[0].type = {
         kind: 'model',
-        model_id: 'home-block-info-wire',
+        model_id: 'editorial-block-wire',
     };
     assert.throws(
         () => compile({ backendContract: nested }),

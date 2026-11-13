@@ -43,7 +43,7 @@ function definition() {
         security_schemes: [],
         models: [
             {
-                id: 'home-block',
+                id: 'editorial-block',
                 kind: 'object',
                 description: "Bloc de l'accueil.",
                 fields: [
@@ -57,19 +57,19 @@ function definition() {
                 ],
             },
             {
-                id: 'home-block-list',
+                id: 'editorial-block-list',
                 kind: 'array',
                 description: 'Blocs publics.',
-                items: { kind: 'model', model_id: 'home-block' },
+                items: { kind: 'model', model_id: 'editorial-block' },
             },
         ],
         operations: [
             {
-                id: 'content.list-home-blocks',
+                id: 'content.list-editorial-blocks',
                 service_id: 'content',
                 description: "Charge l'accueil public.",
                 method: 'GET',
-                path: '/home-blocks',
+                path: '/editorial-blocks',
                 access: {
                     mode: 'public',
                     security_scheme_ids: [],
@@ -83,7 +83,7 @@ function definition() {
                         description: 'Blocs disponibles.',
                         body: {
                             media_type: 'application/json',
-                            model_id: 'home-block-list',
+                            model_id: 'editorial-block-list',
                             envelope: {
                                 kind: 'object',
                                 data_field: 'data',

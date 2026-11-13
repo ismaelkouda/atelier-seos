@@ -61,11 +61,11 @@ function validContract(
         security_schemes: [],
         models: [
             {
-                id: 'home-block',
+                id: 'editorial-block',
                 kind: 'object',
                 status: 'planned',
                 description: "Bloc éditorial de l'accueil.",
-                evidence: evidence('$.models.home-block'),
+                evidence: evidence('$.models.editorial-block'),
                 fields: [
                     {
                         name: 'title',
@@ -73,27 +73,27 @@ function validContract(
                         required: true,
                         nullable: false,
                         type: { kind: 'primitive', name: 'string' },
-                        evidence: evidence('$.models.home-block.title'),
+                        evidence: evidence('$.models.editorial-block.title'),
                     },
                 ],
             },
             {
-                id: 'home-block-list',
+                id: 'editorial-block-list',
                 kind: 'array',
                 status: 'planned',
                 description: 'Liste des blocs éditoriaux.',
-                evidence: evidence('$.models.home-block-list'),
-                items: { kind: 'model', model_id: 'home-block' },
+                evidence: evidence('$.models.editorial-block-list'),
+                items: { kind: 'model', model_id: 'editorial-block' },
             },
         ],
         operations: [
             {
-                id: 'cms.list-home-blocks',
+                id: 'editorial.list-blocks',
                 service_id: 'base-settings',
                 status: 'planned',
                 description: "Charge les blocs actifs de l'accueil.",
                 method: 'GET',
-                path: '/cms/home-block-infos/actives/pwa',
+                path: '/editorial/blocks',
                 access: {
                     mode: 'public',
                     security_scheme_ids: [],
@@ -107,7 +107,7 @@ function validContract(
                         description: 'Blocs disponibles.',
                         body: {
                             media_type: 'application/json',
-                            model_id: 'home-block-list',
+                            model_id: 'editorial-block-list',
                             envelope: {
                                 kind: 'object',
                                 data_field: 'data',
@@ -119,7 +119,7 @@ function validContract(
                         evidence: evidence('$.responses.200'),
                     },
                 ],
-                evidence: evidence('$.operations.list-home-blocks'),
+                evidence: evidence('$.operations.list-editorial-blocks'),
             },
         ],
     };
@@ -135,7 +135,7 @@ test('rejette les références non résolues et les identités dupliquées', () 
     contract.models[1].items.model_id = 'unknown-model';
     contract.models.push(structuredClone(contract.models[0]));
     const errors = validateBackendContract(contract, schema).join('\n');
-    assert.match(errors, /duplicate home-block/);
+    assert.match(errors, /duplicate editorial-block/);
     assert.match(errors, /unresolved service unknown-service/);
     assert.match(errors, /unresolved model unknown-model/);
 });
@@ -191,7 +191,7 @@ test('exige une correspondance exacte entre placeholders et paramètres de chemi
 
 test('rejette une forme de type ou d’enveloppe ambiguë', () => {
     const contract = validContract();
-    contract.models[0].fields[0].type.model_id = 'home-block';
+    contract.models[0].fields[0].type.model_id = 'editorial-block';
     delete contract.operations[0].responses[0].body.envelope.data_field;
     const errors = validateBackendContract(contract, schema).join('\n');
     assert.match(errors, /invalid closed type shape/);
@@ -201,11 +201,11 @@ test('rejette une forme de type ou d’enveloppe ambiguë', () => {
 test('rejette deux identifiants qui décrivent le même endpoint HTTP', () => {
     const contract = validContract();
     const duplicate = structuredClone(contract.operations[0]);
-    duplicate.id = 'cms.list-home-blocks-again';
+    duplicate.id = 'editorial.list-blocks-again';
     contract.operations.push(duplicate);
     assert.match(
         validateBackendContract(contract, schema).join('\n'),
-        /duplicate \["base-settings","GET","\/cms\/home-block-infos\/actives\/pwa"\] endpoint/
+        /duplicate \["base-settings","GET","\/editorial\/blocks"\] endpoint/
     );
 });
 
@@ -241,12 +241,12 @@ test('borne les valeurs d’un tableau primitif au niveau de chaque item', () =>
 test('représente une réponse tableau sans inventer de propriété items', () => {
     const contract = validContract();
     assert.deepEqual(contract.models[1], {
-        id: 'home-block-list',
+        id: 'editorial-block-list',
         kind: 'array',
         status: 'planned',
         description: 'Liste des blocs éditoriaux.',
-        evidence: evidence('$.models.home-block-list'),
-        items: { kind: 'model', model_id: 'home-block' },
+        evidence: evidence('$.models.editorial-block-list'),
+        items: { kind: 'model', model_id: 'editorial-block' },
     });
     assert.deepEqual(validateBackendContract(contract, schema), []);
 });

@@ -10,17 +10,17 @@
     "uri": "tools/generator-platform/fixtures/list-query-v1.backend-contract.json",
     "id": "cmz-settings-api",
     "version": "1.0.0",
-    "sha256": "f371c4fc11941472a74b5edd1ef78c0342f2dc3c876a8df4ff9a275ef8e0f1df"
+    "sha256": "19f50fa9f642f641477808d62b8a2c24b85e341537ccbe50b594b7a8a7f911c1"
   },
   "operations": [
     {
-      "id": "list-home-block-infos",
+      "id": "list-editorial-blocks",
       "operation_ref": {
-        "operation_id": "cms.list-home-block-infos"
+        "operation_id": "editorial.list-blocks"
       },
       "success_response_status": 200,
       "read_model": {
-        "id": "home-block-info",
+        "id": "editorial-block",
         "description": "A generic editorial block.",
         "fields": [
           { "name": "id", "source_field": "id" },
