@@ -305,7 +305,7 @@ jobs:
           expected="$(node -p 'require("./package.json").packageManager.slice(4)')"
           test "$(bun --version)" = "$expected"
       - run: bun install --frozen-lockfile --ignore-scripts
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           pattern: nx-migration-*-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/nx-assess
@@ -382,7 +382,7 @@ jobs:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: nx-migration-ubuntu-latest-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/nx-publish
