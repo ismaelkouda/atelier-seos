@@ -252,7 +252,7 @@
       "date-fns": "4.4.0",
       "exceljs": "4.4.0",
       "ol": "^10.11.0",
-      "tailwindcss": "4.3.3",
+      "tailwindcss": "4.3.5",
       "@tailwindcss/postcss": "4.3.3",
       "@tailwindcss/vite": "4.3.3",
       "postcss": "8.5.32"
