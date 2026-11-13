@@ -162,8 +162,8 @@ if (problemesLignes.length > 0) {
             " d'étendre l'allowlist. Si le découpage est réellement injustifié" +
             ' (cas rare) : ajouter une entrée commentée à ALLOWLIST_LIGNES dans' +
             ' tools/check-file-weight.mjs (revue de code), jamais' +
-            ' `git commit --no-verify` (T11-6, docs/architecture/taches-restantes.md :' +
-            ' ce plafond doit rester une porte machine, pas une porte contournable).'
+            ' `git commit --no-verify` (ce plafond doit rester une porte machine,' +
+            ' pas une porte contournable).'
     );
 }
 

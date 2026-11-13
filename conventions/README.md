@@ -1,8 +1,7 @@
 # Profils de convention
 
 Source unique des choix de code d'une plateforme cible, au moment de la
-génération. Le générateur et l'IA les **lisent** ; ils ne les contiennent jamais
-([ADR-0010](../docs/adr/0010-flux-de-generation-assistee-par-ia.md)).
+génération. Le générateur et l'IA les **lisent** ; ils ne les contiennent jamais.
 
 ## Structure identique pour toute stack, contenu 100 % natif
 
@@ -39,10 +38,8 @@ Exemple `i18n` :
 ### Zéro abstraction cross-platform
 
 Un profil nomme le mécanisme natif de sa plateforme, jamais un wrapper conçu
-pour masquer une différence entre plateformes. Le pont Angular borné qui résout
-les anciennes clés dynamiques du backoffice n'est ni cross-platform ni le défaut
-des nouvelles pages ; voir
-[ADR-0085](../docs/adr/0085-angular-i18n-native-localize.md).
+pour masquer une différence entre plateformes. Une nouvelle page emploie
+directement les primitives `@angular/localize`.
 `tools/check-convention-profile.mjs` échoue si un `native` se revendique
 inter-plateforme ou si un `packages[]` nomme un `*-port` / `*-wrapper` /
 `*-abstraction`.
@@ -72,14 +69,10 @@ reflète `platform` + version majeure ; `version_pin` dit où la version est
 | ------------------------------------------------------ | ---------- | ------------ |
 | [`angular-22.profile.json`](./angular-22.profile.json) | Angular    | v22.2.0      |
 
-Le profil dit _comment_ écrire. Les **archétypes de types de fichier** d'une
-cible — _quoi_ produire par type de fichier — sont un jeu par stack sous
-[`archetypes/<stack>/`](./archetypes/angular/README.md) (Angular pour
-l'instant). Ils ne sont pas neutres : la neutralité vit dans l'IR / les
-compositions.
-
-Convention transverse (indépendante de la plateforme) :
-[`nommage.md`](./nommage.md) — nommage dossiers/fichiers intra-lib.
+Le profil dit _comment_ écrire. Les **archétypes** d'une cible — la forme
+imposée d'un rôle, comme la page `screen` réalisée par l'IA — sont un jeu par
+stack sous [`archetypes/<stack>/`](./archetypes/angular/README.md). Ils ne sont
+pas neutres : la neutralité vit dans les contrats et les plans.
 
 ## Recettes de setup de bibliothèque — `libraries/`
 
@@ -98,8 +91,7 @@ Une recette vit sous `libraries/<platform>/<library>.setup.json` — le dossier 
 (platform, library)**, donc `angular/tailwind` et `react/tailwind` sont deux
 recettes distinctes. Schéma fermé :
 [`library-setup.schema.json`](./libraries/library-setup.schema.json). Elle
-sépare trois niveaux
-([ADR-0041](../docs/adr/0041-angular-material-tailwind-defaults.md)) :
+sépare trois niveaux :
 
 | Champ                            | Rôle                                                                                                                                                                                                                                        | Statut                                                                                                       |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -111,7 +103,7 @@ sépare trois niveaux
 
 La méthode historique `llm-then-verified` est retirée et rejetée explicitement
 par `check:library-setup`. Sa réintroduction exige un fournisseur réellement
-intégré, un nouvel audit de sécurité et un nouvel ADR ; une recette anticipant
+intégré, un nouvel audit de sécurité et une décision explicite ; une recette anticipant
 un fournisseur futur n'est pas valide.
 
 Chaque app avec un `project.json` **régulier doit** déclarer
@@ -121,7 +113,8 @@ Chaque app avec un `project.json` **régulier doit** déclarer
 sous la racine du dépôt, en **traversant zéro lien symbolique** (le dossier
 d'app inclus) ; **échoue** si la plateforme Nx est indéterminable, si le
 manifeste manque, ou si une lib gouvernée est utilisée (empreinte détectée) sans
-être déclarée. `backoffice-angular` déclare `["tailwind"]`. L'i18n native fait
+être déclarée. Le banc `library-qualification-angular` déclare
+`["angular-material"]`. L'i18n native fait
 partie du baseline du shell Angular ; ce n'est pas une bibliothèque opt-in.
 
 Une recette n'est pas obligatoire pour chaque paquet officiel. Elle gouverne un
@@ -141,12 +134,10 @@ lorsque deux applications exigent le même setup réel.
 `add-library` applique désormais un adaptateur plateforme qualifié dans un
 worktree Git jetable. Le schematic, le sandbox, le navigateur et le harnais
 `runtime_acceptance` restent dans `promote-library-compatibility`, la voie rare
-de qualification. Les commandes `create-app`, `add-library` et `create-module`
-exposent leur contrat opérationnel stable avec `--explain`. Le runbook court
-associé est
+de qualification. Les commandes `create-app`, `add-library` et
+`prepare:application-workspace` exposent leur contrat opérationnel stable avec
+`--explain`. Le runbook court associé est
 [`runbook-commandes-creation.md`](../docs/etape-b/runbook-commandes-creation.md).
-Intégration `create-app` et gouvernance d’upgrade :
-[`docs/architecture/library-setup-runtime-plan.md`](../docs/architecture/library-setup-runtime-plan.md).
 
 La promotion d'une piste candidate produit une attestation `1.3.0`. Son champ
 `inputs_sha256.runner_sources` expose la liste fermée des sources communes et
@@ -204,5 +195,4 @@ inchangés.
 ## Emplacement
 
 Les profils vivent **dans ce monorepo** — ils disent « ici on cible Angular 22
-». Les outils SEOS, eux, sont génériques et versionnés séparément
-([ADR-0009](../docs/adr/0009-reconstruction-pilotee-par-patterns.md)).
+».

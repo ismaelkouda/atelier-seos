@@ -1,6 +1,14 @@
 #!/usr/bin/env node
+// Garde de la charte et des liens documentaires.
+//
+// 1. PROJECT_AUTHORITY.md est la charte unique de l'atelier : elle doit
+//    déclarer un atelier générique, l'étape B, l'interface libre dans un cadre
+//    fourni et les protections minimales. README.md et AGENTS.md y renvoient.
+// 2. Aucun lien Markdown relatif d'un document suivi ne pointe vers un fichier
+//    absent : un lien mort trompe les agents.
 
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,205 +17,162 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const AUTHORITY_FILES = Object.freeze({
     authority: 'PROJECT_AUTHORITY.md',
     readme: 'README.md',
-    llmContext: 'LLM_CONTEXT.md',
+    agents: 'AGENTS.md',
     appBuilder: 'LLM_APP_BUILDER.md',
-    adr29: 'docs/adr/0029-perimetre-capacites-plateforme-generation.md',
-    adr38: 'docs/adr/0038-nature-produit-public-multi-locataire.md',
-    adr94: 'docs/adr/0094-cap-produit-interne-remplacement-progressif-et-cibles-web.md',
-    productCap:
-        'docs/adr/0102-atelier-reutilisable-et-preuves-independantes.md',
-    roadmap: 'docs/architecture/feuille-de-route.md',
-    ledger: 'docs/architecture/taches-restantes.md',
-    retainedDiscoveryBrief:
-        'docs/projects/signalement-zone-non-couverte/project-brief.md',
+    docsIndex: 'docs/README.md',
 });
 
-const CURRENT_CAP_FIELD = 'Cap du dépôt — décision courante';
-
-// Métadonnées contiguës après le H1, avant tout texte/section/exemple.
-// Ni une citation, ni un bloc de code, ni un lien historique ne font autorité.
-function metadata(document = '') {
-    const [title, ...lines] = document.split(/\r?\n/);
-    if (!/^# \S/.test(title)) return [];
-    const fields = [];
-    for (let index = 0; index < lines.length; index++) {
-        let line = lines[index];
-        if (!line.trim()) continue;
-        // Markdown may wrap either the field name or its value.
-        while (/^ {2,}\S/.test(lines[index + 1] ?? ''))
-            line += ` ${lines[++index].trim()}`;
-        const match = line.match(/^- \*\*([^*]+?) :\*\*\s*(.*?)\s*$/);
-        if (match) fields.push({ name: match[1], value: match[2] });
-        else if (/^ {2,}\S/.test(line) && fields.length > 0)
-            fields.at(-1).value += ` ${line.trim()}`;
-        else break;
-    }
-    return fields;
-}
-
-function metadataValue(document, name) {
-    const fields = metadata(document).filter((field) => field.name === name);
-    return fields.length === 1 ? fields[0].value.trim() : null;
-}
-
-// Un seul lien local vers un fichier, résolu depuis le document qui le porte.
-function linkedPath(value, source) {
-    const target = value?.match(/^\[[^\]\n]+\]\((\.[^\s()?#\\]+)\)$/)?.[1];
-    if (!target || !/^\.{1,2}\//.test(target)) return null;
-    const path = posix.normalize(posix.join(posix.dirname(source), target));
-    return path.startsWith('../') || path === '..' ? null : path;
-}
-
-function predecessor(document) {
-    const prefix = 'Supersède pour ';
-    const fields = metadata(document).filter((field) =>
-        field.name.startsWith(prefix)
-    );
-    if (fields.length !== 1) return null;
-    const scope = fields[0].name.slice(prefix.length).trim();
-    const path = linkedPath(fields[0].value.trim(), AUTHORITY_FILES.productCap);
-    if (!scope || !path || path === AUTHORITY_FILES.productCap) return null;
-    return { scope, path };
-}
+// Éléments que la charte doit porter, avec leur raison.
+export const CHARTER_REQUIREMENTS = Object.freeze([
+    ['atelier générique', 'la charte doit déclarer un atelier générique'],
+    [
+        'plusieurs applications différentes',
+        'la charte doit viser plusieurs applications',
+    ],
+    ['Étape B', "la charte doit décrire l'étape B"],
+    [
+        'produits Angular extérieurs',
+        'la charte doit viser des produits extérieurs',
+    ],
+    [
+        "cadre d'éléments fourni",
+        "la charte doit borner l'interface libre de l'IA",
+    ],
+    [
+        "aucune donnée d'application",
+        "la charte doit interdire les données d'application",
+    ],
+    ['build', 'la charte doit exiger le build'],
+    ['lint', 'la charte doit exiger le lint'],
+    ['tests', 'la charte doit exiger les tests'],
+    ['licences', 'la charte doit exiger le contrôle des licences'],
+    ['smoke navigateur', 'la charte doit exiger un smoke navigateur'],
+    ['aucun secret', 'la charte doit interdire les secrets'],
+]);
 
 /**
  * @param {Record<string, string>} documents
  * @returns {string[]}
  */
+// Le texte est comparé sans mise en forme : gras et retours à la ligne.
+const plain = (text = '') => text.replace(/\*\*/g, '').replace(/\s+/g, ' ');
+
 export function collectAuthorityViolations(documents) {
     const violations = [];
-    const requireText = (key, value, reason) => {
-        if (!documents[key]?.includes(value)) violations.push(reason);
-    };
-
+    const charter = plain(documents.authority);
     for (const [key, path] of Object.entries(AUTHORITY_FILES)) {
         if (!documents[key]?.trim())
             violations.push(`${path} est absent ou vide`);
     }
-    if (metadataValue(documents.productCap, 'Statut') !== 'Accepted')
-        violations.push(
-            'le cap courant doit porter le statut Accepted en tête'
-        );
-    for (const key of ['authority', 'roadmap']) {
-        const path = linkedPath(
-            metadataValue(documents[key], CURRENT_CAP_FIELD),
-            AUTHORITY_FILES[key]
-        );
-        if (path !== AUTHORITY_FILES.productCap)
+    for (const [text, reason] of CHARTER_REQUIREMENTS) {
+        if (!charter.includes(text))
+            violations.push(`${reason} (« ${text} » absent)`);
+    }
+    for (const key of ['readme', 'agents']) {
+        if (!documents[key]?.includes('PROJECT_AUTHORITY.md'))
             violations.push(
-                `${AUTHORITY_FILES[key]} doit porter un renvoi courant unique vers ${AUTHORITY_FILES.productCap}`
+                `${AUTHORITY_FILES[key]} doit router vers PROJECT_AUTHORITY.md`
             );
     }
-    const previous = predecessor(documents.productCap);
-    if (!previous) {
-        violations.push(
-            'le cap courant doit déclarer sa supersession partielle'
-        );
-    } else if (
-        metadataValue(documents.productPredecessor, 'Statut') !== 'Accepted' ||
-        linkedPath(
-            metadataValue(
-                documents.productPredecessor,
-                `Superseded pour ${previous.scope} par`
-            ),
-            previous.path
-        ) !== AUTHORITY_FILES.productCap
-    ) {
-        violations.push(
-            `${previous.path} doit rester Accepted avec une supersession partielle réciproque en tête`
-        );
-    }
-
-    requireText(
-        'authority',
-        'atelier interne assisté par IA',
-        'PROJECT_AUTHORITY.md doit déclarer le produit interne courant'
-    );
-    requireText(
-        'readme',
-        'PROJECT_AUTHORITY.md',
-        'README.md doit router les nouveaux lecteurs vers PROJECT_AUTHORITY.md'
-    );
-    requireText(
-        'llmContext',
-        "n'est plus le point d'entrée",
-        'LLM_CONTEXT.md doit annoncer explicitement son statut historique'
-    );
-    requireText(
-        'adr29',
-        'Superseded pour le cap produit',
-        'ADR-0029 doit rester supersédé pour le cap produit'
-    );
-    requireText(
-        'adr38',
-        'Superseded pour la phase courante',
-        'ADR-0038 doit rester supersédé pour la phase courante'
-    );
-    if (metadataValue(documents.adr94, 'Statut') !== 'Accepted')
-        violations.push(
-            'ADR-0094 doit rester Accepted pour ses principes conservés'
-        );
-    requireText(
-        'roadmap',
-        '## Chemin critique courant',
-        'la feuille de route doit exposer un chemin critique courant'
-    );
-    requireText(
-        'ledger',
-        'Registre historique, pas feuille de route courante',
-        'taches-restantes.md doit annoncer son statut de registre historique'
-    );
-    requireText(
-        'retainedDiscoveryBrief',
-        '**Statut :** découverte produit',
-        'le brief de découverte conservé doit rester en découverte produit'
-    );
-
-    if (/create-app[^\n]*--apply\b/.test(documents.appBuilder)) {
+    if (/create-app[^\n]*--apply\b/.test(documents.appBuilder ?? '')) {
         violations.push(
             'LLM_APP_BUILDER.md ne doit pas réintroduire --apply pour create-app'
         );
     }
     if (
-        !documents.appBuilder?.includes('--expect-plan <plan_id>') ||
-        !documents.appBuilder?.includes('--profile react-spa')
+        !documents.appBuilder?.includes('--target-root') ||
+        !documents.appBuilder?.includes('--expect-plan <plan_id>')
     ) {
         violations.push(
-            'LLM_APP_BUILDER.md doit documenter le protocole create-app et le profil React courants'
+            'LLM_APP_BUILDER.md doit documenter le protocole extérieur de create-app'
         );
     }
-
     return violations;
 }
 
-export function readAuthorityDocuments(root = ROOT) {
-    const read = (path) => {
-        try {
-            return readFileSync(join(root, path), 'utf8');
-        } catch (error) {
-            if (error.code === 'ENOENT') return '';
-            throw error;
+const LINK = /!?\[[^\]\n]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+
+/** Cibles relatives des liens Markdown d'un document, hors blocs de code. */
+export function relativeLinkTargets(markdown) {
+    const targets = [];
+    let fenced = false;
+    for (const line of markdown.split(/\r?\n/)) {
+        if (/^\s*(?:```|~~~)/.test(line)) {
+            fenced = !fenced;
+            continue;
         }
-    };
-    const documents = Object.fromEntries(
-        Object.entries(AUTHORITY_FILES).map(([key, path]) => [key, read(path)])
+        if (fenced) continue;
+        const prose = line.replace(/`[^`]*`/g, '');
+        for (const match of prose.matchAll(LINK)) {
+            const target = match[1].replace(/^<|>$/g, '');
+            if (/^(?:[a-z][a-z0-9+.-]*:|#|\/)/i.test(target)) continue;
+            const path = decodeURIComponent(target.split(/[?#]/)[0]);
+            if (path) targets.push(path);
+        }
+    }
+    return targets;
+}
+
+/**
+ * @param {string} root
+ * @param {string[]} files chemins POSIX relatifs des documents Markdown suivis
+ * @param {(path: string) => string} [read]
+ * @returns {string[]}
+ */
+export function collectDeadLinks(
+    root,
+    files,
+    read = (path) => readFileSync(join(root, path), 'utf8')
+) {
+    const dead = [];
+    for (const file of files) {
+        for (const target of relativeLinkTargets(read(file))) {
+            const resolved = posix.normalize(
+                posix.join(posix.dirname(file), target)
+            );
+            if (resolved.startsWith('../') || !existsSync(join(root, resolved)))
+                dead.push(`${file} → ${target}`);
+        }
+    }
+    return dead;
+}
+
+export function trackedMarkdown(root = ROOT) {
+    return execFileSync('git', ['-C', root, 'ls-files', '-z', '--', '*.md'], {
+        encoding: 'utf8',
+    })
+        .split('\0')
+        .filter(Boolean)
+        .sort();
+}
+
+export function readAuthorityDocuments(root = ROOT) {
+    return Object.fromEntries(
+        Object.entries(AUTHORITY_FILES).map(([key, path]) => {
+            try {
+                return [key, readFileSync(join(root, path), 'utf8')];
+            } catch (error) {
+                if (error.code === 'ENOENT') return [key, ''];
+                throw error;
+            }
+        })
     );
-    const previous = predecessor(documents.productCap);
-    documents.productPredecessor = previous ? read(previous.path) : '';
-    return documents;
 }
 
 function main() {
-    const violations = collectAuthorityViolations(readAuthorityDocuments());
+    const violations = [
+        ...collectAuthorityViolations(readAuthorityDocuments()),
+        ...collectDeadLinks(ROOT, trackedMarkdown()).map(
+            (link) => `lien mort : ${link}`
+        ),
+    ];
     if (violations.length > 0) {
-        console.error('FAIL  autorité documentaire incohérente');
+        console.error('FAIL  charte ou liens documentaires incohérents');
         for (const violation of violations) console.error(`  - ${violation}`);
         process.exitCode = 1;
         return;
     }
-    console.log(
-        'OK  autorité documentaire — cap, historique, roadmap et CLI cohérents'
-    );
+    console.log('OK  charte de l’atelier et liens documentaires cohérents');
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();

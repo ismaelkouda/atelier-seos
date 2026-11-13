@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cmz.local/schemas/conventions/library-setup.schema.json",
   "title": "CMZ Library Setup Recipe",
-  "description": "Une recette par (bibliothèque, plateforme). Le fichier vit sous conventions/libraries/<platform>/<library>.setup.json : le dossier == `platform`, le nom == `library`, et check:library-setup indexe par le couple (platform, library) — deux plateformes peuvent donc avoir chacune leur recette `tailwind`. PÉRIMÈTRE DE CETTE VERSION : paquets npm pour Angular / React, résolus via Bun workspaces (package.json racine + catalog + bun.lock). Kotlin/Swift : hors périmètre. Elle sépare trois choses. (1) `static_invariants` : présence structurelle, vérifiable en lisant des fichiers de l'app — garde-fou de DÉRIVE de configuration, PAS un test d'acceptation. (2) `runtime_acceptance` : critères de fonctionnement réels exécutés par tools/library-setup/runtime-proofs.mjs dans le candidat isolé ; le registre d'oracles et le status de la recette doivent concorder dans les deux sens. (3) le COMMENT d'installation, volatile, représenté par une commande structurée ou un outil de référence ; jamais une chaîne shell. Voir conventions/README.md et docs/adr/0041-angular-material-tailwind-defaults.md.",
+  "description": "Une recette par (bibliothèque, plateforme). Le fichier vit sous conventions/libraries/<platform>/<library>.setup.json : le dossier == `platform`, le nom == `library`, et check:library-setup indexe par le couple (platform, library) — deux plateformes peuvent donc avoir chacune leur recette `tailwind`. PÉRIMÈTRE DE CETTE VERSION : paquets npm pour Angular / React, résolus via Bun workspaces (package.json racine + catalog + bun.lock). Kotlin/Swift : hors périmètre. Elle sépare trois choses. (1) `static_invariants` : présence structurelle, vérifiable en lisant des fichiers de l'app — garde-fou de DÉRIVE de configuration, PAS un test d'acceptation. (2) `runtime_acceptance` : critères de fonctionnement réels exécutés par tools/library-setup/runtime-proofs.mjs dans le candidat isolé ; le registre d'oracles et le status de la recette doivent concorder dans les deux sens. (3) le COMMENT d'installation, volatile, représenté par une commande structurée ou un outil de référence ; jamais une chaîne shell. Voir conventions/README.md.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -92,7 +92,7 @@
         "executable": {
           "type": "string",
           "enum": ["nx"],
-          "description": "Binaire résolu EXPLICITEMENT dans le workspace cible (`<racine>/node_modules/.bin/nx`), sa version étant comparée à celle du lockfile (`node_modules/nx/package.json`). `bunx` et les gestionnaires de paquets ne peuvent pas être résolus par leur nom pendant l'exécution : PATH est vide sur les deux backends (ADR-0042). `ng` seul n'est pas un binaire du workspace — passer par un schematic local qui ne planifie aucune installation de dépendances."
+          "description": "Binaire résolu EXPLICITEMENT dans le workspace cible (`<racine>/node_modules/.bin/nx`), sa version étant comparée à celle du lockfile (`node_modules/nx/package.json`). `bunx` et les gestionnaires de paquets ne peuvent pas être résolus par leur nom pendant l'exécution : PATH est vide sur les deux backends. `ng` seul n'est pas un binaire du workspace — passer par un schematic local qui ne planifie aucune installation de dépendances."
         },
         "argv": {
           "type": "array",

@@ -82,6 +82,10 @@ jobs:
       - name: check:agent-operating-model (rôles bornés + manifests)
         run: bun run check:agent-operating-model
 
+      # Charte unique de l'atelier et liens Markdown : aucun lien mort.
+      - name: check:docs (charte + liens documentaires)
+        run: bun run check:docs
+
       # Rejoue les contrôles des hooks locaux (ADR-0006)
       - name: check:engines
         run: node tools/check-engines.mjs
@@ -404,7 +408,7 @@ jobs:
         run: node tools/check-secrets.mjs
 
   # ─── Job T4-3 : SAST complémentaire (Semgrep) ────────────────────────────
-  # Big Tech gap identifié (`taches-restantes.md`) : ESLint (style/qualité)
+  # Gap identifié : ESLint (style/qualité)
   # et gitleaks (secrets, job ci-dessus) ne couvrent pas les patterns de
   # vulnérabilité applicative (injection, XSS, désérialisation dangereuse,
   # etc.). Semgrep choisi plutôt que CodeQL : gratuit sans dépendre d'un
@@ -423,7 +427,7 @@ jobs:
   # bloquer un push/PR. À repasser en bloquant une fois qu'un run réel (sur
   # GitHub, avec accès réseau) a été revu par un humain et que les faux
   # positifs pertinents ont été exclus (`.semgrepignore` / commentaires
-  # `nosemgrep`) — voir T4-3 (`taches-restantes.md`).
+  # `nosemgrep`).
   sast:
     name: SAST (Semgrep, rapport seul)
     runs-on: ubuntu-latest
@@ -448,36 +452,6 @@ jobs:
             --exclude 'dist' \
             --exclude 'node_modules' \
             .
-
-  # ─── Job docs : fraîcheur des blocs générés (audit E-5 / P1-9) ───────────
-  docs-freshness:
-    name: Docs freshness
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .nvmrc
-      - name: Verify node runtime against source
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(node --version)" = "v$(cat .nvmrc)"
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: package.json
-      - name: Verify bun runtime against source
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(node --version)" = "v$(cat .nvmrc)"
-          expected="$(node -p 'require("./package.json").packageManager.slice(4)')"
-          test "$(bun --version)" = "$expected"
-
-      - name: check:docs-freshness (preuve octets avant/après régénération)
-        run: bun run check:docs-freshness
 
   # ─── Job 2 : Oracle de vérification (nx affected) ────────────────────────
   oracle:
@@ -654,8 +628,7 @@ jobs:
     name: Dead-code (knip)
     runs-on: ubuntu-latest
     needs: guardrails
-    # Bloquant : contrat monorepo package-based documenté
-    # (docs/architecture/knip-contrat.md) — exit 0 local/CI attendu.
+    # Bloquant : exit 0 local/CI attendu.
     steps:
       - uses: actions/checkout@v7
 
@@ -709,7 +682,7 @@ jobs:
   # `check:security-overrides` ont été retirés le 2026-09-10 : `@nx/react@23.2.0`
   # a supprimé `@svgr/webpack` de ses dépendances, et le dépôt n'a aucun build
   # webpack — toute la chaîne `@svgr/plugin-svgo`/`postcss-svgo`/`svgo` a quitté
-  # l'arbre, `bun audit` le confirme. Détail : taches-restantes T4-2.)
+  # l'arbre, `bun audit` le confirme.)
   # Le 2026-09-30, cinq nouveaux avis high publiés pour axios>=1.16.1<1.20.0
   # ont invalidé l'override exact 1.19.0. L'override impose désormais la plage
   # ^1.20.0 : plancher corrigé et mises à jour 1.x futures autorisées dans le
@@ -761,12 +734,8 @@ jobs:
         run: bun audit --audit-level=high
 
   # ─── Job T6-2 : inventaire de licences tierces (license-checker) ─────────
-  # Reproduit en continu la méthode manuelle de
-  # docs/architecture/licences-tierces.md — jusqu'ici rejouée à la main,
-  # dérivée silencieusement dès le 2026-08-04 (ajout d'axe-core, MPL-2.0,
-  # jamais reporté dans le document faute d'automatisation). Production
-  # 100 % permissive bloquante sans exception ; dev-only limité à une
-  # allowlist nominative documentée (tools/check-licenses.mjs).
+  # Production 100 % permissive bloquante sans exception ; dev-only limité à
+  # une allowlist nominative documentée (tools/check-licenses.mjs).
   licenses:
     name: Third-party licenses (license-checker)
     runs-on: ubuntu-latest

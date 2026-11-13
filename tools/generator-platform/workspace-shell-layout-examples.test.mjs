@@ -92,17 +92,10 @@ test('verrouille les sources et images approuvées reproductibles', async () => 
     }
 });
 
-test('verrouille la sémantique Tabs et la promesse de même instance', async () => {
-    const [html, guide, contract] = await Promise.all([
+test('verrouille la sémantique Tabs de l’exemple', async () => {
+    const [html, guide] = await Promise.all([
         readFile(resolve(repositoryRoot, `${root}mockup.html`), 'utf8'),
         readFile(resolve(repositoryRoot, `${root}README.md`), 'utf8'),
-        readFile(
-            resolve(
-                repositoryRoot,
-                'docs/architecture/workspace-vues-vivantes-accessibilite-2026-10-04.md'
-            ),
-            'utf8'
-        ),
     ]);
 
     assert.match(html, /role="tablist"/);
@@ -116,9 +109,4 @@ test('verrouille la sémantique Tabs et la promesse de même instance', async ()
     assert.equal(html.includes('recent-nav'), false);
     assert.equal(html.includes('Exemple de disposition'), false);
     assert.match(guide, /exemple de disposition approuvé/);
-    assert.match(contract, /même instance de vue/);
-    assert.match(contract, /RouteReuseStrategy/);
-    assert.match(contract, /destroyDetachedRouteHandle/);
-    assert.match(contract, /100 cycles ouverture\/switch\/fermeture/);
-    assert.match(contract, /absente en Compact/);
 });

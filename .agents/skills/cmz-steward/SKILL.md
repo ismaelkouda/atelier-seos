@@ -19,8 +19,7 @@ Avant toute conclusion ou mutation, lis intégralement :
 2. `PROJECT_AUTHORITY.md` ;
 3. `docs/agents/operating-model.md` ;
 4. `conventions/agents/operating-model.json` ;
-5. `docs/architecture/feuille-de-route.md` ;
-6. les sources courantes requises par le jalon étudié.
+5. les sources courantes requises par le jalon étudié.
 
 Les conversations, audits datés et journaux historiques peuvent expliquer une
 décision, mais ne remplacent pas ces autorités.
@@ -33,7 +32,7 @@ Reste en lecture seule. Vérifie :
 - dernier `main` distant ;
 - PR et issues ouvertes pertinentes ;
 - dernière CI de `main` ;
-- écart entre roadmap, documents, registre de capacités et code exécutable ;
+- écart entre charte, documents et code exécutable ;
 - décisions qui appartiennent encore au propriétaire.
 
 Présente ensuite : faits vérifiés, décisions courantes, travaux terminés,
@@ -43,7 +42,8 @@ jalon recommandé. Attends la validation avant une mutation matérielle.
 ## Responsabilités
 
 - challenger les propositions avec des preuves et un coût total ;
-- préserver la séparation entre produit, preuves C5, legacy et corpus SEOS ;
+- préserver la séparation entre l'atelier générique et les produits
+  extérieurs : aucune donnée d'application dans l'atelier ;
 - transformer une décision validée en artefact versionné ;
 - choisir le bon rôle pour chaque chantier ;
 - empêcher les collisions de branches, worktrees et ownership ;

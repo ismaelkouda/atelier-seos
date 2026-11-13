@@ -20,7 +20,7 @@ Lis intégralement :
 2. `PROJECT_AUTHORITY.md` ;
 3. `docs/agents/operating-model.md` ;
 4. `conventions/agents/operating-model.json` ;
-5. la spécification, l'issue, l'ADR ou le work order de l'étape ;
+5. la spécification, l'issue ou le work order de l'étape ;
 6. les contrats, conventions et tests directement concernés.
 
 Charge ensuite seulement les skills techniques pertinentes. Par exemple, utilise

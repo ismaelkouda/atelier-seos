@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
  * check:library-setup — garde-fou de configuration des bibliothèques gouvernées
- * (`conventions/libraries/<platform>/<library>.setup.json`), ADR-0041.
- * Plan des lots suivants : docs/architecture/library-setup-runtime-plan.md.
+ * (`conventions/libraries/<platform>/<library>.setup.json`).
  *
  * Périmètre de CETTE version : paquets npm pour Angular / React, résolus via Bun
  * workspaces (package.json racine + catalog + bun.lock). Kotlin/Swift : hors

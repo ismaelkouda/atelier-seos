@@ -30,5 +30,5 @@ une validation humaine de la page réalisée restent obligatoires.
 - les couleurs, contenus et détails graphiques illustratifs ne constituent pas
   une exigence pixel-perfect.
 
-La classification et les niveaux d'autorité sont définis par
-[ADR-0099](../../docs/adr/0099-references-de-presentation-retirees-conservees-par-git.md).
+Ces exemples sont des références de présentation génériques et fictives : ils
+guident la mise en page sans faire autorité sur les contrats ni sur le code.

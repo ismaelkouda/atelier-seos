@@ -44,7 +44,7 @@
     "check:generator-platform": "bun run check:generator-platform:core && bun run check:generator-platform:angular",
     "check:publication-durability": "node tools/generator-platform/check-publication-durability.mjs && node --test tools/generator-platform/publication-durability.test.mjs tools/generator-platform/generation-transaction.test.mjs",
     "check:agent-operating-model": "node --test tools/check-agent-operating-model.test.mjs && node tools/check-agent-operating-model.mjs",
-    "check:docs-freshness": "node --test tools/check-docs-freshness.test.mjs tools/check-documentation-authority.test.mjs && node tools/check-documentation-authority.mjs && node tools/check-docs-freshness.mjs",
+    "check:docs": "node --test tools/check-documentation-authority.test.mjs && node tools/check-documentation-authority.mjs",
     "check:dead-code": "knip",
     "check:duplicates": "node tools/check-duplicate-files.mjs",
     "check:secrets": "node tools/check-secrets.mjs",
@@ -60,16 +60,13 @@
     "check:workflow-privileges": "node --test tools/check-workflow-privileges.test.mjs && node tools/check-workflow-privileges.mjs",
     "check:playwright-secret-safety": "node --test tools/check-playwright-secret-safety.test.mjs && node tools/check-playwright-secret-safety.mjs",
     "protect:main": "node tools/apply-branch-protection.mjs",
-    "check:all": "bun run check:engines && bun run check:versions && bun run check:bun-lock-catalog-integrity && bun run check:dependabot-policy && bun run check:weight && bun run check:cmz-journals-ignored && bun run check:command-explanations && bun run check:agent-operating-model && bun run check:names && bun run check:targets && bun run check:declared-deps && bun run check:boundary-negative && bun run check:framework-purity && bun run check:target-archetype-coverage && bun run check:generator-platform && bun run check:application-designs && bun run check:publication-durability && bun run check:docs-freshness && bun run check:duplicates && bun run check:convention-profile && bun run check:library-setup && bun run check:lint-tools && bun run check:image-size-security && bun run check:workflow-privileges && bun run check:playwright-secret-safety && bun run check:ci-wiring",
-    "generate:status": "node tools/generate-status.mjs",
-    "generate:adr-index": "node tools/generate-adr-index.mjs",
+    "check:all": "bun run check:engines && bun run check:versions && bun run check:bun-lock-catalog-integrity && bun run check:dependabot-policy && bun run check:weight && bun run check:cmz-journals-ignored && bun run check:command-explanations && bun run check:agent-operating-model && bun run check:names && bun run check:targets && bun run check:declared-deps && bun run check:boundary-negative && bun run check:framework-purity && bun run check:target-archetype-coverage && bun run check:generator-platform && bun run check:application-designs && bun run check:publication-durability && bun run check:docs && bun run check:duplicates && bun run check:convention-profile && bun run check:library-setup && bun run check:lint-tools && bun run check:image-size-security && bun run check:workflow-privileges && bun run check:playwright-secret-safety && bun run check:ci-wiring",
     "generate:action-request": "node tools/generator-platform/generate-action-request.mjs",
     "generate:list-query": "node tools/generator-platform/generate-list-query.mjs",
     "compile:page-execution-plan": "node tools/generator-platform/compile-page-execution-plan.mjs",
     "generate:page-composition": "node tools/generator-platform/generate-page-composition.mjs",
     "format": "node tools/run-prettier.mjs --write",
-    "format:check": "node tools/run-prettier.mjs --check",
-    "dashboard:tasks": "node tools/generate-task-dashboard.mjs"
+    "format:check": "node tools/run-prettier.mjs --check"
   },
   "dependencies": {
     "@angular/aria": "catalog:",

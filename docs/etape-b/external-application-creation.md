@@ -323,7 +323,7 @@ Une création de coque (`create-app`, X0) interrompue après sa publication ne
 laisse aucun répertoire de travail : l'application est en place mais ses
 contrôles natifs peuvent ne pas avoir fini. Relancer le même
 `create-app --expect-plan <plan_id>` les termine. Cette fenêtre est une limite
-connue de l'ADR-0103.
+connue de l'inventaire scellé.
 
 ## Qualification séparée des tests de fichiers
 
@@ -702,8 +702,8 @@ n’est revendiquée.
 
 ## Inventaire scellé et publications sous plan — X1
 
-[ADR-0103](../adr/0103-propriete-etendue-inventaire-application-scelle.md) étend
-la propriété d’une application extérieure au-delà de la coque. Le registre reste
+L'inventaire scellé étend la propriété d’une application extérieure au-delà de
+la coque. Le registre reste
 `apps/<app>/.cmz/app-manifest.json`. En mode extérieur, `create-app` y ajoute un
 bloc `ownership` : identité du produit, empreinte de l’inventaire de la coque,
 publications acceptées et sceau. Le mode atelier ne change pas.
@@ -777,7 +777,7 @@ Limites :
 
 `generate:action-request --target-root` génère une commande `action-request` 2.1
 depuis les entrées du produit et la publie dans une de ses applications Angular
-avec session, par la primitive de l’ADR-0103 :
+avec session, par la primitive de l’inventaire scellé :
 
 ```sh
 bun run generate:action-request --target-root /chemin/absolu/produit --app <app> --definition descriptions/<…>.json --dry-run
@@ -824,10 +824,9 @@ la même raison, une commande renommée (identifiant d’action changé) est pub
 dans un nouveau répertoire et l’ancien reste, avec ses entrées de registre ; une
 suppression sous plan reste à décider.
 
-Mode atelier : ses sorties sont inchangées et il type-check toujours par défaut
-(`external-action-request-guards.test.mjs`). Deux écarts d’outillage existent :
-l’aide de `generate:action-request` gagne la ligne du mode extérieur, et
-l’oracle Angular du contrôle atelier lance Nx sans démon (`NX_DAEMON=false`).
+Le mode atelier de `generate:action-request` est retiré : sans `--target-root`,
+la commande refuse avec un message fermé. L’oracle Angular lance Nx sans démon
+(`NX_DAEMON=false`).
 
 `external-action-request.test.mjs` couvre, sur les deux domaines fictifs :
 
@@ -842,8 +841,8 @@ l’oracle Angular du contrôle atelier lance Nx sans démon (`NX_DAEMON=false`)
 
 `external-action-request-guards.test.mjs` couvre le jeton absent, lié à un autre
 contrat ou défini comme alias, un faux filtre en commentaire, le contrat de même
-identifiant mais d’octets différents, chaque moitié de la garde « coque avec
-session » et le typage par défaut du mode atelier.
+identifiant mais d’octets différents et chaque moitié de la garde « coque avec
+session ».
 
 Le contrôle T11 vérifie que la sortie n’importe que `@angular/*`, `rxjs` et des
 fichiers possédés de l’application, sans module cmz ni chemin de l’atelier.
@@ -873,7 +872,7 @@ navigateur. Seule la variante 2.1 Angular est publiable en extérieur.
 ## Plan de page et composition extérieurs — X3
 
 Deux commandes fermées, toutes deux sous plan relu et par la primitive de
-l’ADR-0103, pour une application Angular avec session :
+l’inventaire scellé, pour une application Angular avec session :
 
 ```sh
 bun run compile:page-execution-plan --target-root /chemin/absolu/produit --app <app> --page <page_id> --dry-run
@@ -914,10 +913,8 @@ commande par un chemin relatif. Son `generation-manifest.json` est relatif à
 consommée. Le compilateur du produit la type-checke sur le candidat, puis build,
 lint, tests et `check-workspace` passent par ses binaires.
 
-En mode atelier, le rendu de composition est inchangé : l’option de nœud
-extérieur n’est utilisée que par ce mode. Seul écart textuel, comme pour
-`generate:action-request` : l’aide de `generate:page-composition` gagne la ligne
-du mode extérieur.
+`generate:page-composition` n’a plus de mode atelier : sans `--target-root`, la
+commande refuse avec un message fermé.
 
 `external-page-composition.test.mjs` couvre, sur les deux domaines fictifs : le
 plan et la composition publiés, la recompilation déterministe, le rejeu, le plan
@@ -936,8 +933,8 @@ renommée laisse son plan et sa composition, faute de suppression.
 
 ## Réalisation de page extérieure — X4
 
-Deux commandes fermées, sous plan relu et par la primitive de l’ADR-0103, pour
-une page dont le plan et la composition sont publiés :
+Deux commandes fermées, sous plan relu et par la primitive de l’inventaire
+scellé, pour une page dont le plan et la composition sont publiés :
 
 ```sh
 bun run prepare:page-realization --target-root /chemin/absolu/produit --app <app> --page <page_id> --dry-run
@@ -1028,9 +1025,10 @@ sans composition) et une spec rouge, refusées sans changement de l’applicatio
 puis ouvre la page dans le navigateur : titre, champs étiquetés, page d’attente
 absente, envoi sans adresse passé à l’état d’erreur, aucune requête.
 
-Mode atelier : `prepare:page-realization` et `verify:page-realization` sans
-`--target-root` sont inchangés. Seul ajout partagé : la fonction qui calcule le
-contrat de réalisation (nœud de rôle et archétype) est exportée.
+`prepare:page-realization` et `verify:page-realization` n’ont plus de mode
+atelier : sans `--target-root`, elles refusent avec un message fermé. Le contrat
+de réalisation (nœud de rôle et archétype) est calculé par
+`core/page-realization.mjs`.
 
 Limites : une seule page de référence, réalisée par l’agent développeur pour les
 deux produits fictifs ; aucun fichier de page supplémentaire n’est permis ;
@@ -1049,7 +1047,7 @@ appels de même origine.
 **Commandes du produit confinées.** Toute commande que l’atelier lance dans un
 produit extérieur (compilateur, build, lint, tests, contrôle d’espace), y
 compris par `verify:page-realization --apply` du pilote, passe par le bac à
-sable des oracles du mode atelier (`runConfined`, profil `execution`) :
+sable de l’atelier (`runConfined`, profil `execution`) :
 
 - refus par défaut, aucun réseau, pas même la boucle locale ;
 - environnement propre : `PATH` vide, aucune variable de l’hôte, HOME jetable
@@ -1109,8 +1107,7 @@ trusted-types angular angular#bundler cmz-sw
 
 La coque ne se republie pas : un produit déjà créé ne reçoit la politique qu’en
 recréant son application (`create-app --target-root`). Les produits fictifs et
-le banc sont recréés à chaque preuve ; `generate-cmz-backoffice` n’est pas
-encore créé.
+le banc sont recréés à chaque preuve.
 
 **Monde fermé par symbole résolu (X4-sécurité 2).** Le programme de la page est
 vérifié dans l’atelier, avec les bibliothèques installées du produit (lib ES et
@@ -1249,8 +1246,8 @@ Topologie A (décision du propriétaire) : l'application et ses services sont
 joints depuis une seule origine. Le navigateur ne connaît que des chemins
 `/api/<service_id>/` ; les adresses des services ne vivent que dans les
 variables de l'opérateur `CMZ_UPSTREAM_<SERVICE>`, lues par nginx au
-démarrage. Il n'y a pas d'`env.js` dans la coque extérieure (ADR-0007,
-amendement du 2026-11-11, portée : produits extérieurs, topologie A).
+démarrage. Il n'y a pas d'`env.js` dans la coque extérieure (portée : produits
+extérieurs, topologie A).
 
 **Une seule table de chemins**, générée depuis les services de la session de la
 conception, est lue à l'identique par :
@@ -1335,7 +1332,7 @@ worker qui met `/api/` en cache doit la rendre rouge.
 **Service worker sans session.** Celui de l'atelier met en cache, réseau
 d'abord, toute requête de même origine de destination document, script, style,
 image ou police, `/api/` compris. La coque extérieure ignore `/api` et `/api/…`
-; le mode atelier est inchangé. Le cache contient la coque et ses ressources de
+; la coque d’atelier est inchangée. Le cache contient la coque et ses ressources de
 même origine ; l'application démarre hors ligne.
 
 **Limites.** Une expérience avec session est en `offline_policy: none` : son
@@ -1359,11 +1356,8 @@ est refusé. Les comportements d'écran (tri, filtre, navigation contextuelle,
 validation) passent par le générateur.
 
 **Portée.** La grammaire, la table `api`, la connectivité de coque et la
-résolution différée de l'adresse de service ne s'appliquent qu'au profil
-extérieur (D7). Le profil interne de l'atelier (`users-management-proof`) est
-inchangé à l'octet (Π1), et aucun chemin réservé (`apps/backoffice-angular/**`,
-`Dockerfile`, `deploy/env.template.js.in`, `deploy/docker-entrypoint.sh`) ne
-change (Π4).
+résolution différée de l'adresse de service s'appliquent au profil extérieur
+(D7), le seul mode de génération de l'atelier.
 
 **Quatre obligations, prouvées séparément.**
 
@@ -1435,7 +1429,7 @@ WebKit ne sont pas mesurés ; seul Chromium l'est.
 
 `generate:list-query --target-root` génère une lecture `list-query` v2 depuis
 les entrées du produit et la publie dans une de ses applications Angular avec
-session, par la primitive de l’ADR-0103, sur le modèle exact de la commande
+session, par la primitive de l’inventaire scellé, sur le modèle exact de la commande
 extérieure (X2) :
 
 ```sh

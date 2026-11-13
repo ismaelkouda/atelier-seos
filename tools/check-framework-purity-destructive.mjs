@@ -48,8 +48,7 @@
  * Volontairement PAS branché en CI bloquant à chaque commit (Q-6/Q-7 déjà
  * bloquant couvre le cas courant) : ce test manipule `node_modules` et est
  * plus lent (~20 compilations `tsc` complètes). Recommandé en job
- * périodique / avant release, pas sur chaque PR — cf. note dans
- * taches-restantes.md.
+ * périodique / avant release, pas sur chaque PR.
  */
 
 import { execFileSync } from 'node:child_process';

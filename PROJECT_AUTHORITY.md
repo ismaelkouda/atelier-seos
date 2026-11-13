@@ -1,385 +1,118 @@
-# Autorité produit et guide de démarrage — cmz-platform
+# Charte de l'atelier
 
-- **Cap du dépôt — décision courante :**
-  [ADR-0102](./docs/adr/0102-atelier-reutilisable-et-preuves-independantes.md)
+> Point d'entrée obligatoire de toute personne ou de tout agent qui découvre le
+> dépôt. Cette charte est la seule source de direction. Elle ne remplace pas la
+> lecture du code, des contrats et des tests concernés par une tâche.
 
-> Point d'entrée obligatoire pour toute personne ou tout agent qui découvre le
-> dépôt. Ce document fixe le cap courant, l'ordre des autorités et les règles de
-> travail. Il ne remplace pas la lecture du code et des contrats concernés par
-> une tâche.
-
-`AGENTS.md` est l'instruction opérationnelle chargée automatiquement. Il oblige
-chaque agent à lire ce document et route vers un rôle borné. Le modèle complet
-des rôles et le guide simple du propriétaire vivent sous `docs/agents/`. Leurs
-permissions machine sont bornées par `conventions/agents/operating-model.json`
-et décidées dans ADR-0095. Une étape planifiée sépare obligatoirement l'executor
-du reviewer selon ADR-0096 ; aucun agent reviewer n'approuve ou ne fusionne.
+`AGENTS.md` est chargé automatiquement. Il impose la lecture de cette charte et
+route vers un rôle borné décrit sous [`docs/agents/`](./docs/agents/README.md).
 
 ## 1. Ordre d'autorité
 
-En cas de contradiction, utiliser cet ordre :
+En cas de contradiction, appliquer cet ordre :
 
-1. demande explicite actuelle du propriétaire du produit ;
-2. contrats, schémas et garde-fous exécutables présents sur la base Git de
+1. la demande explicite actuelle du propriétaire ;
+2. les contrats, schémas et gardes exécutables présents sur la base Git de
    travail ;
-3. ADR `Accepted` non supersédé ;
-4. [ADR-0102](./docs/adr/0102-atelier-reutilisable-et-preuves-independantes.md)
-   pour le cap réutilisable et les preuves indépendantes des projets ;
-   [ADR-0094](./docs/adr/0094-cap-produit-interne-remplacement-progressif-et-cibles-web.md)
-   pour les principes conservés de l'atelier ;
-5. [matrice de capacités](./docs/architecture/generation-platform-capability-matrix.md)
-   pour les claims techniques ;
-6. [feuille de route courante](./docs/architecture/feuille-de-route.md) pour
-   l'ordre des prochains travaux ;
-7. documents d'architecture spécialisés ;
-8. audits, mémos, `taches-restantes.md`, corpus et Git pour l'historique.
+3. cette charte ;
+4. les guides sous `docs/` et les conventions sous `conventions/`.
 
-Un statut GitHub, une version, une PR ou un résultat CI est une donnée vivante :
-il faut la vérifier. Une note « fait localement » ne prouve ni un commit, ni une
-PR, ni une fusion, ni une CI verte.
+Un statut GitHub, une PR ou un résultat CI est une donnée vivante : la vérifier.
+Une note « fait localement » ne prouve ni un commit, ni une fusion, ni une CI
+verte.
 
-## 2. Mission du produit
+## 2. Un atelier générique
 
-Le dépôt construit un **atelier interne assisté par IA** pour produire nos
-propres applications métier data-centric : backoffices, CRUD, vues de données,
-commandes et workflows. Une application produite doit rester du code standard,
-lisible, testable, débogable et modifiable sans connaître le générateur.
+Ce dépôt est un **atelier générique**. Il sert à générer **plusieurs
+applications différentes**. Il n'est lié à aucune application particulière.
 
-```text
-besoin métier confirmé
-→ sources et contrats versionnés
-→ conception applicative validée
-→ plan déterministe
-→ réalisation UI bornée par un LLM
-→ compilation, tests et oracles
-→ revue humaine
-→ publication contrôlée
-```
+- L'atelier ne contient aucune donnée d'application : ni contrat backend réel,
+  ni règle métier, ni identifiant, ni domaine réel, ni capture d'un produit.
+- Ses tests et ses preuves utilisent uniquement des fixtures fictives,
+  déclarées comme telles.
+- Les faits d'un produit réel (brief, contrats, conception, données) vivent dans
+  le dépôt de ce produit, jamais dans l'atelier.
 
-La conversation aide à concevoir ; elle n'est jamais la source de vérité. Les
-artefacts versionnés, leurs preuves et les décisions validées le sont.
+## 3. Étape B : des produits extérieurs
 
-### Cap confirmé par le propriétaire
+L'atelier produit des **produits Angular extérieurs**. Un produit vit dans sa
+propre racine physique, hors de l'atelier, avec ses propres outils installés.
 
-- usage interne d'abord ;
-- publication en ligne possible lorsque l'exploitation est prête ;
-- aucun claim actuel de SaaS public multi-locataire ;
-- remplacement progressif du legacy en production ;
-- priorité : des capacités utilisables sur les contrats de l’application
-  choisie, indépendamment du nom, de la connexion ou des données de SEOS ;
-- les faits manquants d’un projet bloquent seulement son exécution concernée,
-  jamais la qualification générique sur des entrées explicitement fictives ;
-- le propriétaire fournit les faits de chaque projet réel ; aucune règle métier
-  n’est inventée pour combler une inconnue ;
-- Angular et React sont deux cibles produit ;
-- une sortie est mono-stack et idiomatique à sa cible.
+La chaîne de l'étape B :
 
-L’atelier réutilisable est le produit de ce dépôt. SEOS est un exemple
-quelconque, sans branche spécialisée dans le moteur ni rôle de référence
-universelle. Son corpus et ses preuves de migration restent historiques ; leur
-conservation ne conditionne pas le développement d’une capacité générale.
+1. `prepare:application-workspace` prépare la racine du produit ;
+2. `compile:backend-contract` et `compile:application-design` compilent les
+   contrats du produit (`--target-root`) ;
+3. `create-app --target-root` crée la coque de l'application ;
+4. `generate:list-query` et `generate:action-request` génèrent les lectures et
+   les actions ;
+5. `compile:page-execution-plan` et `generate:page-composition` composent une
+   page ;
+6. `prepare:page-realization` et `verify:page-realization` encadrent la
+   réalisation de la page ;
+7. la session, le relais nginx et la politique de sécurité sont fournis par la
+   coque.
 
-L’avancement se mesure par capacité : contrat indépendant du projet, preuves sur
-des entrées structurellement distinctes, résultat réel par cible, puis
-intégration et publiabilité. Une réussite sur un cas ne prouve pas à elle seule
-la réutilisabilité. Les briefs d’application restent des projets séparés.
+Chaque commande lit les entrées du produit, publie sous plan relu
+(`--dry-run`, puis `--apply <plan_id>`) et refuse toute sortie hors du produit.
+Le protocole détaillé est dans
+[`docs/etape-b/external-application-creation.md`](./docs/etape-b/external-application-creation.md).
+Le runbook des commandes est
+[`docs/etape-b/runbook-commandes-creation.md`](./docs/etape-b/runbook-commandes-creation.md).
 
-## 3. Ce que le dépôt n'est pas
+Le job CI requis **External application shells** prouve cette chaîne sur deux
+produits fictifs (`observatory`, `equipment-hire`) et sur des produits A et B
+indépendants.
 
-- un générateur universel de tout type de logiciel ;
-- un système autorisé à inventer des règles métier absentes ;
-- une preuve qu'un backend réel fonctionne parce qu'un mock passe ;
-- un moteur mélangeant Angular et React dans la même application ;
-- un SaaS public déjà sécurisé, modéré, facturé et opéré ;
-- un système autonome qui fusionne ou déploie sans revue ;
-- un runtime propriétaire obligatoire pour les applications produites ;
-- un corpus de fine-tuning : le corpus SEOS est un inventaire historique de
-  correspondances et décisions.
+## 4. Une interface libre, dans un cadre fourni
 
-## 4. Rôle du legacy, de SEOS et de C5
+L'IA est libre d'écrire l'interface d'une page. Cette liberté s'exerce dans un
+**cadre d'éléments fourni** par l'atelier :
 
-Le legacy sert temporairement à observer des contrats, comportements,
-permissions et cas limites. Il ne doit pas imposer sa structure, ses
-bibliothèques, ses défauts ou sa présentation aux nouvelles applications.
+- le bon de travail de la page (fichiers autorisés, contrats, routes) ;
+- les lectures, actions et compositions générées ;
+- la session, les jetons de service et les erreurs fournis par la coque ;
+- les primitives officielles de la pile (Angular, CDK, Material si qualifié).
 
-Le code Angular reconstruit sert à la migration progressive et à la comparaison.
-La preuve C5 « Gestion des utilisateurs » éprouve `list-query`,
-`action-request`, leur composition et la réalisation d'une page. Elle n'est pas
-la première application produit.
+L'IA n'invente jamais une règle métier, une permission, un endpoint ou une
+donnée. Une inconnue reste visible et bloque seulement ce qu'elle concerne.
 
-Avant de retirer une fonctionnalité legacy :
+## 5. Protections minimales
 
-1. identifier les comportements encore utiles ;
-2. les encoder dans des contrats et tests indépendants du legacy ;
-3. vérifier la nouvelle tranche contre le backend et les usages réels ;
-4. déployer progressivement avec une stratégie de retour arrière ;
-5. retirer seulement les consommateurs devenus inutiles.
+Toute contribution à l'atelier et tout produit généré passent ces protections :
 
-L'issue #64 gouverne la dernière promotion humaine de la preuve de composition ;
-son état GitHub doit être relu avant toute action. L'archivage du corpus et la
-réduction de ses jobs CI constituent un changement séparé après cette clôture.
-Ce corpus historique ne mesure ni la réutilisabilité ni la maturité globale de
-l’atelier ; son archivage reste séparé des prochaines capacités.
+| Protection       | Preuve minimale                                              |
+| ---------------- | ------------------------------------------------------------ |
+| build            | compilation et `ngc --strictTemplates` sans erreur            |
+| lint             | ESLint sans avertissement                                    |
+| tests            | tests unitaires et tests de l'étape B verts                  |
+| licences         | dépendances de production permissives (`check:licenses`)     |
+| smoke navigateur | coque servie et ouverte dans un vrai navigateur              |
+| aucun secret     | `check:secrets` (gitleaks) vert ; aucun secret dans Git      |
+| aucune donnée    | aucune donnée d'application dans l'atelier (§ 2)             |
 
-C5 React possède le chargement progressif, le filtre Compact à deux niveaux et
-le FAB de création borné par ADR-0097. Les trois écarts Compact automatisables
-identifiés par ADR-0091 sont fermés. La revue visuelle humaine et les essais
-VoiceOver/NVDA restent distincts de la promotion des primitives de composition.
+Une gate, un hook ou une revue ne se contourne jamais (`--no-verify`, fusion
+forcée, baisse silencieuse d'exigence). Un test vert ne prouve que ce qu'il
+exerce.
 
-## 5. Architecture actuelle
+## 6. Agents
 
-### 5.1 Chaîne applicative
-
-Les artefacts centraux sont :
-
-- `backend-contract` : opérations, modèles, sécurité, provenance et cycle de vie
-  du backend ;
-- `application-design` : audiences, expériences, routes, pages, données,
-  actions, états et accessibilité ;
-- shell d'application : Angular ou React, sans métier inventé ;
-- `list-query` v2 : lecture, paramètres, décodage, cache, concurrence et états ;
-- `action-request` v2 : validation, mutation, permission, erreurs, résultat et
-  invalidation ;
-- `page-execution-plan` : lie N lectures et N actions indépendantes sans
-  recopier leurs contrats ;
-- work order de page : périmètre de fichiers et contrat de réalisation accordés
-  au LLM ;
-- oracles : contrats, code cible, navigateur et comportements revendiqués.
-
-Le code déterministe vit sous `tools/generator-platform/`. Les exemples et les
-applications de preuve ne créent pas une capacité : ils démontrent un claim
-précis.
-
-### 5.2 Place de `workflow-action`
-
-`workflow-action` reste un modèle d'orchestration ordonnée, séparé du plan de
-page courant. Il ne devient pas un troisième nœud générique ajouté par défaut.
-Une liaison à une page exigera un cas produit réel, un contrat explicite et des
-oracles adaptés. Une action ponctuelle reste `action-request`.
-
-### 5.3 Neutralité backend
-
-Une liste peut être un tableau direct, une page ou une projection explicitement
-décrite. Laravel, Spring Boot, .NET, Django ou une API propriétaire sont des
-sources possibles. Aucun nom comme `data`, `content`, `items` ou `results` ne
-déclenche une heuristique cachée.
-
-Les URL d'environnement sont injectées au runtime. Les URL de test historiques
-visibles dans le `Dockerfile` ne donnent pas l'autorisation d'appeler le
-backend. Tout test vivant exige une décision explicite, des identifiants fournis
-hors Git, une portée minimale et commence en lecture seule.
-
-## 6. Frontière d'autorité du LLM
-
-Le LLM peut :
-
-- transformer une demande en définition candidate ;
-- proposer des mappings et rendre les inconnues visibles ;
-- produire une page dans l'allowlist d'un work order ;
-- expliquer un échec et réparer sa cause ;
-- préparer une migration et son diff.
-
-Le LLM ne peut pas :
-
-- décider une règle métier, une permission ou un endpoint non fourni ;
-- élargir seul un schéma ou une allowlist pour rendre un test vert ;
-- présenter une supposition comme une observation ;
-- transformer une capture en autorité backend ou comportementale ;
-- fusionner, publier ou appeler un service réel sans l'autorité correspondante.
-
-Toujours distinguer : **confirmé**, **observé**, **déduit**, **proposé** et
-**inconnu**.
-
-## 7. Règles de réalisation
-
-### 7.1 Natif et officiel avant custom
-
-Chercher d'abord la primitive officielle de la version installée. Ne pas
-transposer une API d'une version future ni une convention d'une autre stack.
-
-- Angular : Angular, CDK, Angular Aria, Angular Material, `@angular/localize`,
-  signaux et formulaires officiels selon le besoin.
-- React : React, React DOM, hooks, React Router et primitives web. Redux,
-  Zustand, TanStack Query, une bibliothèque de formulaire, React Aria ou une
-  bibliothèque UI exigent chacun un problème démontré et une qualification.
-- Style : réutiliser les tokens du dépôt ; Tailwind et SCSS sont
-  complémentaires. Le CSS custom ne réimplémente pas un comportement accessible
-  déjà couvert par une primitive officielle.
-
-Une primitive partagée n'est promue qu'après deux usages indépendants, un
-contrat stable et des oracles communs. Un cas unique peut garder une solution
-locale lisible.
-
-### 7.2 Interface adaptative
-
-Une capture ou un fichier Figma porte l'intention visuelle ; les contrats
-portent le comportement et les données ; les normes officielles portent les
-interactions et l'accessibilité. Aucun ne remplace les autres.
-
-- raisonner par espace utile et contenu, pas par nom d'appareil ;
-- préférer HTML sémantique et navigation clavier aux rôles ARIA avancés ;
-- une table reste une table tant qu'une grille interactive 2D n'est pas requise
-  ;
-- filtres, actions, consultation de ligne, sélection, export et création sont
-  des capacités optionnelles ;
-- une ligne n'est cliquable que si une action de ligne est déclarée ;
-- les contrôles internes d'une ligne ne déclenchent jamais son action ;
-- le tri est optionnel : `none`, `client` (`complete-collection` ou
-  `current-page`) ou `server` avec codec backend explicite. La portée locale
-  reste perceptible et aucun dialecte n'est déduit ;
-- dialogue, panneau, sheet ou page sont choisis selon la tâche, l'espace, le
-  risque et le contenu, pas selon une table figée de breakpoints ;
-- une image devient une baseline seulement après validation humaine explicite et
-  provenance cataloguée.
-
-Lire les références officielles consolidées dans
-[`ui-adaptative-references-officielles.md`](./docs/architecture/ui-adaptative-references-officielles.md)
-et l'inventaire de capacités dans
-[`data-view-capabilities-cmz-backoffice-2026-10-01.md`](./docs/architecture/data-view-capabilities-cmz-backoffice-2026-10-01.md).
-Le contrat du tri est détaillé dans
-[`tri-vues-donnees-multi-backend-2026-10-11.md`](./docs/architecture/tri-vues-donnees-multi-backend-2026-10-11.md).
-
-## 8. Discipline d'ingénierie
-
-### Modèle opératoire des agents
-
-Tout agent choisit exactement un rôle parmi `steward`, `step-executor`,
-`task-specialist` et `orchestrator`. Il ne peut pas élargir seul ce rôle. Les
-permissions, gates, handoffs et commandes applicables sont définis dans
-[`docs/agents/operating-model.md`](./docs/agents/operating-model.md). Le
-propriétaire peut utiliser
-[`docs/agents/guide-utilisateur.md`](./docs/agents/guide-utilisateur.md) pour
-choisir et contrôler un agent en français simple.
-
-Les permissions machine et le handoff minimal sont définis dans
+Tout agent choisit un seul rôle parmi `steward`, `step-executor`,
+`task-specialist` et `orchestrator`. Les permissions, gates et handoffs sont
+définis dans [`docs/agents/operating-model.md`](./docs/agents/operating-model.md)
+et bornés par
 [`conventions/agents/operating-model.json`](./conventions/agents/operating-model.json).
+Le propriétaire dispose du
+[guide simple d'orchestration](./docs/agents/guide-utilisateur.md).
 
-La qualité du résultat ne repose pas sur la compétence supposée du modèle :
-autorité bornée, contrat avant mutation, preuves réfutables, revue indépendante
-et CI rendent les erreurs observables.
-
-Pour une étape planifiée, le work order est approuvé avant le code et reste
-immuable pendant la réalisation. Un `step-executor` écrit ; un `task-specialist`
-distinct en mode `review` lit le diff exact sans le modifier ; un humain
-autorisé approuve ; Soumaila fusionne ; la CI de `main` clôt la chaîne. Le
-protocole complet est documenté dans
-[`chaine-agent-execution-revue-2026-10-08.md`](./docs/architecture/chaine-agent-execution-revue-2026-10-08.md).
-
-### Avant de modifier
-
-1. vérifier l'état Git, la branche, le commit de base et les worktrees ;
-2. préserver tous les changements non liés de l'utilisateur ;
-3. lire les fichiers concernés, leur configuration et leurs tests ;
-4. vérifier la version installée avant toute recherche externe ;
-5. rechercher les précédents et la cause racine ;
-6. annoncer toute hypothèse susceptible de changer le résultat ;
-7. utiliser un worktree isolé pour un chantier indépendant si l'arbre est sale.
-
-### Pendant la réalisation
-
-- petits incréments cohérents sans fragmenter artificiellement une même preuve ;
-- aucune écriture hors du périmètre d'un work order ;
-- aucune dépendance avant audit de valeur, version, sécurité, licence, poids,
-  maintenance et alternatives natives ;
-- aucune commande forcée, `--no-verify`, baisse de gate ou relance aveugle ;
-- une panne récurrente reçoit une correction de cause racine et un test de
-  non-régression ;
-- KISS, DRY, YAGNI et SOLID réduisent le coût total ; ils ne justifient pas une
-  multiplication de couches.
-
-### Preuve proportionnée
-
-| Claim               | Preuve minimale                                                         |
-| ------------------- | ----------------------------------------------------------------------- |
-| contrat valide      | schéma + invariants négatifs                                            |
-| code cible valide   | type-check/compilation + lint                                           |
-| comportement        | test runtime observant l'effet et mutation crédible tuée                |
-| intégration         | vrai graphe et vrais adaptateurs internes                               |
-| interface           | navigateur, clavier, focus, reflow, états et revue visuelle             |
-| accessibilité       | sémantique + outillage + clavier ; lecteur d'écran humain si revendiqué |
-| publication         | candidat isolé, diff, rollback/reprise, CI depuis clone propre          |
-| support multi-stack | preuve séparée pour chaque stack annoncée                               |
-
-Un test vert ne prouve que ce qu'il a exercé. Un avertissement Nx Cloud local
-lié aux identifiants ne doit pas être confondu avec un échec du code ou de la CI
-distante.
-
-## 9. Git, revue et fusion
+## 7. Git, revue et fusion
 
 - branche dédiée et PR ciblée ;
 - historique linéaire et `main` protégé ;
-- approbation indépendante avec droit d'écriture ;
-- le dernier pousseur ne peut pas approuver son propre changement ;
-- assigner et demander la revue à `soumailakouda` lorsque sa revue est requise ;
-- après un nouveau push, vérifier que l'approbation est encore valide ;
-- ne pas fusionner tant qu'une gate est rouge ou en cours ;
-- après fusion, vérifier le run `main`, pas uniquement celui de la PR.
+- approbation indépendante : le dernier pousseur n'approuve pas son propre
+  changement ;
+- aucune fusion tant qu'une gate est rouge ou en cours ;
+- après fusion, vérifier le run de `main`.
 
-Rapporter séparément : commit/push, revue demandée, approbation, fusion et CI
-post-fusion. Ces états ne sont pas interchangeables.
-
-## 10. Démarrer une application réelle
-
-Lire [LLM_APP_BUILDER.md](./LLM_APP_BUILDER.md), puis :
-
-1. obtenir un brief métier court ;
-2. collecter les sources backend sans les réinterpréter ;
-3. compiler le contrat backend ;
-4. compiler la conception applicative ;
-5. choisir explicitement `angular-pwa` ou `react-spa` ;
-6. créer le shell ;
-7. préparer et réaliser une seule page ;
-8. vérifier cette page de bout en bout ;
-9. faire valider avant la page suivante.
-
-Pour chaque application choisie, utiliser les sources contractuelles fournies :
-définition structurée, OpenAPI ou collection Postman admissible. La capture
-locale est une voie d’acquisition lorsqu’une source manque, pas un prérequis
-universel. Ne déduire ni accès public, ni permissions, ni types depuis une
-observation incomplète.
-
-Les faits ou l’authentification manquants de SEOS ne bloquent que ce cas. La
-qualification de l’atelier utilise des contrats fictifs déclarés, indépendants
-de son corpus ; elle ne prétend pas vérifier un backend vivant. Angular et React
-gardent des preuves distinctes. Les actes touchant un projet réel restent soumis
-à son autorité et à son plan, sans droit implicite issu d’une fixture. La
-configuration GitHub provient de la baseline codifiée de l’atelier, avec GitHub
-gratuit d’abord ; aucune copie manuelle concurrente.
-
-## 11. Clôturer la preuve de composition (#64)
-
-La preuve technique C5 existe. Le protocole de clôture exige une revue de
-promotion ; vérifier l'état vivant de #64 avant d'en déduire le reste à faire :
-
-1. matrice critère de #64 → artefact → test → résultat CI ;
-2. revue humaine de l'équivalence observable et des limites ;
-3. enregistrement distinct des compositions v2, avec maturité par cible ;
-4. synchronisation de #64, de la matrice et de la feuille de route ;
-5. PR verte et approbation indépendante ;
-6. seulement ensuite, fermeture de #64.
-
-La parité React est un objectif produit distinct. Elle ne bloque pas
-rétroactivement #64 si l'issue ne l'exige pas ; un claim « Angular + React »
-exige en revanche les preuves des deux cibles. Le retrait du corpus vient dans
-une PR séparée après cette clôture.
-
-## 12. Carte documentaire
-
-| Besoin                        | Autorité                                                                     |
-| ----------------------------- | ---------------------------------------------------------------------------- |
-| finalité de l'atelier         | ADR-0094 + ce document                                                       |
-| cap réutilisable et priorités | [ADR-0102](./docs/adr/0102-atelier-reutilisable-et-preuves-independantes.md) |
-| construire une application    | `LLM_APP_BUILDER.md`                                                         |
-| capacité revendiquée          | matrice de capacités + tests/CI                                              |
-| ordre du travail              | feuille de route courante                                                    |
-| décision technique            | ADR accepté non supersédé                                                    |
-| état mécanique                | `STATUS.md` généré                                                           |
-| preuve de composition         | issue #64 + artefacts C5                                                     |
-| intervention d'un agent       | `AGENTS.md` + `docs/agents/operating-model.md`                               |
-| pilotage simple des agents    | `docs/agents/guide-utilisateur.md`                                           |
-| historique détaillé           | `LLM_CONTEXT.md`, `taches-restantes.md`, audits, Git                         |
-
-`LLM_CONTEXT.md` et `taches-restantes.md` sont conservés pour la traçabilité et
-les blocs générés historiques. Ils ne sont plus les sources du cap ni de la
-priorité courante. Un document daté décrit son époque ; il ne peut pas annuler
-une décision plus récente.
+Rapporter séparément : commit, push, revue, approbation, fusion et CI
+post-fusion.

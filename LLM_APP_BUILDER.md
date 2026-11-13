@@ -7,11 +7,12 @@
 ## Mission
 
 Tu es la LLM chargée d’aider l’utilisateur à concevoir puis construire une
-application dans ce workspace.
+application avec cet atelier. L’application vit dans sa propre racine de
+produit, hors de l’atelier.
 
 L’utilisateur n’a pas à connaître l’architecture, les générateurs ou les formats
 JSON du dépôt. Tu dois transformer son besoin exprimé en langage simple en une
-conception vérifiable, puis en code conforme au workspace.
+conception vérifiable, puis en code conforme au produit.
 
 Le travail se fait progressivement :
 
@@ -41,8 +42,8 @@ Ne commence jamais à construire toutes les pages en une seule fois.
 6. Distingue toujours les informations confirmées, déduites et inconnues.
 7. Recherche dans le dépôt toute information qui peut y être découverte avant de
    la demander à l’utilisateur.
-8. Obtiens une validation explicite avant de créer une application, un module,
-   une page ou d’appliquer un changement destructif.
+8. Obtiens une validation explicite avant de créer une application, une page ou
+   d’appliquer un changement destructif.
 9. Une validation d’une page n’autorise pas implicitement la construction des
    pages suivantes.
 10. Ne contourne jamais une gate en supprimant un test, en élargissant une
@@ -57,138 +58,141 @@ conception écrit les artefacts source, la LLM de réalisation écrit l’interf
 dans le périmètre borné de chaque page, et les scripts calculent les plans,
 publient et vérifient.
 
+Chaque produit vit dans **sa propre racine**, hors de l’atelier. L’atelier ne
+reçoit jamais les faits, contrats ou conceptions d’un produit.
+
 ```text
 entretien produit
+→ racine du produit préparée
 → source backend immuable
 → contrat backend canonique
 → source de conception applicative
 → conception canonique validée
-→ shell Angular ou React
-→ work order d’une page
+→ coque Angular
+→ lectures et actions
+→ plan et composition d’une page
+→ bon de travail d’une page
 → réalisation UI par la LLM
 → oracles
 → page suivante
 ```
 
-Le protocole dépend de la commande. Les compilateurs de contrats et la
-préparation d'un work order utilisent `--dry-run`, puis `--apply <identifiant>`.
-`create-app` publie directement dans son chemin nominal ; `--dry-run` permet
-d'inspecter le plan et `--expect-plan <identifiant>` exige ensuite le plan revu.
-Ne jamais transposer les options d'une CLI à une autre : vérifier son parseur ou
-son aide dans la version présente du dépôt.
+Chaque commande extérieure exige `--target-root <racine absolue>`, calcule un
+plan avec `--dry-run`, puis publie seulement le plan relu avec
+`--apply <plan_id>` (`--expect-plan <plan_id>` pour `create-app`). Ne jamais
+transposer les options d'une CLI à une autre : vérifier son aide (`--explain` ou
+`--help`) dans la version présente du dépôt.
 
-### 1. Compiler le contrat backend
+### 1. Préparer la racine du produit
+
+```bash
+bun run prepare:application-workspace -- --target-root <racine> \
+  --profiles angular-pwa --github-repository <owner/repo> \
+  --review-owner <login> --dry-run
+```
+
+La racine reçoit ses propres configurations Nx/Bun et son verrou. Elle ne
+partage aucun runtime avec l’atelier.
+
+### 2. Compiler le contrat backend
 
 Choisir exactement un adaptateur :
 
 ```bash
-bun run compile:backend-contract -- --adapter structured --definition <source.json> --out <contrat.json> --dry-run
-bun run compile:backend-contract -- --adapter openapi --definition <openapi.json|yaml> --out <contrat.json> --dry-run
-bun run compile:backend-contract -- --adapter postman --definition <collection.json> --out <contrat-reference.json> --dry-run
+bun run compile:backend-contract -- --target-root <racine> --adapter structured --definition <source.json> --out <contrat.json> --dry-run
+bun run compile:backend-contract -- --target-root <racine> --adapter openapi --definition <openapi.json|yaml> --out <contrat.json> --dry-run
+bun run compile:backend-contract -- --target-root <racine> --adapter postman --definition <collection.json> --out <contrat-reference.json> --dry-run
 ```
 
-Après revue, remplacer `--dry-run` par `--apply <plan_id>`. Une collection
-Postman est toujours une observation `reference`. Une spécification OpenAPI
-cible `planned` doit être distincte de toute API analogue.
+Les chemins sont relatifs à la racine du produit. Une collection Postman est
+toujours une observation `reference`. Une spécification OpenAPI cible `planned`
+doit être distincte de toute API analogue.
 
-### 2. Compiler la conception complète
+### 3. Compiler la conception complète
 
 La LLM écrit une source JSON ou YAML conforme à
 `tools/generator-platform/schemas/application-design.schema.json`. Elle y
-déclare les sources immuables, contrats backend, audiences, expériences web /
-Android / iOS, pages, états, contrôles, actions, données et preuves.
+déclare les sources immuables, contrats backend, audiences, expériences, pages,
+états, contrôles, actions, données et preuves.
 
 ```bash
-bun run compile:application-design -- --source <conception.json|yaml> --out designs/<app>.application-design.json --dry-run
-bun run compile:application-design -- --source <conception.json|yaml> --out designs/<app>.application-design.json --apply <plan_id>
-bun run check:application-designs
+bun run compile:application-design -- --target-root <racine> --source <conception.json|yaml> --out <conception.json> --dry-run
 ```
 
 Une conception `approved` échoue si une inconnue subsiste, si une page est
 inaccessible, si un champ ou endpoint n’existe pas dans le contrat cible, ou si
 une source `reference` pilote l’implémentation.
 
-### 3. Créer le shell de l’application
+### 4. Créer la coque de l’application
 
 ```bash
-bun run create-app -- --design designs/<app>.application-design.json --experience <experience-id> --app <app> --dry-run
-bun run create-app -- --design designs/<app>.application-design.json --experience <experience-id> --app <app> --expect-plan <plan_id>
-bun run create-app -- --design designs/<app>.application-design.json --experience <experience-id> --app <app> --profile react-spa
+bun run create-app -- --target-root <racine> --design <conception.json> --experience <experience-id> --app <app> --profile angular-pwa --dry-run
+bun run create-app -- --target-root <racine> --design <conception.json> --experience <experience-id> --app <app> --profile angular-pwa --expect-plan <plan_id>
 ```
 
-Le profil par défaut est `angular-pwa`; React exige `--profile react-spa`. Le
-publisher vérifie le compilateur propre au profil (`ngc` ou `tsc`), le build de
-production et le lint, puis restaure un candidat reprenable en cas d’échec.
+La coque porte la session, le relais nginx de même origine et la politique de
+sécurité de contenu. Elle ne contient aucune règle métier.
 
-### 4. Réaliser une page par LLM
+### 5. Générer les lectures, les actions et la composition
 
 ```bash
-bun run prepare:page-realization -- --app <app> --page <page_id> --dry-run
-bun run prepare:page-realization -- --app <app> --page <page_id> --apply <work_order_id>
+bun run generate:list-query -- --target-root <racine> --app <app> --definition <lecture.json> --dry-run
+bun run generate:action-request -- --target-root <racine> --app <app> --definition <action.json> --dry-run
+bun run compile:page-execution-plan -- --target-root <racine> --app <app> --page <page_id> --dry-run
+bun run generate:page-composition -- --target-root <racine> --app <app> --page <page_id> --dry-run
 ```
 
-La LLM lit le work order publié, y compris le nœud de rôle `screen`, le profil
-de l'application et le contrat d'archétype hashé (`shape` + `forbid`), puis
-écrit uniquement les fichiers autorisés sous la racine indiquée. Elle ne fait
-aucun appel HTTP direct et mappe chaque identifiant du contrat vers un sélecteur
-`data-cmz-id` exact. Ensuite :
+Une page peut porter plusieurs lectures et plusieurs actions indépendantes
+(chargements sur entrée + actions, sans dépendance ni ordre entre eux). Une
+dépendance ordonnée entre nœuds n’est pas prise en charge. Une autre composition
+n’est jamais simulée.
+
+### 6. Réaliser une page par LLM
 
 ```bash
-bun run verify:page-realization -- --app <app> --page <page_id> --work-order <work_order_id>
+bun run prepare:page-realization -- --target-root <racine> --app <app> --page <page_id> --dry-run
+bun run prepare:page-realization -- --target-root <racine> --app <app> --page <page_id> --apply <plan_id>
+```
+
+La LLM lit le bon de travail publié, y compris le nœud de rôle `screen`, le
+profil de l'application et le contrat d'archétype haché (`shape` + `forbid`),
+puis écrit uniquement les fichiers autorisés. Elle est libre de l’interface
+dans ce cadre. Elle ne fait aucun appel HTTP direct et mappe chaque identifiant
+du contrat vers un sélecteur `data-cmz-id` exact. Ensuite :
+
+```bash
+bun run verify:page-realization -- --target-root <racine> --app <app> --page <page_id> --dry-run
 ```
 
 En cas d’échec, la LLM corrige seulement cette page et relance le même oracle.
 Le rapport exécute compilation, build de production, lint et tests. Le passage à
-la page suivante exige un nouveau work order.
+la page suivante exige un nouveau bon de travail.
 
-Cette chaîne automatise aujourd’hui les shells Angular et React ainsi que les
-compositions `action-request` et `list-query`. Une page peut porter **plusieurs
-`list-query` et plusieurs `action-request` indépendants** (chargements sur
-entrée + actions, sans dépendance ni ordre entre eux — ADR-0045). Une dépendance
-ordonnée entre nœuds ou une livraison asynchrone relève du graphe d’exécution
-typé (ADR-0031), non implémenté. Une autre composition n’est jamais simulée :
-elle doit d’abord entrer dans le registre avec des cas métier probants et un
-générateur testé. `workflow-action` reste un moteur d'orchestration séparé ; il
-n'est pas un troisième nœud de page par défaut. Kotlin, iOS et le backend cible
-sont des profils futurs, pas des capacités prétendument livrées.
+Le fonctionnement de cette chaîne est prouvé par des produits fictifs dans le
+job CI requis External application shells. Il ne valide jamais les champs ou
+endpoints de ton projet.
 
-Le fonctionnement du moteur est prouvé par une fixture technique versionnée,
-distincte de tout projet métier :
-
-```bash
-bun run check:application-pipeline
-```
-
-Cette gate reconstruit la chaîne Postman `reference` → cible `planned` →
-conception → shell → page, interdit de lier l’analogue à une action, puis lance
-les oracles déclarés par le pipeline. Elle ne constitue jamais une validation
-implicite des champs ou endpoints de ton projet.
-
-## 1. Prendre connaissance du workspace
+## 1. Prendre connaissance de l’atelier et du produit
 
 Avant le premier entretien, lis au minimum :
 
 - `PROJECT_AUTHORITY.md` ;
 - `README.md` ;
-- `LLM_CONTEXT.md` seulement pour une question historique ciblée ;
-- `STATUS.md` ;
 - `package.json` ;
-- `docs/architecture/retirer-un-module.md` ;
-- `docs/architecture/scope.json` ;
-- les ADR et documents d’architecture pertinents ;
-- les patterns sous `docs/architecture/patterns/` ;
-- les applications sous `apps/` ;
-- les modules proches du besoin sous `libs/` ;
-- les définitions existantes sous `tools/generator-platform/sources/`.
+- [`docs/etape-b/runbook-commandes-creation.md`](./docs/etape-b/runbook-commandes-creation.md) ;
+- [`docs/etape-b/external-application-creation.md`](./docs/etape-b/external-application-creation.md) ;
+- les schémas sous `tools/generator-platform/schemas/` ;
+- la racine du produit, si elle existe déjà : `descriptions/`, `apps/` et son
+  manifeste `.cmz/application-workspace.json`.
 
-Utilise la recherche du dépôt pour découvrir les routes, DTO, permissions,
-providers, composants et contrats déjà disponibles. Ne lis pas tous les fichiers
-sans discernement : commence par l’inventaire, puis ouvre seulement les sources
+Utilise la recherche du dépôt et du produit pour découvrir les contrats, routes,
+permissions et pages déjà disponibles. Ne lis pas tous les fichiers sans
+discernement : commence par l’inventaire, puis ouvre seulement les sources
 pertinentes.
 
 Après cette inspection, explique en quelques phrases :
 
-- ce que le workspace permet déjà d’automatiser ;
+- ce que l’atelier permet déjà d’automatiser ;
 - les conventions applicables au projet demandé ;
 - les informations métier qui restent nécessaires.
 
@@ -241,10 +245,11 @@ Pour chaque élément, indique son statut :
 Demande à l’utilisateur de corriger ou valider cette fiche. Ne construis pas la
 carte des pages avant cette validation.
 
-Après validation, conserve la fiche comme source de preuve sous :
+Après validation, conserve la fiche comme source de preuve dans la racine du
+produit, jamais dans l’atelier :
 
 ```text
-docs/projects/<nom-projet>/project-brief.md
+<racine du produit>/descriptions/project-brief.md
 ```
 
 La LLM crée elle-même ce document lorsque l’utilisateur demande de matérialiser
@@ -292,7 +297,7 @@ Demande une validation explicite de la carte et de l’ordre de construction.
 Après validation, la carte est enregistrée par la LLM sous :
 
 ```text
-docs/projects/<nom-projet>/page-map.md
+<racine du produit>/descriptions/page-map.md
 ```
 
 ## 5. Choisir la prochaine page
@@ -381,7 +386,7 @@ Pied de page éventuel
 ```
 
 Précise le comportement mobile, clavier et lecteur d’écran. Respecte les
-conventions Angular et d’accessibilité trouvées dans le workspace.
+conventions Angular et d’accessibilité de `conventions/angular-22.profile.json`.
 
 ### 6.6 Contrats techniques
 
@@ -393,8 +398,7 @@ Recherche les contrats existants avant de proposer du code :
 - permissions ;
 - route ;
 - providers ;
-- traductions ;
-- modules réutilisables.
+- traductions.
 
 Si le backend n’existe pas, ne fabrique pas silencieusement un faux contrat. Un
 backend analogue ne prouve jamais le backend cible. Classe les informations avec
@@ -415,42 +419,29 @@ et sa propre provenance. Présente explicitement l’une de ces options :
 - définir un contrat à faire valider par l’équipe backend ;
 - utiliser temporairement un mock clairement isolé.
 
-La conception produit reste agnostique de la cible. Angular, React, Kotlin et
-iOS sont des profils de réalisation distincts ; seuls Angular et React sont des
-cibles web produit actuellement instrumentées. Les variantes citoyenne et
-traitante partagent le domaine, mais déclarent séparément audiences, capacités,
-routes et permissions ; une page validée pour une variante ne l’est pas
-implicitement pour une autre.
+La conception produit reste agnostique de la cible. Les lectures, actions,
+compositions et réalisations de page des produits extérieurs sont Angular avec
+session. Deux variantes d’une même application partagent le domaine, mais
+déclarent séparément audiences, capacités, routes et permissions ; une page
+validée pour une variante ne l’est pas implicitement pour une autre.
 
-### 6.7 Traduction vers les instruments du workspace
+### 6.7 Traduction vers les instruments de l’atelier
 
-Classe chaque besoin dans la composition ou le pattern approprié.
-
-Primitives d'exécution de page actuellement disponibles :
+Classe chaque besoin dans une primitive d’exécution de page :
 
 - `action-request` : formulaire ou action ponctuelle avec validation, mutation
   serveur et résultat ;
 - `list-query` : consultation simple ou liste en lecture.
 
-Références architecturales également présentes dans le workspace, sans claim
-qu'elles soient des nœuds de page génériques :
-
-- `crud-entity` ;
-- `workflow-action` ;
-- `read-only-view`.
-
-Ne prétends pas que `create-module` automatise un pattern qu’il ne supporte pas.
-Pour une composition non supportée, explique précisément le manque et propose
-soit une implémentation conforme aux exemples existants, soit une évolution
-séparée du générateur.
+Une page compose plusieurs lectures et actions indépendantes par son plan
+d’exécution. Pour un besoin non couvert, explique précisément le manque et
+propose une évolution séparée du générateur ; ne simule jamais une composition.
 
 Détermine ensuite :
 
-- les modules à créer ;
-- les modules existants à réutiliser ;
-- les couches `domain`, `data`, `application` nécessaires ;
-- les composants applicatifs de la page ;
-- les extensions humaines prévues.
+- les lectures et actions à générer ;
+- le plan d’exécution de la page ;
+- les fichiers que la LLM de réalisation écrira dans le bon de travail.
 
 ## 7. Présenter le contrat de page
 
@@ -467,8 +458,7 @@ Action principale :
 États couverts :
 Contrats backend confirmés :
 Permissions confirmées :
-Modules existants réutilisés :
-Modules à créer :
+Lectures et actions à générer :
 Tests prévus :
 Inconnues restantes :
 ```
@@ -482,36 +472,26 @@ Le contrat validé est encodé par la LLM dans la source de conception canonique
 Une vue Markdown de lecture peut aussi être enregistrée sous :
 
 ```text
-docs/projects/<nom-projet>/pages/<nom-page>.md
+<racine du produit>/descriptions/pages/<nom-page>.md
 ```
 
 ## 8. Implémenter la page validée
 
 Une fois la page validée :
 
-1. inspecte les fichiers qui seront modifiés ;
-2. vérifie l’état Git et préserve les changements existants de l’utilisateur ;
-3. génère les modules supportés avec un dry-run ;
-4. présente le résumé du Change Set si une décision reste nécessaire ;
-5. crée ou fait évoluer les modules ;
-6. prépare le work order borné de la page ;
-7. laisse la LLM de réalisation écrire l’interface et ses tests dans les seuls
+1. inspecte les fichiers du produit qui seront touchés ;
+2. vérifie l’état Git du produit et préserve les changements existants ;
+3. génère les lectures et actions avec un `--dry-run`, puis applique le plan relu ;
+4. compile le plan d’exécution et génère la composition de la page ;
+5. prépare le bon de travail borné de la page ;
+6. laisse la LLM de réalisation écrire l’interface et ses tests dans les seuls
    fichiers autorisés ;
-8. exécute l’oracle et fait corriger la page en boucle ;
-9. présente le résultat avant de passer à la suivante.
+7. exécute `verify:page-realization` et fais corriger la page en boucle ;
+8. présente le résultat avant de passer à la suivante.
 
-Pour un module supporté, la LLM écrit sa définition puis l’utilisateur exécute :
-
-```bash
-bun run create-module --definition <definition.json> --dry-run
-bun run create-module --definition <definition.json>
-```
-
-Ne modifie pas manuellement les fichiers `generator-owned`. Place les
-personnalisations dans les extensions `human-owned` ou dans les composants
-applicatifs prévus. « human-owned » désigne la propriété et la stabilité du
-fichier ; cela n’oblige jamais l’utilisateur à coder lui-même, la LLM peut le
-réaliser sous contrôle du work order.
+Ne modifie pas manuellement les fichiers générés. La LLM de réalisation écrit
+l’interface sous contrôle du bon de travail ; l’utilisateur n’a jamais à coder
+lui-même.
 
 ## 9. Vérifier chaque page
 
@@ -527,14 +507,9 @@ La vérification doit être proportionnée à la page, mais couvrir au minimum :
 - absence de dépendances non déclarées ;
 - formatage.
 
-Utilise les targets Nx exactes lorsque la modification est locale. Avant de
-déclarer l’application terminée, exécute les gates globales :
-
-```bash
-bun install --frozen-lockfile
-bun run check:all
-bun run format:check
-```
+Utilise les targets Nx exactes du produit lorsque la modification est locale.
+Avant de déclarer l’application terminée, exécute dans le produit son build,
+son lint, ses tests et ses contrôles natifs, avec ses propres binaires.
 
 N’annonce jamais une gate comme réussie si elle n’a pas été exécutée. Si elle
 échoue à cause d’un changement appartenant à l’utilisateur, explique le fichier
@@ -604,46 +579,27 @@ L’application est terminée seulement si :
 - les permissions sont fail-closed ;
 - les contrats backend sont traçables ;
 - les documents du projet sont à jour ;
-- `bun install --frozen-lockfile`, `bun run check:all` et `bun run format:check`
-  passent ;
+- le build, le lint, les tests et les contrôles natifs du produit passent ;
 - les limites et travaux post-MVP sont explicitement listés.
 
-## 13. Évolution et retrait
+## 13. Évolution
 
 Pour faire évoluer une sortie générée :
 
-1. modifie sa définition source ;
-2. exécute le générateur en dry-run ;
-3. fais relire le Change Set ;
+1. modifie sa définition source dans le produit ;
+2. exécute la commande en `--dry-run` ;
+3. fais relire le plan ;
 4. applique son identifiant exact ;
-5. relance les gates.
+5. relance les contrôles du produit.
 
-Pour retirer un module :
-
-```bash
-bun run retire-module --module <nom> --dry-run
-bun run retire-module --module <nom>
-```
-
-N’efface jamais manuellement un module généré. Les références conservées après
-un retrait doivent être classifiées par occurrence exacte dans son tombstone.
-
-Pour retirer une application générée :
-
-```bash
-bun run retire-app -- --app <nom> --dry-run
-bun run retire-app -- --app <nom> --apply <plan_id>
-```
-
-Une interruption se traite uniquement par `--resume` ou `--abort` avec
-`--app <nom>` ; aucune suppression manuelle n’est admise.
+N’efface jamais manuellement une sortie générée.
 
 ## Première réponse attendue de la LLM
 
 Après avoir lu ce fichier et inspecté le workspace, commence ainsi :
 
 ```text
-J’ai inspecté le workspace et je vais t’accompagner page par page.
+J’ai inspecté l’atelier et je vais t’accompagner page par page.
 
 Pour commencer :
 1. Quel problème veux-tu résoudre avec cette application ?
@@ -673,10 +629,9 @@ métier. La qualification utilise uniquement des fixtures fictives.
 Lire
 [le protocole extérieur](./docs/etape-b/external-application-creation.md)
 et le runbook avant de proposer une commande. Le registre d’exécution est celui
-du projet choisi et de son autorité. Dans le seul exemple SEOS,
-`commandes-a-lancer.md` conserve les permissions particulières déjà décidées.
+du projet choisi et de son autorité.
 
-La qualification de l’atelier est indépendante de cette application. Les
+La qualification de l’atelier est indépendante de toute application. Les
 contrats fournis et les fixtures techniques déclarées permettent de travailler
 sans sa connexion. Les deux CLI de compilation acceptent désormais
 `--target-root` : elles lisent les contrats du produit extérieur et publient ses

@@ -28,10 +28,9 @@ Tout agent lit d'abord, intégralement :
 5. le `SKILL.md` du rôle actif ;
 6. les sources particulières indiquées par la tâche.
 
-Ensuite seulement, il lit les ADR, contrats, guides de stack et tests
-pertinents. Il ne charge pas tous les audits historiques « au cas où » : ce
-volume dilue l'autorité actuelle et augmente le risque de réintroduire une
-décision supersédée.
+Ensuite seulement, il lit les contrats, guides de stack et tests pertinents. Il
+ne charge pas l'historique Git « au cas où » : ce volume dilue l'autorité
+actuelle et augmente le risque de réintroduire une décision abandonnée.
 
 Les skills de rôle sont canoniques sous `.agents/skills/`. Un client peut les
 exposer par un adaptateur de découverte déclaré dans
@@ -222,10 +221,8 @@ Un finding confirmé suit l'une de ces routes :
 2. correction hors allowlist : nouveau work order ou extension approuvée ;
 3. décision produit ou architecture : arbitrage humain avant reprise.
 
-Le protocole exhaustif, les permissions GitHub, la sécurité des entrées, le
-format de sortie et les phases de calibration sont définis dans
-[`chaine-agent-execution-revue-2026-10-08.md`](../architecture/chaine-agent-execution-revue-2026-10-08.md).
-Aucun appel de modèle externe n'est activé par cette règle.
+Le reviewer agent et l'executor doivent être deux identités distinctes. Aucun
+appel de modèle externe n'est activé par cette règle.
 
 ## 6. Protection contre les agents peu fiables
 
@@ -278,8 +275,8 @@ contrats du dépôt.
 
 Le contrat JSON est la surface machine des permissions. La prose explique
 comment l'appliquer. Le garde CI vérifie la forme, les invariants critiques et
-le câblage documentaire ; conformément à ADR-0043 et ADR-0095, il ne prétend pas
-prouver le comportement réel d'un modèle.
+le câblage documentaire ; il ne prétend pas prouver le comportement réel d'un
+modèle.
 
 ## 8. Handoff standard
 

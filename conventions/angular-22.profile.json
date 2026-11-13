@@ -2,7 +2,7 @@
   "$schema": "./profile.schema.json",
   "platform": "angular",
   "platform_version": "22",
-  "description": "Profil de convention Angular 22. Source unique des choix de code qui changent d'une version majeure à l'autre. Le générateur et l'IA le LISENT ; ils ne le contiennent pas (ADR-0010). Pour Angular 23, créer angular-23.profile.json — ne pas modifier les générateurs.",
+  "description": "Profil de convention Angular 22. Source unique des choix de code qui changent d'une version majeure à l'autre. Le générateur et l'IA le LISENT ; ils ne le contiennent pas. Pour Angular 23, créer angular-23.profile.json — ne pas modifier les générateurs.",
   "source_of_truth": {
     "origin": "https://angular.dev/ai/develop-with-ai",
     "verified_for": "22.2.0",
@@ -77,10 +77,10 @@
         "abstraction cross-platform TranslationPort / I18nPort / provideI18n()"
       ],
       "guidance": "https://angular.dev/guide/i18n",
-      "notes": "Le pont historique du backoffice n'est ni une API portable ni le défaut du générateur. Une nouvelle page emploie directement les primitives Angular. React conserve son propre mécanisme natif. Voir ADR-0085."
+      "notes": "Une nouvelle page emploie directement les primitives Angular. React conserve son propre mécanisme natif."
     },
     "styling": {
-      "native": "Hiérarchie officielle (ADR-0077) : HTML sémantique pour les contrôles simples ; Angular Material standalone pour un composant visuel M3 dans une app qui l'a adopté ; Angular Aria pour un motif WAI-ARIA headless au visuel propre ; CDK pour une primitive bas niveau manquante. Mise en page, espacement, échelle typographique et one-offs : Tailwind ou styles de composant scopés. `NgOptimizedImage` pour les images statiques.",
+      "native": "Hiérarchie officielle : HTML sémantique pour les contrôles simples ; Angular Material standalone pour un composant visuel M3 dans une app qui l'a adopté ; Angular Aria pour un motif WAI-ARIA headless au visuel propre ; CDK pour une primitive bas niveau manquante. Mise en page, espacement, échelle typographique et one-offs : Tailwind ou styles de composant scopés. `NgOptimizedImage` pour les images statiques.",
       "packages": [
         "@angular/material",
         "@angular/aria",
@@ -92,12 +92,12 @@
         "ngClass / ngStyle (bindings natifs class / style à la place)",
         "CSS global hors thème M3 / couche `@theme` Tailwind",
         "autre librairie de composants (PrimeNG, NG-ZORRO, Nebular…) — Material est la seule",
-        "le reset Tailwind qui réinitialise les composants Material (préserver la frontière ADR-0041)",
+        "le reset Tailwind qui réinitialise les composants Material (préserver la frontière Material / Tailwind)",
         "Material et Angular Aria superposés sur le même comportement interactif",
         "style Tailwind / CSS utilisé pour simuler une sémantique ou une gestion clavier absente"
       ],
-      "guidance": "ADR-0077",
-      "notes": "Material et Tailwind restent opt-in via leurs recettes (ADR-0044). Angular Aria est un paquet headless sans setup d'application : catalogue + lockfile + premier usage réel, sans recette artificielle ; une recette ne devient candidate qu'après deux configurations d'app concordantes. `@cmz/shared-ui` reste le design system de `backoffice-angular` uniquement (ADR-0041)."
+      "guidance": "https://angular.dev/guide/components/styling",
+      "notes": "Material et Tailwind restent opt-in via leurs recettes. Angular Aria est un paquet headless sans setup d'application : catalogue + lockfile + premier usage réel, sans recette artificielle ; une recette ne devient candidate qu'après deux configurations d'app concordantes."
     },
     "accessibility": {
       "native": "WCAG AA et HTML sémantique d'abord. Pour un motif composite au visuel propre, utiliser la directive Angular Aria officielle ; pour une UI M3 adoptée, le composant Angular Material ; CDK A11y seulement pour une primitive manquante. Boutons nommés, champs avec `<label for>`, icônes décoratives `aria-hidden=\"true\"`, focus visible et parcours clavier/lecteur d'écran prouvé.",
@@ -109,7 +109,7 @@
         "réimplémentation manuelle d'un motif clavier/focus couvert par une primitive officielle applicable",
         "AXE présenté comme unique preuve d'accessibilité"
       ],
-      "guidance": "ADR-0077",
+      "guidance": "https://angular.dev/best-practices/a11y",
       "notes": "AXE est un gate structurel, pas une preuve complète. Ajouter tests de composant/harness, Playwright clavier/focus et validation manuelle sur la matrice navigateur/technologie d'assistance pertinente."
     },
     "testing": {

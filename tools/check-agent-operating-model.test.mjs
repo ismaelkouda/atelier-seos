@@ -40,7 +40,7 @@ test('the guard rejects a specialist that is no longer read-only by default', ()
 
 test('the guard rejects a historical authority restored in CLAUDE.md', () => {
     const documents = readAgentModelDocuments();
-    documents.claude += '\nSEOS reste le golden reference.\n';
+    documents.claude += '\nLe backoffice reste le golden reference.\n';
 
     assert.ok(
         collectAgentModelViolations(documents).some((violation) =>

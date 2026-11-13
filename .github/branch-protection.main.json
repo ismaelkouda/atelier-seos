@@ -11,7 +11,6 @@
       "Library integration (create-app → Material → Tailwind)",
       "External application shells",
       "Secret scan (gitleaks)",
-      "Docs freshness",
       "Oracle — lint + build + ngc + test",
       "E2E smoke (Playwright)",
       "Dead-code (knip)",

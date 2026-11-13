@@ -19,9 +19,6 @@ export const AGENT_MODEL_FILES = Object.freeze({
     agentsIndex: 'docs/agents/README.md',
     contract: 'conventions/agents/operating-model.json',
     contractSchema: 'conventions/agents/operating-model.schema.json',
-    adr95: 'docs/adr/0095-modele-operatoire-agents-bornes.md',
-    adr96: 'docs/adr/0096-separer-execution-et-revue-agent.md',
-    reviewChain: 'docs/architecture/chaine-agent-execution-revue-2026-10-08.md',
     steward: '.agents/skills/cmz-steward/SKILL.md',
     stewardUi: '.agents/skills/cmz-steward/agents/openai.yaml',
     executor: '.agents/skills/cmz-step-executor/SKILL.md',
@@ -391,34 +388,9 @@ export function collectAgentModelViolations(documents) {
         "l'index agents doit exposer le guide du propriétaire"
     );
     requireText(
-        'adr95',
-        '**Statut :** Accepted',
-        'ADR-0095 doit rester la décision acceptée du modèle opératoire'
-    );
-    requireText(
-        'adr95',
-        'ne prouve pas',
-        'ADR-0095 doit conserver la limite de la preuve automatisée'
-    );
-    requireText(
-        'adr96',
-        '**Statut :** Accepted',
-        'ADR-0096 doit rester la décision acceptée de séparation entre exécution et revue'
-    );
-    requireText(
-        'adr96',
-        "n'active aucun appel de modèle externe",
-        "ADR-0096 doit conserver la frontière d'activation externe"
-    );
-    requireText(
-        'reviewChain',
+        'model',
         "Le reviewer agent et l'executor doivent être deux identités",
-        "la chaîne détaillée doit imposer l'indépendance de l'executor et du reviewer"
-    );
-    requireText(
-        'reviewChain',
-        'Soumaila — fusion',
-        'la chaîne détaillée doit conserver la fusion humaine par Soumaila'
+        "le modèle opératoire doit imposer l'indépendance de l'executor et du reviewer"
     );
 
     for (const role of ROLES) {

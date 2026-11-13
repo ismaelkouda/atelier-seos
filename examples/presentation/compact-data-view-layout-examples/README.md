@@ -4,8 +4,6 @@
 - **Autorité :** mise en page seulement (`layout-guidance-only`)
 - **Sujet :** vue de données générique en espace Compact
 - **Manifeste :** [`example-set.json`](./example-set.json)
-- **Décision :**
-  [ADR-0099](../../../docs/adr/0099-references-de-presentation-retirees-conservees-par-git.md)
 
 ## Objectif
 

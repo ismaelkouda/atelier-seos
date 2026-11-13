@@ -5,8 +5,6 @@
 - **Autorité :** placement et hiérarchie des onglets du workspace uniquement
 - **Espaces :** Medium et Expanded ; Compact explicitement exclu
 - **Manifeste :** [`example-set.json`](./example-set.json)
-- **Décision :**
-  [ADR-0084](../../../docs/adr/0084-workspace-a-vues-vivantes-et-fermables.md)
 
 ## Objectif
 
@@ -41,14 +39,11 @@ budget mémoire.
 Le tableau, sa recherche et ses actions constituent seulement un panneau de
 contenu fictif. Ils n'appartiennent pas à l'autorité du shell.
 
-Le runtime doit suivre le
-[contrat complet](../../../docs/architecture/workspace-vues-vivantes-accessibilite-2026-10-04.md)
-et produire ses propres preuves.
+Une implémentation produit ses propres preuves de comportement et
+d'accessibilité.
 
 [`mockup.html`](./mockup.html) et [`render.mjs`](./render.mjs) reproduisent les
 PNG. Ils ne constituent pas du code Angular à copier.
 
-Les deux candidats antérieurs, à navigation par routes récentes, ont été
-supprimés du dépôt le 2026-10-10
-([ADR-0099](../../../docs/adr/0099-references-de-presentation-retirees-conservees-par-git.md)) ;
-ils restent consultables dans Git au commit `ea31ecf7`.
+Les candidats antérieurs, à navigation par routes récentes, restent
+consultables dans l'historique Git.

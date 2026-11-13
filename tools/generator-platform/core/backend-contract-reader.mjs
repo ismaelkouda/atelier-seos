@@ -2,7 +2,7 @@
 // lecteur de contrat, en mode graphe 2.1 (action-request), en list-query v2 et
 // à la validation de conception. Un contrat adopté n'est pas une observation
 // d'exécution : OBSERVATION_LIMITS (4096 nœuds) reste réservé aux preuves,
-// potentiellement hostiles. Mesure : le contrat SEOS adopté compte 4570
+// potentiellement hostiles. Mesure : un contrat réel adopté comptait 4570
 // jetons et 52 Ko, refusé à 4096. Ces valeurs sont celles que le compilateur
 // action-request 2.1 appliquait déjà ; ACTION_RESULT_GRAPH_LIMITS en dérive.
 import { observationInputPrimitives as io } from './runtime-observation-evidence.mjs';

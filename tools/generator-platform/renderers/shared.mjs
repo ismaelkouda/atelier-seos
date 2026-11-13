@@ -67,7 +67,6 @@ export function renderModels(semantic) {
  * bloc du `if` devient `never`, et `.trim()` sur `never` casse le
  * type-check strict. La contrainte required doit donc être générée selon
  * le type réel du champ, pas supposer `string` pour tous.
- * @see docs/architecture/taches-restantes.md, entrée PLAT-4bis-AR.
  */
 function renderRequiredCheck(field, fieldType) {
     if (fieldType === 'string') {
@@ -167,17 +166,12 @@ function assertRequiredPermissions(
 }
 
 /**
- * Généralisation (PLAT-7, 2026-08-19) : calque le pattern legacy consolidé
- * `libs/shared/data/src/lib/dtos/simple-response.dto.ts` /
- * `unwrap-response.util.ts` — un vrai backend externe
- * (`/auth/v1.0/backoffice/`) enveloppe systématiquement sa réponse dans
- * `{error, message, data}` (succès) ou `{error: true, statusCode, message}`
- * (échec applicatif). Le client HTTP généré typait jusqu'ici la sortie à
- * plat ; ce contrat + `unwrapResponseEnvelope` reproduisent le déballage
- * qu'effectue `unwrapResponse` côté legacy, sans dépendre d'aucun import
- * externe (même esprit que `renderPermissionContract` : le code généré
+ * Généralisation : un backend externe peut envelopper systématiquement sa
+ * réponse dans `{error, message, data}` (succès) ou
+ * `{error: true, statusCode, message}` (échec applicatif). Ce contrat +
+ * `unwrapResponseEnvelope` reproduisent ce déballage sans dépendre d'aucun
+ * import externe (même esprit que `renderPermissionContract` : le code généré
  * reste autonome).
- * @see docs/architecture/taches-restantes.md, entrée PLAT-7.
  */
 export function renderResponseEnvelopeContract() {
     return `export interface ResponseEnvelope<T> {
