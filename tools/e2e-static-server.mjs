@@ -1,14 +1,11 @@
 /**
- * Serveur statique SPA + reverse-proxy `/api` → mock (T12-6).
+ * Serveur statique SPA + reverse-proxy `/api` local.
  * Zéro watchers (évite EMFILE macOS / agent sandbox) — alternative au
  * `nx serve` pour Playwright.
  *
  * Prérequis : dist présent. `E2E_APP_NAME` sélectionne une application dans
- * l'allowlist fermée ci-dessous ; la valeur par défaut préserve le smoke login.
+ * l'allowlist fermée ci-dessous.
  *
- *   bunx nx run backoffice-angular:build:development
- *   E2E_APP_NAME=users-management-proof node tools/e2e-static-server.mjs
- *   E2E_APP_NAME=users-management-react-proof node tools/e2e-static-server.mjs
  *   E2E_APP_NAME=workspace-react-proof node tools/e2e-static-server.mjs
  *
  * Usage :
@@ -22,12 +19,9 @@ import { dirname } from 'node:path';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const APP_OUTPUTS = new Map([
-    ['backoffice-angular', 'dist/apps/backoffice-angular/browser'],
-    ['users-management-proof', 'dist/apps/users-management-proof/browser'],
-    ['users-management-react-proof', 'dist/apps/users-management-react-proof'],
     ['workspace-react-proof', 'dist/apps/workspace-react-proof'],
 ]);
-const APP_NAME = process.env.E2E_APP_NAME ?? 'backoffice-angular';
+const APP_NAME = process.env.E2E_APP_NAME ?? 'workspace-react-proof';
 const output = APP_OUTPUTS.get(APP_NAME);
 if (!output) {
     console.error(

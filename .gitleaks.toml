@@ -9,7 +9,8 @@ useDefault = true
 [allowlist]
 description = "Faux positifs documentés — ne jamais y coller de vrais secrets"
 paths = [
-  # Credentials **mock** e2e / mock-server (SSoT tools/mock-server/credentials.mjs)
+  # Identifiants de test (mock e2e) de fichiers retirés de l'arbre, présents dans
+  # l'historique Git, que la CI scanne en entier : conservés pour ce seul scan.
   '''tools/mock-server/credentials\.mjs''',
   '''apps/backoffice-angular/e2e/credentials\.ts''',
   # Lockfiles / assets générés non secrets

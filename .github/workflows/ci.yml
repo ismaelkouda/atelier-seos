@@ -1,29 +1,13 @@
-# CI Pipeline — cmz-platform
-# ADR-0006 : les garde-fous locaux (hooks Husky) sont reproduits ici pour qu'ils
-# soient incontournables. --no-verify local ne passe pas en CI.
+# CI Pipeline — atelier
+# Les garde-fous locaux (hooks Husky) sont reproduits ici pour qu'ils soient
+# incontournables. --no-verify local ne passe pas en CI.
 #
-# Stratégie : nx affected pour ne reconstruire que ce qui a changé.
-# Nx Cloud (décision G-7/T6-4 : claim + activer) :
-# - `nxCloudId` dans nx.json (workspace Nx Cloud)
-# - secret repo `NX_CLOUD_ACCESS_TOKEN` (CI access token émis après claim)
-#
-# OPS-22 (2026-08-19) : GitHub n'expose pas les secrets du dépôt aux PR
-# ouvertes par Dependabot (protection anti-exfiltration standard). Sans
-# NX_CLOUD_ACCESS_TOKEN, Nx (v23+) n'exécute plus aucune commande — il
-# n'existe plus de dégradation silencieuse vers le cache local seul,
-# contrairement à ce que supposait le runbook G-7 d'origine (« bruit 401,
-# pas un gate CI »). NX_NO_CLOUD=true calculé ci-dessous force le repli sur
-# le cache local (toujours actif) sans jamais tenter Nx Cloud — le principe
-# général : l'indisponibilité d'un accélérateur de cache ne doit jamais
-# faire échouer le pipeline, seulement le ralentir. S'applique à tout
-# contexte sans le secret (Dependabot aujourd'hui, tout futur cas
-# équivalent), pas seulement Dependabot nommément.
-#
-# OPS-23 (2026-08-20) : confirmé en CI réelle que ce même symptôme touchait
-# aussi nightly-integration.yml (run nightly, aucune PR/Dependabot en jeu) —
-# preuve que le problème est bien la dépendance structurelle de Nx 23+ au
-# token, pas un cas Dependabot isolé. Fallback NX_NO_CLOUD généralisé aux
-# 3 workflows (ci.yml, corpus-full.yml, nightly-integration.yml).
+# Stratégie : nx affected pour ne reconstruire que ce qui a changé, avec le
+# cache local de Nx. Aucun workspace Nx Cloud n'est configuré (pas de
+# `nxCloudId` dans nx.json) ; NX_NO_CLOUD reste vrai par défaut. Les étapes qui
+# reçoivent encore `NX_CLOUD_ACCESS_TOKEN` sur `main` retombent sur le cache
+# local quand le secret est absent : l'indisponibilité d'un accélérateur de
+# cache ne doit jamais faire échouer le pipeline, seulement le ralentir.
 
 name: CI
 
@@ -148,8 +132,8 @@ jobs:
       - name: check:retire-module (suite retire-module.mjs)
         run: bun run check:retire-module
 
-      # Audit A-12 — une violation scope: doit faire échouer ESLint (barrière machine)
-      - name: check:boundary-negative (scope cross-module interdit)
+      # Une violation de couche doit faire échouer ESLint (barrière machine)
+      - name: check:boundary-negative (import de couche interdit)
         run: bun run check:boundary-negative
 
       # Chantier Q, Q-6/Q-7 (ADR-0024/ADR-0025) — layering test rendu
@@ -158,36 +142,11 @@ jobs:
       - name: check:framework-purity (0 couplage Angular en domain/constants)
         run: bun run check:framework-purity
 
-      # Audit B-3 / ADR-0014 — pin SHA legacy versionné (concordance si SEOS_LEGACY_ROOT)
-      - name: check:legacy-lock
-        run: bun run check:legacy-lock
-
-      # Trouvé lors de l'audit self-review post-ADR-0022 (2026-08-11) :
-      # `check:pair-schema` (fixture du schéma de paires corpus) et
-      # `check:corpus-tools` (tests node:test de la logique pure de l'Oracle
-      # corpus — resolveStatus, mapping-helpers, oracle-levels, module-gate)
-      # étaient définis dans package.json/check:all mais jamais invoqués par
-      # aucun gate automatisé (ni husky, ni CI) — un script qui existe sans
-      # jamais s'exécuter n'est qu'une intention (cf. philosophie du
-      # référentiel, taches-restantes.md). Câblés ici.
-      - name: check:pair-schema (schéma des paires corpus)
-        run: bun run check:pair-schema
-
-      - name: check:corpus-tools (tests unitaires de l'Oracle corpus)
-        run: bun run check:corpus-tools
-
       # PLAT-1…3 / ADR-0030 — le modèle sémantique canonique est validé hors
       # des profils cibles. Provenance, convergence des deux sources, compilation
       # des deux renderers et manifests déterministes sont bloquants ensemble.
       - name: check:generator-platform (Evidence + Semantic IR + renderers)
         run: bun run check:generator-platform
-
-      # C6 / issue #64 — la promotion des primitives doit rester comparée au
-      # comportement SEOS observé, même si un diff tools/docs ne rend pas
-      # backoffice-angular affected. Ce gate ciblé est retiré seulement avec
-      # l'archivage SEOS gouverné qui suivra la clôture de #64.
-      - name: check:c6-seos-baseline (référentiel observable SEOS)
-        run: bun run check:c6-seos-baseline
 
       # Conception sans code manuel — chaque artefact versionné doit rester
       # complet, target-neutral et traçable vers un contrat backend exact.
@@ -230,17 +189,10 @@ jobs:
       - name: check:library-setup (ADR-0041)
         run: bun run check:library-setup
 
-      # T3-4 / DT-6 — provideDevPermissions confiné à isDevMode() (fail-closed prod)
-      - name: check:dev-permissions-prod
-        run: bun run check:dev-permissions-prod
-
       # `eslint.config.mjs` `files:` ne couvre que .ts/.tsx/.js/.jsx et `tools/`
-      # n'est pas un projet Nx : ~130 tools/**/*.mjs n'étaient lintés par aucune
-      # gate. Ce script couvre tout tools/**/*.mjs sauf trois zones à dette
-      # pré-existante isolée : seos/** (vendored octet-stable), mock-server/**
-      # (sous-package, 51 erreurs) et corpus/** (13 erreurs).
-      # Le répertoire généré tools/generator-platform/.stack-test-runtime/**
-      # est aussi exclu ; les applications gardent leurs cibles lint natives.
+      # n'est pas un projet Nx : ce script lint tout tools/**/*.mjs. Seul le
+      # répertoire généré tools/generator-platform/.stack-test-runtime/** est
+      # exclu ; les applications gardent leurs cibles lint natives.
       - name: check:lint-tools (eslint sur tools/**/*.mjs)
         run: bun run check:lint-tools
 
@@ -513,7 +465,6 @@ jobs:
             --metrics off \
             --exclude 'dist' \
             --exclude 'node_modules' \
-            --exclude 'corpus' \
             .
 
   # ─── Job docs : fraîcheur des blocs générés (audit E-5 / P1-9) ───────────
@@ -522,14 +473,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          # fetch-depth: 0 nécessaire pour check:dto-schema-breaking-changes
-          # (T2-2), qui compare le schéma DTO committé sur la branche cible
-          # de la PR (`git show origin/<base>:...`) contre l'état régénéré —
-          # un clone superficiel (défaut fetch-depth: 1) ne contiendrait pas
-          # cette révision. Même besoin que le job oracle (cf. `Set NX base
-          # branch` plus bas dans ce fichier).
-          fetch-depth: 0
 
       - uses: actions/setup-node@v7
         with:
@@ -554,51 +497,6 @@ jobs:
       - name: check:docs-freshness (preuve octets avant/après régénération)
         run: bun run check:docs-freshness
 
-      # T2-2 — gate de fraîcheur schéma↔DTO (docs/architecture/schema/
-      # dto.schema.json régénéré en mémoire depuis les 303 DTOs TS et
-      # comparé à la version committée, même mécanisme que
-      # check:docs-freshness ci-dessus). Trouvé lors de l'audit Big Tech du
-      # 2026-08-14 : ce script existait dans check:all depuis T2-2
-      # (2026-08-13) mais n'avait jamais reçu de step CI dédiée — jamais
-      # exécuté automatiquement malgré taches-restantes.md affirmant
-      # "branché dans check:all" (vrai littéralement, mais check:all
-      # lui-même n'est jamais invoqué en CI/husky, cf. commentaire
-      # check:pair-schema/check:corpus-tools ci-dessus dans le job
-      # guardrails, même classe de bug).
-      #
-      # OPS-12a (2026-08-16) : ce step échouait en CI depuis son ajout
-      # (ERR_MODULE_NOT_FOUND 'typescript') — le job était conçu Node pur
-      # (check:docs-freshness ne lit que project.json/corpus, sans
-      # dépendance npm), une hypothèse restée vraie jusqu'à l'ajout de ce
-      # step, qui importe `typescript` via generate-dto-schema.mjs et donc
-      # exige node_modules. bun install ajouté ci-dessous pour combler cet
-      # angle mort réel, jamais détecté car aucune run CI n'avait encore été
-      # observée après l'ajout du step avant OPS-12a.
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: check:dto-schema (T2-2, fraîcheur schéma↔DTO)
-        run: node tools/check-dto-schema.mjs
-
-      # T2-2 (2026-08-18) — deux volets restants du chantier, câblés dès leur
-      # écriture pour éviter la même classe de bug « gate fantôme dans
-      # check:all mais jamais invoqué en CI » documentée ci-dessus (détectée
-      # cette fois par tools/check-ci-wiring.mjs avant tout commit, pas après
-      # coup — voir docs/architecture/taches-restantes.md, entrée T2-2).
-      - name: check:mapper-dto-conformity (T2-2, mappers ↔ DTO required)
-        run: node --test tools/check-mapper-dto-conformity.test.mjs && node tools/check-mapper-dto-conformity.mjs
-
-      - name: Set schema diff base branch
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "SCHEMA_DIFF_BASE=origin/${{ github.base_ref }}" >> $GITHUB_ENV
-          else
-            echo "SCHEMA_DIFF_BASE=HEAD~1" >> $GITHUB_ENV
-          fi
-
-      - name: check:dto-schema-breaking-changes (T2-2, diff sémantique)
-        run: node --test tools/check-dto-schema-breaking-changes.test.mjs && node tools/check-dto-schema-breaking-changes.mjs --base ${{ env.SCHEMA_DIFF_BASE }}
-
   # ─── Job 2 : Oracle de vérification (nx affected) ────────────────────────
   oracle:
     name: Oracle — lint + build + ngc + test
@@ -606,8 +504,6 @@ jobs:
     timeout-minutes: 45
     permissions:
       contents: read
-      actions: read
-      pull-requests: read
     needs: guardrails
     steps:
       - uses: actions/checkout@v7
@@ -663,51 +559,6 @@ jobs:
           NX_NO_CLOUD: ${{ (github.ref != 'refs/heads/main' || secrets.NX_CLOUD_ACCESS_TOKEN == '') && 'true' || 'false' }}
         run: bunx nx affected -t build --base=${{ env.NX_BASE }}
 
-      # OPS-36 — le Nightly reste une défense en profondeur, pas le premier
-      # endroit où une dérive de bundle est découverte après fusion. Ce build
-      # Ubuntu explicite est intentionnellement inconditionnel : une baseline
-      # générée sur macOS n'est pas bit-à-bit portable et une heuristique
-      # `affected` pourrait rater un changement d'outillage ou de dépendance.
-      # Les budgets Angular restent bloquants pendant le build ; la step suivante
-      # vérifie la fraîcheur, et une proposition bornée conserve son échec initial.
-      - name: Bundle production — budgets + baseline Linux
-        id: nx-bundle-production
-        env:
-          NX_CLOUD_ACCESS_TOKEN: ${{ github.ref == 'refs/heads/main' &&
-            secrets.NX_CLOUD_ACCESS_TOKEN || '' }}
-          NX_NO_CLOUD: 'true'
-        run: |
-          bunx nx run backoffice-angular:build:production --skip-nx-cache
-      - name: Bundle metrics — freshness
-        id: nx-bundle-freshness
-        run: |
-          bun run check:bundle-metrics-freshness
-      - name: Bundle metrics — prepare data-only proposal
-        id: bundle-proposal
-        if:
-          ${{ always() && !cancelled() && github.event_name == 'pull_request' &&
-          github.event.pull_request.user.login == 'dependabot[bot]' &&
-          steps.nx-bundle-production.outcome == 'success' &&
-          steps.nx-bundle-freshness.outcome == 'failure' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          node tools/bundle-metrics-proposal.mjs produce
-      - name: Bundle metrics — upload data-only proposal
-        id: bundle-proposal-upload
-        if:
-          ${{ always() && !cancelled() && github.event_name == 'pull_request' &&
-          github.event.pull_request.user.login == 'dependabot[bot]' &&
-          steps.nx-bundle-production.outcome == 'success' &&
-          steps.nx-bundle-freshness.outcome == 'failure' &&
-          steps.bundle-proposal.outputs.active == 'true' }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: bundle-metrics-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/bundle-metrics-proposal/
-          if-no-files-found: error
-          retention-days: 1
-
       # Vite transpile TypeScript sans le vérifier. Les projets Vite exposent
       # donc un target `typecheck` distinct ; Nx ignore les projets qui n'en ont
       # pas au lieu de dupliquer ngc pour Angular.
@@ -718,9 +569,9 @@ jobs:
           NX_NO_CLOUD: ${{ (github.ref != 'refs/heads/main' || secrets.NX_CLOUD_ACCESS_TOKEN == '') && 'true' || 'false' }}
         run: bunx nx affected -t typecheck --base=${{ env.NX_BASE }}
 
-      # Audit A-10 / P1-8 — strictTemplates bloquant en PR (shift-left)
+      # strictTemplates bloquant en PR (shift-left), sur le banc Angular.
       - name: strictTemplates (ngc)
-        run: bunx ngc -p apps/backoffice-angular/tsconfig.app.json --noEmit
+        run: bunx ngc -p apps/library-qualification-angular/tsconfig.app.json --noEmit
 
       # Tests Vitest — ADR-0008. Ne pas passer `--passWithNoTests` ici : Nx
       # le forward à tous les targets ; `@angular/build:unit-test` (app) a un
@@ -732,56 +583,12 @@ jobs:
           NX_CLOUD_ACCESS_TOKEN: ${{ github.ref == 'refs/heads/main' && secrets.NX_CLOUD_ACCESS_TOKEN || '' }}
           NX_NO_CLOUD: ${{ (github.ref != 'refs/heads/main' || secrets.NX_CLOUD_ACCESS_TOKEN == '') && 'true' || 'false' }}
         run: bunx nx affected -t test --base=${{ env.NX_BASE }}
-      - id: production-image-build
-        name: Production image — frozen build
-        shell: bash
-        run: |
-          set -euo pipefail
-          export DOCKER_BUILDKIT=1
-          sha256sum Dockerfile bun.lock package.json .nvmrc
-          timeout 1200s docker build --pull --progress=plain --iidfile "$RUNNER_TEMP/production-image.id" .
-          image="$(cat "$RUNNER_TEMP/production-image.id")"
-          test "$(docker image inspect --format '{{.Id}}' "$image")" = "$image"
-          echo "PRODUCTION_IMAGE_ID=$image"
-      - id: production-image-http
-        name: Production image — HTTP and runtime config
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 90s bash tools/smoke-production-image.sh "$(cat "$RUNNER_TEMP/production-image.id")"
-      - id: production-image-build-negative
-        name: Production image — reject broken build
-        shell: bash
-        run: |
-          set -euo pipefail
-          export DOCKER_BUILDKIT=1
-          cp Dockerfile "$RUNNER_TEMP/Dockerfile.production-negative"
-          printf '\nRUN printf "CMZ_DOCKER_BUILD_NEGATIVE\\n"; exit 91\n' >> "$RUNNER_TEMP/Dockerfile.production-negative"
-          status=0
-          timeout 180s docker build --progress=plain -f "$RUNNER_TEMP/Dockerfile.production-negative" . > "$RUNNER_TEMP/production-build-negative.log" 2>&1 || status=$?
-          cat "$RUNNER_TEMP/production-build-negative.log"
-          case "$status" in 0|124|137) echo "Counter-proof did not produce the expected failure" >&2; exit 1 ;; esac
-          grep -E '^#[0-9]+ [0-9.]+ CMZ_DOCKER_BUILD_NEGATIVE$' "$RUNNER_TEMP/production-build-negative.log"
-          grep -F 'exit code: 91' "$RUNNER_TEMP/production-build-negative.log"
-          echo "PRODUCTION_BUILD_NEGATIVE=PASS"
-      - id: production-image-start-negative
-        name: Production image — reject broken startup
-        shell: bash
-        run: |
-          set -euo pipefail
-          status=0
-          CMZ_ENV_TEMPLATE=/etc/cmz/no-such-template timeout 90s bash tools/smoke-production-image.sh "$(cat "$RUNNER_TEMP/production-image.id")" > "$RUNNER_TEMP/production-start-negative.log" 2>&1 || status=$?
-          cat "$RUNNER_TEMP/production-start-negative.log"
-          case "$status" in 0|124|137) echo "Counter-proof did not produce the expected failure" >&2; exit 1 ;; esac
-          grep -F 'PRODUCTION_IMAGE_EXITED_BEFORE_HTTP' "$RUNNER_TEMP/production-start-negative.log"
-          grep -F '/etc/cmz/no-such-template' "$RUNNER_TEMP/production-start-negative.log"
-          echo "PRODUCTION_START_NEGATIVE=PASS"
 
-  # ─── Job T12-6 : e2e Playwright + candidats visuels C5 ────────────────────
-  # Mock-server local + serve app — 0 secrets staging. Le rendu C5 ne tourne
-  # que si son projet (ou son serveur statique partagé) est affecté.
+  # ─── Job : e2e Playwright du banc React workspace ─────────────────────────
+  # Serveur statique local, 0 secret. La preuve ne tourne que si son projet
+  # (ou son serveur statique partagé) est affecté.
   e2e-smoke:
-    name: E2E smoke — login (Playwright)
+    name: E2E smoke (Playwright)
     runs-on: ubuntu-latest
     needs: guardrails
     timeout-minutes: 25
@@ -836,36 +643,6 @@ jobs:
             echo "NX_BASE=HEAD~1" >> $GITHUB_ENV
           fi
 
-      - name: E2E smoke login
-        run: bunx nx run backoffice-angular:e2e
-        env:
-          CI: 'true'
-
-      - name: Detect C5 browser-proof impact
-        id: c5-browser-proof
-        run: |
-          if bunx nx show projects --affected --base=${{ env.NX_BASE }} | grep -qx users-management-proof \
-            || ! git diff --quiet ${{ env.NX_BASE }}...HEAD -- \
-              tools/e2e-static-server.mjs \
-              tools/generator-platform/collect-visual-evaluation.mjs \
-              tools/generator-platform/core/visual-evaluation.mjs \
-              tools/generator-platform/schemas/visual-evaluation-plan.schema.json \
-              tools/generator-platform/schemas/visual-evaluation-bundle.schema.json \
-              tools/generator-platform/schemas/visual-review-protocol.schema.json \
-              tools/generator-platform/schemas/visual-runtime-evidence.schema.json \
-              designs/users-management-proof.visual-review.json \
-              designs/users-management-proof.visual-evaluation.json; then
-            echo "run=true" >> $GITHUB_OUTPUT
-          else
-            echo "run=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: C5 deterministic browser candidates
-        if: steps.c5-browser-proof.outputs.run == 'true'
-        run: bunx playwright test -c apps/users-management-proof/playwright.config.mjs
-        env:
-          CI: 'true'
-
       - name: Detect React workspace browser-proof impact
         id: react-workspace-proof
         run: |
@@ -883,62 +660,6 @@ jobs:
         env:
           CI: 'true'
 
-      - name: Detect React C5 browser-proof impact
-        id: react-c5-browser-proof
-        run: |
-          if bunx nx show projects --affected --base=${{ env.NX_BASE }} | grep -qx users-management-react-proof \
-            || ! git diff --quiet ${{ env.NX_BASE }}...HEAD -- \
-              tools/e2e-static-server.mjs; then
-            echo "run=true" >> $GITHUB_OUTPUT
-          else
-            echo "run=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: React C5 deterministic browser proof
-        if: steps.react-c5-browser-proof.outputs.run == 'true'
-        run: bunx playwright test -c apps/users-management-react-proof/playwright.config.mjs
-        env:
-          CI: 'true'
-
-      - name: Detect active C5 visual evaluation
-        id: c5-visual-evaluation
-        run: |
-          if [ -f designs/users-management-proof.visual-evaluation.json ] \
-            && [ -f designs/users-management-proof.visual-review.json ]; then
-            echo "active=true" >> $GITHUB_OUTPUT
-          else
-            echo "active=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Assemble C5 visual evaluation bundle
-        if: >-
-          steps.c5-browser-proof.outputs.run == 'true' &&
-          steps.c5-visual-evaluation.outputs.active == 'true'
-        run: node tools/generator-platform/collect-visual-evaluation.mjs
-
-      - name: Upload C5 rendered candidates
-        if: always() && steps.c5-browser-proof.outputs.run == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: c5-rendered-candidates
-          path: |
-            test-results/users-management-proof/**/*.actual.png
-            test-results/users-management-proof/**/*.evidence.json
-            test-results/users-management-proof/visual-evaluation.bundle.json
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Upload React C5 rendered candidates
-        if: always() && steps.react-c5-browser-proof.outputs.run == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: react-c5-rendered-candidates
-          path: |
-            test-results/users-management-react-proof/**/*.actual.png
-            test-results/users-management-react-proof/**/browser-layout-evidence.json
-          if-no-files-found: error
-          retention-days: 7
-
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v7
@@ -947,59 +668,6 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  # ─── Job 4 : contrat corpus rapide + passe profonde conditionnelle ─────────
-  # Le contexte GitHub reste toujours produit et bloquant. Le contrat rapide
-  # valide les 1 507 paires committées sans réexécuter les builds déjà couverts
-  # par `oracle`/nx affected. La passe historique `corpus:ci` ne tourne que si
-  # une source de vérité corpus change (ADR-0046).
-  corpus:
-    name: Corpus SEOS — structural-only
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .nvmrc
-      - name: Verify node runtime against source
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(node --version)" = "v$(cat .nvmrc)"
-
-      - name: Contrat corpus committé (rapide, toujours bloquant)
-        run: node tools/corpus/check-corpus-contract.mjs
-
-      - name: Déterminer la profondeur de validation
-        id: corpus-impact
-        env:
-          CORPUS_DIFF_BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || 'HEAD~1' }}
-        run: node tools/corpus/ci-impact.mjs --base "$CORPUS_DIFF_BASE" >> "$GITHUB_OUTPUT"
-
-      - uses: oven-sh/setup-bun@v2
-        if: steps.corpus-impact.outputs.deep == 'true'
-        with:
-          bun-version-file: package.json
-      - name: Verify bun runtime against source
-        if: steps.corpus-impact.outputs.deep == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(node --version)" = "v$(cat .nvmrc)"
-          expected="$(node -p 'require("./package.json").packageManager.slice(4)')"
-          test "$(bun --version)" = "$expected"
-
-      - name: Install dependencies
-        if: steps.corpus-impact.outputs.deep == 'true'
-        run: bun install --frozen-lockfile
-
-      - name: Corpus structural-only profond (bun run corpus:ci)
-        if: steps.corpus-impact.outputs.deep == 'true'
-        env:
-          CORPUS_STRUCTURAL_ONLY: '1'
-        run: bun run corpus:ci
   dead-code:
     name: Dead-code (knip)
     runs-on: ubuntu-latest
@@ -1110,42 +778,6 @@ jobs:
       - name: bun audit (high/critical bloquant)
         run: bun audit --audit-level=high
 
-  # ─── Job K-1/K-2 : clés i18n manquantes (check:i18n) ─────────────────────
-  # Audit-workspace-2026-08-03.md, chantier K. `tools/check-i18n.mjs` compare
-  # les clés réellement définies dans `fr.translation.ts` (transpilé et
-  # importé, pas parsé à l'œil) aux clés référencées dans `apps/`+`libs/`.
-  #
-  # Bloquant depuis le 2026-08-04 (backlog #7, cartographie). État mesuré à
-  # l'écriture de ce job : 313 clés référencées sans définition. K-3 (triage
-  # des faux positifs de la regex — 5 correctifs successifs documentés dans
-  # `tools/check-i18n.mjs`) et K-4 (rédaction des traductions manquantes) ont
-  # réduit ce chiffre à **0** (`node tools/check-i18n.mjs`, sans
-  # `--warn-only` : 0 clé référencée sans définition, 251 clés définies mais
-  # jamais référencées — avertissement seulement, pas bloquant). Plus de
-  # dette pré-existante à tolérer : `continue-on-error` retiré.
-  i18n-check:
-    name: i18n keys (check:i18n)
-    runs-on: ubuntu-latest
-    needs: guardrails
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: package.json
-      - name: Verify bun runtime against source
-        shell: bash
-        run: |
-          set -euo pipefail
-          expected="$(node -p 'require("./package.json").packageManager.slice(4)')"
-          test "$(bun --version)" = "$expected"
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: check:i18n (clés référencées sans définition)
-        run: node tools/check-i18n.mjs
-
   # ─── Job T6-2 : inventaire de licences tierces (license-checker) ─────────
   # Reproduit en continu la méthode manuelle de
   # docs/architecture/licences-tierces.md — jusqu'ici rejouée à la main,
@@ -1186,9 +818,8 @@ jobs:
       - name: check:licenses (production permissive + exceptions dev-only)
         run: node tools/check-licenses.mjs
 
-  # ─── Job F-4 / H-3 / P1-11 : fichiers byte-identiques cross-module ───────
-  # Baseline 0 (post F-7) — bloquant. Contrainte aussi dans pattern.json (H-3)
-  # et check:all / gate corpus module (H-2).
+  # ─── Job : fichiers byte-identiques entre modules ─────────────────────────
+  # Baseline 0 — bloquant.
   duplicates:
     name: Duplicate files (MD5)
     runs-on: ubuntu-latest
@@ -1215,64 +846,8 @@ jobs:
           expected="$(node -p 'require("./package.json").packageManager.slice(4)')"
           test "$(bun --version)" = "$expected"
 
-      - name: check:duplicates (empreinte MD5 cross-module + contrainte H-3)
+      - name: check:duplicates (empreinte MD5 cross-module)
         run: node tools/check-duplicate-files.mjs
-
-      # Audit O-1/O-2 (P1-25, ADR-0020) : duplication de la famille
-      # workflow-action modulo nom de module — invisible au check MD5
-      # ci-dessus. Bloquant à la hausse seulement (isolation scope:* choisie,
-      # pas une dette à zéro) contre docs/architecture/
-      # family-duplication-metrics.json.
-      - name: check:duplicates --family (P1-25 / ADR-0020, bloquant à la hausse)
-        run: node tools/check-duplicate-files.mjs --family
-
-      # ADR-0030 — le profil Angular/Nx reste un contrat cible transitoire,
-      # mais doit être cohérent tant qu'il alimente les oracles existants.
-      - name: check:pattern-profile-schema (registre + placeholders + références)
-        run: bun run check:pattern-profile-schema
-
-      # Audit J-9 (onzième passe, 2026-08-04) : conformité structurelle au
-      # pattern crud-entity Nx-shaped (N-7, docs/architecture/patterns/
-      # crud-entity.pattern.json), contre les 3 modules déjà validés
-      # fichier par fichier (administrative-infrastructure/infrastructure,
-      # administrative-boundary/region, coverage-areas/site-group — 3e
-      # validation ajoutée le 2026-08-04). Script local
-      # (tools/check-pattern-nx.mjs, pas un des outils vendorés
-      # tools/seos/ — cf. son propre docstring).
-      - name: check:pattern-nx (J-9, crud-entity Nx-shaped)
-        run: bun run check:pattern-nx:crud-entity
-
-      # T2-8 (ADR-0027/0028) — même vérification structurelle que
-      # crud-entity ci-dessus, pour les 3 autres classes du catalogue de
-      # patterns. Trouvé lors de l'audit Big Tech du 2026-08-14 : ces 3
-      # scripts existaient dans check:all depuis T2-6/T2-8/T2-8-suite
-      # (2026-08-13/14) mais n'avaient jamais reçu de step CI dédiée —
-      # jamais exécutés automatiquement, même bug que check:dto-schema
-      # (job docs-freshness) et check:pair-schema/check:corpus-tools
-      # (job guardrails) : une commande "branchée dans check:all" n'est
-      # bloquante que si check:all lui-même est invoqué en CI, ce qui
-      # n'est jamais le cas (check:all est un raccourci local uniquement).
-      - name: check:pattern-nx (T2-8, workflow-action Nx-shaped)
-        run: bun run check:pattern-nx:workflow-action
-
-      - name: check:pattern-nx (T2-8, action-request Nx-shaped)
-        run: bun run check:pattern-nx:action-request
-
-      - name: check:pattern-nx (T2-8 suite, read-only-view Nx-shaped)
-        run: bun run check:pattern-nx:read-only-view
-
-      # T11-7, généralisé 2026-08-14 (T2-8 suite) — toute entité des 4
-      # classes du périmètre (scope.json) doit être couverte par l'un des
-      # check:pattern-nx:* ci-dessus, sinon elle peut dériver en silence
-      # (constat réel : optical-fiber-network/radio-relay-links construites
-      # à 89.4 % sans jamais être vérifiées, cf. docstring de
-      # tools/check-pattern-nx-coverage.mjs). Exceptions nominatives
-      # documentées dans le script (KNOWN_GAPS/STRUCTURAL_EXCEPTIONS) ;
-      # toute AUTRE entité manquante fait échouer ce job. Doit rester la
-      # DERNIÈRE step check:pattern-nx du job — elle valide la cohérence
-      # des 4 scripts précédents.
-      - name: check:pattern-nx-coverage (T11-7, angle mort périmètre)
-        run: bun run check:pattern-nx-coverage
 
   external-application-shells:
     name: External application shells

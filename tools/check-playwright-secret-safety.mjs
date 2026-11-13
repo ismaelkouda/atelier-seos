@@ -32,8 +32,8 @@ const PLAYWRIGHT_CLI = join(
     'cli.js'
 );
 const SENTINEL_VALUE = 'cmz-synthetic-environment-must-not-be-serialized';
-const EXPECTED_PRIMARY_CONFIGS = 4;
-const EXPECTED_PRIMARY_WEB_SERVERS = 5;
+const EXPECTED_PRIMARY_CONFIGS = 1;
+const EXPECTED_PRIMARY_WEB_SERVERS = 1;
 const GIT_TIMEOUT_MS = 10_000;
 const CONFIG_PROCESS_TIMEOUT_MS = 30_000;
 const MAX_DIAGNOSTIC_LENGTH = 2_000;

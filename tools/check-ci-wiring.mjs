@@ -47,7 +47,6 @@ const REQUIRED_STANDALONE_SCRIPTS = [
     // d'Angular (O-S-V), sur la preuve native.
     'check:page-submit-witnesses',
     'check:library-setup-integration',
-    'check:bundle-metrics-freshness',
 ];
 
 export function workflowRunCommands(content, label = 'workflow') {

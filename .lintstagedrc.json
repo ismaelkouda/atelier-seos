@@ -1,5 +1,5 @@
 {
-  "{apps,libs,tools,deploy}/**/*.{ts,tsx,js,mjs,cjs,json,jsonc,html,css,scss,md,yml,yaml}": [
+  "{apps,libs,tools}/**/*.{ts,tsx,js,mjs,cjs,json,jsonc,html,css,scss,md,yml,yaml}": [
     "prettier --write"
   ],
   "package.json": ["prettier --write"],

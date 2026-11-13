@@ -2,12 +2,8 @@
 /**
  * T6-2 — inventaire de licences tierces automatisé (gate CI).
  *
- * Reproduit en continu la méthode manuelle documentée dans
- * `docs/architecture/licences-tierces.md` (jusqu'ici « à rejouer
- * manuellement avant chaque revue de dépendances majeure » — sans
- * automatisation, le document dérive silencieusement : `axe-core`
- * (MPL-2.0, devDependency ajoutée le 2026-08-04) n'y figurait plus depuis
- * son ajout, la dernière relecture manuelle datant du 2026-08-03).
+ * Remplace une relecture manuelle des licences, qui dérivait sans
+ * automatisation : `axe-core` (MPL-2.0, devDependency) y avait été oublié.
  *
  * Deux gates distinctes, pas une seule :
  *   1. **Production** (`--production`, ce qui est réellement livré au
@@ -64,13 +60,9 @@ const OWN_LICENSE = 'UNLICENSED';
  * dépendance de production doit être re-décidée, pas héritée silencieusement.
  */
 const DEV_ONLY_EXCEPTIONS = new Map([
-    // OFL-1.1 — fichiers WOFF2 utilisés uniquement par les deux preuves de
-    // reflow React C5 afin de rendre leurs métriques identiques sur macOS et
-    // Linux ; jamais importés ni bundlés dans le livrable navigateur.
-    ['@fontsource/dejavu-sans', 'OFL-1.1'],
     // MPL-2.0 (copyleft faible, fichier par fichier) — devDependency de
-    // test uniquement (T12-8, gate a11y), jamais importée dans
-    // apps/backoffice-angular ni bundlée dans le livrable navigateur.
+    // test uniquement (gate a11y de workspace-react-proof), jamais bundlée
+    // dans le livrable navigateur.
     ['axe-core', 'MPL-2.0'],
 ]);
 

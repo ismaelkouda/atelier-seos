@@ -73,8 +73,8 @@ test('qualification : la désactivation du graphe est bornée aux deux inspectio
         },
         (m) => {
             controls(m).run = controls(m).run.replace(
-                'bun run bundle:metrics',
-                'NX_CACHE_PROJECT_GRAPH=false bun run bundle:metrics'
+                'bun run check:library-setup',
+                'NX_CACHE_PROJECT_GRAPH=false bun run check:library-setup'
             );
         },
         (m) => {
@@ -257,7 +257,7 @@ function promotionCommands(job) {
 function assertPromotionParity(w) {
     const automatic = promotionCommands(w.jobs.calculate);
     const manual = promotionCommands(w.jobs.qualification);
-    assert.ok(automatic.length >= 10, 'la vraie séquence doit être extraite');
+    assert.ok(automatic.length >= 8, 'la vraie séquence doit être extraite');
     assert.deepEqual(
         manual,
         automatic,
@@ -268,7 +268,7 @@ function assertPromotionParity(w) {
     const sharedScripts = (job) =>
         job.steps
             .filter((s) =>
-                /bun run (?:promote-library-compatibility|bundle:metrics)\b/.test(
+                /bun run (?:promote-library-compatibility|check:library-setup)\b/.test(
                     s.run ?? ''
                 )
             )

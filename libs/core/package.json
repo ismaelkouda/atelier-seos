@@ -7,10 +7,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@angular/core": "catalog:",
-    "@angular/common": "catalog:",
-    "@cmz/shared-domain": "workspace:*",
-    "rxjs": "catalog:"
+    "@angular/common": "catalog:"
   },
   "devDependencies": {
     "typescript": "catalog:tooling",

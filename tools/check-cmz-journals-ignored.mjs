@@ -51,7 +51,6 @@ export function cmzDirectoryNames(source) {
 export function scanCmzDirectories(root = ROOT) {
     const names = new Set();
     for (const file of globSync('tools/**/*.mjs', { cwd: root })) {
-        if (file.includes('/seos/') || file.includes('/mock-server/')) continue;
         // Ses propres contre-tests portent des chemins d'exemple, pas des
         // journaux d'outil.
         if (file === SELF_TEST) continue;

@@ -26,7 +26,7 @@ export default {
             ],
         ],
 
-        // La portée désigne le package ou la zone concernée : feat(backoffice-angular): …
+        // La portée désigne le package ou la zone concernée : feat(generator-platform): …
         // Non obligatoire, car certains commits sont transverses.
         'scope-case': [2, 'always', 'kebab-case'],
 

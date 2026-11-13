@@ -15,10 +15,7 @@
         "@angular/material": "catalog:",
         "@angular/platform-browser": "catalog:",
         "@angular/router": "catalog:",
-        "date-fns": "catalog:",
         "exceljs": "^4.4.0",
-        "i18next": "catalog:",
-        "ol": "catalog:",
         "react-router": "8.5.0",
         "rxjs": "catalog:",
         "tslib": "catalog:",
@@ -34,7 +31,6 @@
         "@commitlint/config-conventional": "^21.2.4",
         "@eslint-community/regexpp": "4.12.2",
         "@eslint/js": "^10.0.1",
-        "@fontsource/dejavu-sans": "5.3.0",
         "@nx/angular": "24.0.3",
         "@nx/eslint": "24.0.3",
         "@nx/eslint-plugin": "24.0.3",
@@ -80,7 +76,6 @@
         "react-dom": "19.3.1",
         "sass": "^1.107.0",
         "semver": "7.8.5",
-        "source-map-explorer": "^2.5.3",
         "tailwindcss": "catalog:",
         "typescript": "catalog:tooling",
         "typescript-eslint": "^8.72.1",
@@ -89,839 +84,14 @@
         "yaml": "2.9.1",
       },
     },
-    "libs/administrative-boundary/application": {
-      "name": "@cmz/administrative-boundary-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/administrative-boundary-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/administrative-boundary/data": {
-      "name": "@cmz/administrative-boundary-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/administrative-boundary-domain": "workspace:*",
-        "@cmz/core": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/administrative-boundary/domain": {
-      "name": "@cmz/administrative-boundary-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/administrative-boundary/ui": {
-      "name": "@cmz/administrative-boundary-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/administrative-boundary-application": "workspace:*",
-        "@cmz/administrative-boundary-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/administrative-infrastructure/application": {
-      "name": "@cmz/administrative-infrastructure-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/administrative-infrastructure-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/administrative-infrastructure/data": {
-      "name": "@cmz/administrative-infrastructure-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/administrative-infrastructure-domain": "workspace:*",
-        "@cmz/core": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/administrative-infrastructure/domain": {
-      "name": "@cmz/administrative-infrastructure-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/administrative-infrastructure/ui": {
-      "name": "@cmz/administrative-infrastructure-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/administrative-infrastructure-application": "workspace:*",
-        "@cmz/administrative-infrastructure-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/authentication/application": {
-      "name": "@cmz/authentication-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/authentication-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/authentication/data": {
-      "name": "@cmz/authentication-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/authentication-domain": "workspace:*",
-        "@cmz/core": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/authentication/domain": {
-      "name": "@cmz/authentication-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/authentication/ui": {
-      "name": "@cmz/authentication-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/authentication-application": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/communication/application": {
-      "name": "@cmz/communication-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/communication-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/communication/data": {
-      "name": "@cmz/communication-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/communication-domain": "workspace:*",
-        "@cmz/core": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/communication/domain": {
-      "name": "@cmz/communication-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/communication/ui": {
-      "name": "@cmz/communication-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/administrative-boundary-application": "workspace:*",
-        "@cmz/administrative-boundary-domain": "workspace:*",
-        "@cmz/communication-application": "workspace:*",
-        "@cmz/communication-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/content-management/application": {
-      "name": "@cmz/content-management-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/content-management-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/content-management/data": {
-      "name": "@cmz/content-management-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/content-management-domain": "workspace:*",
-        "@cmz/core": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/content-management/domain": {
-      "name": "@cmz/content-management-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/content-management/ui": {
-      "name": "@cmz/content-management-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/content-management-application": "workspace:*",
-        "@cmz/content-management-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
     "libs/core": {
       "name": "@cmz/core",
       "version": "0.0.0",
       "dependencies": {
         "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
       },
       "devDependencies": {
         "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/coverage-areas/application": {
-      "name": "@cmz/coverage-areas-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/coverage-areas-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/coverage-areas/data": {
-      "name": "@cmz/coverage-areas-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/coverage-areas-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/coverage-areas/domain": {
-      "name": "@cmz/coverage-areas-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/coverage-areas/ui": {
-      "name": "@cmz/coverage-areas-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/coverage-areas-application": "workspace:*",
-        "@cmz/coverage-areas-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/dashboard/application": {
-      "name": "@cmz/dashboard-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/dashboard-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/dashboard/data": {
-      "name": "@cmz/dashboard-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/dashboard-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/dashboard/domain": {
-      "name": "@cmz/dashboard-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/dashboard/ui": {
-      "name": "@cmz/dashboard-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/dashboard-application": "workspace:*",
-        "@cmz/dashboard-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/finalization/application": {
-      "name": "@cmz/finalization-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/finalization-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/finalization/data": {
-      "name": "@cmz/finalization-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/finalization-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/finalization/domain": {
-      "name": "@cmz/finalization-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/finalization/ui": {
-      "name": "@cmz/finalization-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/finalization-application": "workspace:*",
-        "@cmz/finalization-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/interactive-map/application": {
-      "name": "@cmz/interactive-map-application",
-      "version": "1.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/interactive-map-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-      },
-    },
-    "libs/interactive-map/data": {
-      "name": "@cmz/interactive-map-data",
-      "version": "1.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/interactive-map-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/interactive-map/domain": {
-      "name": "@cmz/interactive-map-domain",
-      "version": "1.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-      },
-    },
-    "libs/interactive-map/ui": {
-      "name": "@cmz/interactive-map-ui",
-      "version": "1.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/interactive-map-application": "workspace:*",
-        "@cmz/interactive-map-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-        "ol": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-      },
-    },
-    "libs/monitoring/application": {
-      "name": "@cmz/monitoring-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/monitoring-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/monitoring/data": {
-      "name": "@cmz/monitoring-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/monitoring-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/monitoring/domain": {
-      "name": "@cmz/monitoring-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/monitoring/ui": {
-      "name": "@cmz/monitoring-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/monitoring-application": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/processing/application": {
-      "name": "@cmz/processing-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/processing-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/processing/data": {
-      "name": "@cmz/processing-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/processing-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/processing/domain": {
-      "name": "@cmz/processing-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/processing/ui": {
-      "name": "@cmz/processing-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/processing-application": "workspace:*",
-        "@cmz/processing-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/report-states/application": {
-      "name": "@cmz/report-states-application",
-      "version": "1.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/report-states-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/report-states/data": {
-      "name": "@cmz/report-states-data",
-      "version": "1.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/report-states-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/report-states/domain": {
-      "name": "@cmz/report-states-domain",
-      "version": "1.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/workflow-details-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-      },
-    },
-    "libs/report-states/ui": {
-      "name": "@cmz/report-states-ui",
-      "version": "1.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/report-states-application": "workspace:*",
-        "@cmz/report-states-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-      },
-    },
-    "libs/reporting/application": {
-      "name": "@cmz/reporting-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/reporting-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/reporting/data": {
-      "name": "@cmz/reporting-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/reporting-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/reporting/domain": {
-      "name": "@cmz/reporting-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/reporting/ui": {
-      "name": "@cmz/reporting-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/reporting-application": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/requests/application": {
-      "name": "@cmz/requests-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/requests-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/requests/data": {
-      "name": "@cmz/requests-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/requests-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/requests/domain": {
-      "name": "@cmz/requests-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/workflow-details-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/requests/ui": {
-      "name": "@cmz/requests-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/requests-application": "workspace:*",
-        "@cmz/requests-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/settings-security/application": {
-      "name": "@cmz/settings-security-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/settings-security-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/settings-security/data": {
-      "name": "@cmz/settings-security-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/settings-security-domain": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/settings-security/domain": {
-      "name": "@cmz/settings-security-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/settings-security/ui": {
-      "name": "@cmz/settings-security-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/settings-security-application": "workspace:*",
-        "@cmz/settings-security-domain": "workspace:*",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-      },
-    },
-    "libs/shared/application": {
-      "name": "@cmz/shared-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/shared-constants": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/shared/browser": {
-      "name": "@cmz/shared-browser",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/shared-domain": "workspace:*",
-        "exceljs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/shared/constants": {
-      "name": "@cmz/shared-constants",
-      "version": "0.0.0",
-    },
-    "libs/shared/data": {
-      "name": "@cmz/shared-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/shared-domain": "workspace:*",
-        "date-fns": "catalog:",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
         "vitest": "^5.0.5",
       },
     },
@@ -929,84 +99,6 @@
       "name": "@cmz/shared-domain",
       "version": "0.0.0",
       "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/shared/ui": {
-      "name": "@cmz/shared-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/platform-browser": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "date-fns": "catalog:",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/team-organization/application": {
-      "name": "@cmz/team-organization-application",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/team-organization-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/team-organization/data": {
-      "name": "@cmz/team-organization-data",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/common": "catalog:",
-        "@angular/core": "catalog:",
-        "@cmz/core": "workspace:*",
-        "@cmz/shared-data": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/team-organization-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "vitest": "^5.0.5",
-      },
-    },
-    "libs/team-organization/domain": {
-      "name": "@cmz/team-organization-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-    },
-    "libs/team-organization/ui": {
-      "name": "@cmz/team-organization-ui",
-      "version": "0.0.0",
-      "dependencies": {
-        "@angular/core": "catalog:",
-        "@angular/forms": "catalog:",
-        "@angular/router": "catalog:",
-        "@cmz/shared-application": "workspace:*",
-        "@cmz/shared-domain": "workspace:*",
-        "@cmz/shared-ui": "workspace:*",
-        "@cmz/team-organization-application": "workspace:*",
-        "@cmz/team-organization-domain": "workspace:*",
-      },
-    },
-    "libs/workflow-details/domain": {
-      "name": "@cmz/workflow-details-domain",
-      "version": "0.0.0",
-      "dependencies": {
-        "@cmz/shared-domain": "workspace:*",
-        "rxjs": "catalog:",
-      },
-      "devDependencies": {
-        "typescript": "catalog:tooling",
         "vitest": "^5.0.5",
       },
     },
@@ -1039,10 +131,7 @@
     "@angular/service-worker": "22.2.4",
     "@tailwindcss/postcss": "4.3.3",
     "@tailwindcss/vite": "4.3.3",
-    "date-fns": "4.4.0",
     "exceljs": "4.4.0",
-    "i18next": "26.5.11",
-    "ol": "^10.11.0",
     "postcss": "8.5.32",
     "rxjs": "7.8.2",
     "tailwindcss": "4.3.3",
@@ -1189,149 +278,9 @@
 
     "@clack/prompts": ["@clack/prompts@1.7.0", "", { "dependencies": { "@clack/core": "1.4.3", "fast-string-width": "^3.0.2", "fast-wrap-ansi": "^0.2.0", "sisteransi": "^1.0.5" } }, "sha512-y7/yvZ2TPAnR9+jnc00klvNNLkJiXFFrQA/hlLCcxA9a2A4zQIOimyFQ9XfwYKiGD1fb5GY8vbKIIgO8d5Tb2A=="],
 
-    "@cmz/administrative-boundary-application": ["@cmz/administrative-boundary-application@workspace:libs/administrative-boundary/application"],
-
-    "@cmz/administrative-boundary-data": ["@cmz/administrative-boundary-data@workspace:libs/administrative-boundary/data"],
-
-    "@cmz/administrative-boundary-domain": ["@cmz/administrative-boundary-domain@workspace:libs/administrative-boundary/domain"],
-
-    "@cmz/administrative-boundary-ui": ["@cmz/administrative-boundary-ui@workspace:libs/administrative-boundary/ui"],
-
-    "@cmz/administrative-infrastructure-application": ["@cmz/administrative-infrastructure-application@workspace:libs/administrative-infrastructure/application"],
-
-    "@cmz/administrative-infrastructure-data": ["@cmz/administrative-infrastructure-data@workspace:libs/administrative-infrastructure/data"],
-
-    "@cmz/administrative-infrastructure-domain": ["@cmz/administrative-infrastructure-domain@workspace:libs/administrative-infrastructure/domain"],
-
-    "@cmz/administrative-infrastructure-ui": ["@cmz/administrative-infrastructure-ui@workspace:libs/administrative-infrastructure/ui"],
-
-    "@cmz/authentication-application": ["@cmz/authentication-application@workspace:libs/authentication/application"],
-
-    "@cmz/authentication-data": ["@cmz/authentication-data@workspace:libs/authentication/data"],
-
-    "@cmz/authentication-domain": ["@cmz/authentication-domain@workspace:libs/authentication/domain"],
-
-    "@cmz/authentication-ui": ["@cmz/authentication-ui@workspace:libs/authentication/ui"],
-
-    "@cmz/communication-application": ["@cmz/communication-application@workspace:libs/communication/application"],
-
-    "@cmz/communication-data": ["@cmz/communication-data@workspace:libs/communication/data"],
-
-    "@cmz/communication-domain": ["@cmz/communication-domain@workspace:libs/communication/domain"],
-
-    "@cmz/communication-ui": ["@cmz/communication-ui@workspace:libs/communication/ui"],
-
-    "@cmz/content-management-application": ["@cmz/content-management-application@workspace:libs/content-management/application"],
-
-    "@cmz/content-management-data": ["@cmz/content-management-data@workspace:libs/content-management/data"],
-
-    "@cmz/content-management-domain": ["@cmz/content-management-domain@workspace:libs/content-management/domain"],
-
-    "@cmz/content-management-ui": ["@cmz/content-management-ui@workspace:libs/content-management/ui"],
-
     "@cmz/core": ["@cmz/core@workspace:libs/core"],
 
-    "@cmz/coverage-areas-application": ["@cmz/coverage-areas-application@workspace:libs/coverage-areas/application"],
-
-    "@cmz/coverage-areas-data": ["@cmz/coverage-areas-data@workspace:libs/coverage-areas/data"],
-
-    "@cmz/coverage-areas-domain": ["@cmz/coverage-areas-domain@workspace:libs/coverage-areas/domain"],
-
-    "@cmz/coverage-areas-ui": ["@cmz/coverage-areas-ui@workspace:libs/coverage-areas/ui"],
-
-    "@cmz/dashboard-application": ["@cmz/dashboard-application@workspace:libs/dashboard/application"],
-
-    "@cmz/dashboard-data": ["@cmz/dashboard-data@workspace:libs/dashboard/data"],
-
-    "@cmz/dashboard-domain": ["@cmz/dashboard-domain@workspace:libs/dashboard/domain"],
-
-    "@cmz/dashboard-ui": ["@cmz/dashboard-ui@workspace:libs/dashboard/ui"],
-
-    "@cmz/finalization-application": ["@cmz/finalization-application@workspace:libs/finalization/application"],
-
-    "@cmz/finalization-data": ["@cmz/finalization-data@workspace:libs/finalization/data"],
-
-    "@cmz/finalization-domain": ["@cmz/finalization-domain@workspace:libs/finalization/domain"],
-
-    "@cmz/finalization-ui": ["@cmz/finalization-ui@workspace:libs/finalization/ui"],
-
-    "@cmz/interactive-map-application": ["@cmz/interactive-map-application@workspace:libs/interactive-map/application"],
-
-    "@cmz/interactive-map-data": ["@cmz/interactive-map-data@workspace:libs/interactive-map/data"],
-
-    "@cmz/interactive-map-domain": ["@cmz/interactive-map-domain@workspace:libs/interactive-map/domain"],
-
-    "@cmz/interactive-map-ui": ["@cmz/interactive-map-ui@workspace:libs/interactive-map/ui"],
-
-    "@cmz/monitoring-application": ["@cmz/monitoring-application@workspace:libs/monitoring/application"],
-
-    "@cmz/monitoring-data": ["@cmz/monitoring-data@workspace:libs/monitoring/data"],
-
-    "@cmz/monitoring-domain": ["@cmz/monitoring-domain@workspace:libs/monitoring/domain"],
-
-    "@cmz/monitoring-ui": ["@cmz/monitoring-ui@workspace:libs/monitoring/ui"],
-
-    "@cmz/processing-application": ["@cmz/processing-application@workspace:libs/processing/application"],
-
-    "@cmz/processing-data": ["@cmz/processing-data@workspace:libs/processing/data"],
-
-    "@cmz/processing-domain": ["@cmz/processing-domain@workspace:libs/processing/domain"],
-
-    "@cmz/processing-ui": ["@cmz/processing-ui@workspace:libs/processing/ui"],
-
-    "@cmz/report-states-application": ["@cmz/report-states-application@workspace:libs/report-states/application"],
-
-    "@cmz/report-states-data": ["@cmz/report-states-data@workspace:libs/report-states/data"],
-
-    "@cmz/report-states-domain": ["@cmz/report-states-domain@workspace:libs/report-states/domain"],
-
-    "@cmz/report-states-ui": ["@cmz/report-states-ui@workspace:libs/report-states/ui"],
-
-    "@cmz/reporting-application": ["@cmz/reporting-application@workspace:libs/reporting/application"],
-
-    "@cmz/reporting-data": ["@cmz/reporting-data@workspace:libs/reporting/data"],
-
-    "@cmz/reporting-domain": ["@cmz/reporting-domain@workspace:libs/reporting/domain"],
-
-    "@cmz/reporting-ui": ["@cmz/reporting-ui@workspace:libs/reporting/ui"],
-
-    "@cmz/requests-application": ["@cmz/requests-application@workspace:libs/requests/application"],
-
-    "@cmz/requests-data": ["@cmz/requests-data@workspace:libs/requests/data"],
-
-    "@cmz/requests-domain": ["@cmz/requests-domain@workspace:libs/requests/domain"],
-
-    "@cmz/requests-ui": ["@cmz/requests-ui@workspace:libs/requests/ui"],
-
-    "@cmz/settings-security-application": ["@cmz/settings-security-application@workspace:libs/settings-security/application"],
-
-    "@cmz/settings-security-data": ["@cmz/settings-security-data@workspace:libs/settings-security/data"],
-
-    "@cmz/settings-security-domain": ["@cmz/settings-security-domain@workspace:libs/settings-security/domain"],
-
-    "@cmz/settings-security-ui": ["@cmz/settings-security-ui@workspace:libs/settings-security/ui"],
-
-    "@cmz/shared-application": ["@cmz/shared-application@workspace:libs/shared/application"],
-
-    "@cmz/shared-browser": ["@cmz/shared-browser@workspace:libs/shared/browser"],
-
-    "@cmz/shared-constants": ["@cmz/shared-constants@workspace:libs/shared/constants"],
-
-    "@cmz/shared-data": ["@cmz/shared-data@workspace:libs/shared/data"],
-
     "@cmz/shared-domain": ["@cmz/shared-domain@workspace:libs/shared/domain"],
-
-    "@cmz/shared-ui": ["@cmz/shared-ui@workspace:libs/shared/ui"],
-
-    "@cmz/team-organization-application": ["@cmz/team-organization-application@workspace:libs/team-organization/application"],
-
-    "@cmz/team-organization-data": ["@cmz/team-organization-data@workspace:libs/team-organization/data"],
-
-    "@cmz/team-organization-domain": ["@cmz/team-organization-domain@workspace:libs/team-organization/domain"],
-
-    "@cmz/team-organization-ui": ["@cmz/team-organization-ui@workspace:libs/team-organization/ui"],
-
-    "@cmz/workflow-details-domain": ["@cmz/workflow-details-domain@workspace:libs/workflow-details/domain"],
 
     "@commitlint/cli": ["@commitlint/cli@21.2.4", "", { "dependencies": { "@commitlint/config-conventional": "^21.2.4", "@commitlint/format": "^21.2.3", "@commitlint/lint": "^21.2.4", "@commitlint/load": "^21.2.4", "@commitlint/read": "^21.2.3", "@commitlint/types": "^21.2.3", "tinyexec": "^1.0.0", "yargs": "^18.0.0" }, "bin": { "commitlint": "cli.js" } }, "sha512-g3M/wrQdElqGH5vROIeL2QiYIxrzqUkhCgsDyDlWfKEyQdCt10OyMB28W2cJtpZ+VNGMvmaN923infr1hOfyrg=="],
 
@@ -1462,8 +411,6 @@
     "@fast-csv/format": ["@fast-csv/format@4.3.5", "", { "dependencies": { "@types/node": "^14.0.1", "lodash.escaperegexp": "^4.1.2", "lodash.isboolean": "^3.0.3", "lodash.isequal": "^4.5.0", "lodash.isfunction": "^3.0.9", "lodash.isnil": "^4.0.0" } }, "sha512-8iRn6QF3I8Ak78lNAa+Gdl5MJJBM5vRHivFtMRUWINdevNo00K7OXxS2PshawLKTejVwieIlPmK5YlLu6w4u8A=="],
 
     "@fast-csv/parse": ["@fast-csv/parse@4.3.6", "", { "dependencies": { "@types/node": "^14.0.1", "lodash.escaperegexp": "^4.1.2", "lodash.groupby": "^4.6.0", "lodash.isfunction": "^3.0.9", "lodash.isnil": "^4.0.0", "lodash.isundefined": "^3.0.1", "lodash.uniq": "^4.5.0" } }, "sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA=="],
-
-    "@fontsource/dejavu-sans": ["@fontsource/dejavu-sans@5.3.0", "", {}, "sha512-F/tV+7S31Mo8jtGUhj857XfUzcDCl9JJC8bzMtZ0wcTuOm89dG4FPjAOHOesMfmoChYVQ3eg5fHafdhxFrQIxQ=="],
 
     "@harperfast/extended-iterable": ["@harperfast/extended-iterable@1.0.3", "", {}, "sha512-sSAYhQca3rDWtQUHSAPeO7axFIUJOI6hn1gjRC5APVE1a90tuyT8f5WIgRsFhhWA7htNkju2veB9eWL6YHi/Lw=="],
 
@@ -1741,8 +688,6 @@
 
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.6.0", "", { "os": "win32", "cpu": "x64" }, "sha512-cA+/pXV2YkfxlIcXOQ5fSWqAzzPyD78/x5qbK/I0vUkrlYHA8TIz+MXjAbGouguKVSI4bOmkTSJ1/poVSsgt+A=="],
 
-    "@petamoriken/float16": ["@petamoriken/float16@3.9.3", "", {}, "sha512-8awtpHXCx/bNpFt4mt2xdkgtgVvKqty8VbjHI/WWWQuEw+KLzFot3f4+LkQY9YmOtq7A5GdOnqoIC8Pdygjk2g=="],
-
     "@phenomnomnominal/tsquery": ["@phenomnomnominal/tsquery@6.2.0", "", { "dependencies": { "@types/esquery": "^1.5.4", "esquery": "^1.7.0" }, "peerDependencies": { "typescript": ">3.0.0" } }, "sha512-Vo9nkhfZxDB/sBiqIY3pjDC4mOSyure+AFlEW5hcy/tRE82MqCXjRN4InnVNMldinRt0dLYqg4HAU2XPq5e1LA=="],
 
     "@playwright/test": ["@playwright/test@1.64.1", "", { "dependencies": { "playwright": "1.64.1" }, "bin": { "playwright": "cli.js" } }, "sha512-IaYGml/nSOiZWROfPtuIL7neuu9qDOZ3TNvNljUIrhDMxiGTgPjzj/g9p9RxpS2tSepPDRY+UwAaEeiKtUvIAg=="],
@@ -1887,8 +832,6 @@
 
     "@types/parse-json": ["@types/parse-json@4.0.2", "", {}, "sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw=="],
 
-    "@types/rbush": ["@types/rbush@4.0.0", "", {}, "sha512-+N+2H39P8X+Hy1I5mC6awlTX54k3FhiUmvt7HWzGJZvF+syUAAxP/stwppS8JE84YHqFgRMv6fCy31202CMFxQ=="],
-
     "@types/react": ["@types/react@19.3.0", "", { "dependencies": { "csstype": "^3.2.2" } }, "sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg=="],
 
     "@types/react-dom": ["@types/react-dom@19.3.0", "", { "peerDependencies": { "@types/react": "^19.3.0" } }, "sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q=="],
@@ -1934,8 +877,6 @@
     "@vitest/utils": ["@vitest/utils@5.0.5", "", { "dependencies": { "@vitest/pretty-format": "5.0.5", "convert-source-map": "^2.0.0", "tinyrainbow": "^3.2.0" } }, "sha512-/rBu7gzLDQI/SC79Tn98b5DwOgaHU/Gt4I9OVeP3YofzNaYtbImRCOJQmT1S6vOJg9gEIlWC+r3QxKkjuSa1nQ=="],
 
     "@yarnpkg/lockfile": ["@yarnpkg/lockfile@1.1.0", "", {}, "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ=="],
-
-    "@zarrita/storage": ["@zarrita/storage@0.2.0", "", { "dependencies": { "reference-spec-reader": "^0.2.0", "unzipit": "2.0.0" } }, "sha512-855ZXqtnds7spnT8vNvD+MXa3QExP1m2GqShe8yt7uZXHnQLgJHgkpVwFjE1B0KDDRO0ki09hmk6OboTaIfPsQ=="],
 
     "@zkochan/js-yaml": ["@zkochan/js-yaml@0.0.7", "", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.js" } }, "sha512-nrUSn7hzt7J6JWgWGz78ZYI8wj+gdIJdk0Ynjpp8l+trkn58Uqsf6RYrYkEK+3X18EX+TNdtJI0WxAtc+L84SQ=="],
 
@@ -2030,8 +971,6 @@
     "brace-expansion": ["brace-expansion@5.0.12", "", { "dependencies": { "balanced-match": "^4.0.2" } }, "sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ=="],
 
     "browserslist": ["browserslist@4.28.8", "", { "dependencies": { "baseline-browser-mapping": "^2.11.12", "caniuse-lite": "^1.0.30001809", "electron-to-chromium": "^1.5.402", "node-releases": "^2.0.53", "update-browserslist-db": "^1.3.0" }, "bin": { "browserslist": "cli.js" } }, "sha512-V2NpofLblG64mfOtSgDhOJESZEGogzDMBv/q+W6oc4LXWP/q75eOXoOaaOu1EOadB9U4Bwx/e0yzbvwKH8zalA=="],
-
-    "btoa": ["btoa@1.2.1", "", { "bin": { "btoa": "bin/btoa.js" } }, "sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g=="],
 
     "buffer": ["buffer@5.7.1", "", { "dependencies": { "base64-js": "^1.3.1", "ieee754": "^1.1.13" } }, "sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ=="],
 
@@ -2131,8 +1070,6 @@
 
     "data-view-byte-offset": ["data-view-byte-offset@1.0.1", "", { "dependencies": { "call-bound": "^1.0.2", "es-errors": "^1.3.0", "is-data-view": "^1.0.1" } }, "sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ=="],
 
-    "date-fns": ["date-fns@4.4.0", "", {}, "sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w=="],
-
     "dayjs": ["dayjs@1.11.21", "", {}, "sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA=="],
 
     "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" }, "peerDependencies": { "supports-color": "*" }, "optionalPeers": ["supports-color"] }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
@@ -2171,11 +1108,7 @@
 
     "dunder-proto": ["dunder-proto@1.0.1", "", { "dependencies": { "call-bind-apply-helpers": "^1.0.1", "es-errors": "^1.3.0", "gopd": "^1.2.0" } }, "sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A=="],
 
-    "duplexer": ["duplexer@0.1.2", "", {}, "sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg=="],
-
     "duplexer2": ["duplexer2@0.1.4", "", { "dependencies": { "readable-stream": "^2.0.2" } }, "sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA=="],
-
-    "earcut": ["earcut@3.2.3", "", {}, "sha512-vnS4AVwp1KHAF13i1vp1/2D5evWy3k5u/iW/B81QVsUZtV8cv2tU0b2VNFlqvh4kYwrFMDdjPCfAmfyJW9y14Q=="],
 
     "ejs": ["ejs@5.0.1", "", { "bin": { "ejs": "bin/cli.js" } }, "sha512-COqBPFMxuPTPspXl2DkVYaDS3HtrD1GpzOGkNTJ1IYkifq/r9h8SVEFrjA3D9/VJGOEoMQcrlhpntcSUrM8k6A=="],
 
@@ -2222,8 +1155,6 @@
     "esbuild": ["esbuild@0.28.2", "", { "optionalDependencies": { "@esbuild/aix-ppc64": "0.28.2", "@esbuild/android-arm": "0.28.2", "@esbuild/android-arm64": "0.28.2", "@esbuild/android-x64": "0.28.2", "@esbuild/darwin-arm64": "0.28.2", "@esbuild/darwin-x64": "0.28.2", "@esbuild/freebsd-arm64": "0.28.2", "@esbuild/freebsd-x64": "0.28.2", "@esbuild/linux-arm": "0.28.2", "@esbuild/linux-arm64": "0.28.2", "@esbuild/linux-ia32": "0.28.2", "@esbuild/linux-loong64": "0.28.2", "@esbuild/linux-mips64el": "0.28.2", "@esbuild/linux-ppc64": "0.28.2", "@esbuild/linux-riscv64": "0.28.2", "@esbuild/linux-s390x": "0.28.2", "@esbuild/linux-x64": "0.28.2", "@esbuild/netbsd-arm64": "0.28.2", "@esbuild/netbsd-x64": "0.28.2", "@esbuild/openbsd-arm64": "0.28.2", "@esbuild/openbsd-x64": "0.28.2", "@esbuild/openharmony-arm64": "0.28.2", "@esbuild/sunos-x64": "0.28.2", "@esbuild/win32-arm64": "0.28.2", "@esbuild/win32-ia32": "0.28.2", "@esbuild/win32-x64": "0.28.2" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-HKVLS8dvII+xoKW9kmqxbRKrnWEXfJJr/FZhhJmiqIB0e053QNYFqOBouTMO/k5sID4MvCiUCvv8b9M4h32wIA=="],
 
     "escalade": ["escalade@3.2.0", "", {}, "sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA=="],
-
-    "escape-html": ["escape-html@1.0.3", "", {}, "sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow=="],
 
     "escape-string-regexp": ["escape-string-regexp@4.0.0", "", {}, "sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA=="],
 
@@ -2291,8 +1222,6 @@
 
     "file-entry-cache": ["file-entry-cache@11.1.5", "", { "dependencies": { "flat-cache": "^6.1.23" } }, "sha512-+PFTHITI08JIGhnNpGNI8T8inUpgZfk3GNEqfT9R2zZV2iFXg3CvqzSl/uEhs7TSGujYRELEANyDvS8Fj7+S7Q=="],
 
-    "filelist": ["filelist@1.0.6", "", { "dependencies": { "minimatch": "^5.0.1" } }, "sha512-5giy2PkLYY1cP39p17Ech+2xlpTRL9HLspOfEgm0L6CwBXBTgsK5ou0JtzYuepxkaQ/tvhCFIJ5uXo0OrM2DxA=="],
-
     "find-up": ["find-up@5.0.0", "", { "dependencies": { "locate-path": "^6.0.0", "path-exists": "^4.0.0" } }, "sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng=="],
 
     "flat-cache": ["flat-cache@6.1.23", "", { "dependencies": { "cacheable": "^2.5.0", "flatted": "^3.4.2", "hookified": "^1.15.0" } }, "sha512-f++BY9pTk+983xK1FLzlLpmM0i0z+jHmx3QESGkURMXujQZz1k5wzwX6hjnQ8goaD0B+sYnDK1yZ6MTyZfUaqA=="],
@@ -2325,8 +1254,6 @@
 
     "gensync": ["gensync@1.0.0-beta.2", "", {}, "sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg=="],
 
-    "geotiff": ["geotiff@3.1.0-beta.0", "", { "dependencies": { "@petamoriken/float16": "^3.9.3", "lerc": "^3.0.0", "pako": "^2.0.4", "parse-headers": "^2.0.2", "quick-lru": "^6.1.1", "web-worker": "^1.5.0", "xml-utils": "^1.10.2", "zstddec": "^0.2.0" } }, "sha512-wbVwOaQYuN+ywly5NoMXn37nHslwkQg5EFHqMeUTtjDACrSag0EEVlFsc+2DK3Pzmmp6XzJW2RTZOamPsBM6ng=="],
-
     "get-caller-file": ["get-caller-file@2.0.5", "", {}, "sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg=="],
 
     "get-east-asian-width": ["get-east-asian-width@1.6.0", "", {}, "sha512-QRbvDIbx6YklUe6RxeTeleMR0yv3cYH6PsPZHcnVn7xv7zO1BHN8r0XETu8n6Ye3Q+ahtSarc3WgtNWmehIBfA=="],
@@ -2352,8 +1279,6 @@
     "gopd": ["gopd@1.2.0", "", {}, "sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg=="],
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
-
-    "gzip-size": ["gzip-size@6.0.0", "", { "dependencies": { "duplexer": "^0.1.2" } }, "sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q=="],
 
     "has-bigints": ["has-bigints@1.1.0", "", {}, "sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg=="],
 
@@ -2392,8 +1317,6 @@
     "https-proxy-agent": ["https-proxy-agent@9.1.0", "", { "dependencies": { "agent-base": "9.0.0", "debug": "^4.3.4", "proxy-agent-negotiate": "1.1.0" } }, "sha512-ag87y7cJJ9/3+GxFr8Oy4O5faDsGRGnBGsJj/YjOSsSx/5eadKLYTMPlzuR6obgoCDDm0abAAZitXXQkMOPSpA=="],
 
     "husky": ["husky@9.1.7", "", { "bin": { "husky": "bin.js" } }, "sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA=="],
-
-    "i18next": ["i18next@26.5.11", "", { "peerDependencies": { "typescript": "^5 || ^6 || ^7" }, "optionalPeers": ["typescript"] }, "sha512-Wc0klBPKxqZ2tL2qdAnF8xvvnWgr1IMGSY2ikTiAvaFVbz7xiFARtkoU4RidBDw1SyziGROp0qxu6qnJ7l2Wug=="],
 
     "iconv-lite": ["iconv-lite@0.7.3", "", { "dependencies": { "safer-buffer": ">= 2.1.2 < 3.0.0" } }, "sha512-IKXpvIzjnC9XTAUbVBcMfGS0EPaIXtW6v+zr+RRp+hqULEpo0owZax6wyRwPOJbWbzjYspQwusTsfVr0ifh4uQ=="],
 
@@ -2436,8 +1359,6 @@
     "is-data-view": ["is-data-view@1.0.2", "", { "dependencies": { "call-bound": "^1.0.2", "get-intrinsic": "^1.2.6", "is-typed-array": "^1.1.13" } }, "sha512-RKtWF8pGmS87i2D6gqQu/l7EYRlVdfzemCJN/P3UOs//x1QE7mfhvzHIApBTRf7axvT6DMGwSwBXYCT0nfB9xw=="],
 
     "is-date-object": ["is-date-object@1.1.0", "", { "dependencies": { "call-bound": "^1.0.2", "has-tostringtag": "^1.0.2" } }, "sha512-PwwhEakHVKTdRNVOw+/Gyh0+MzlCl4R6qKvkhuvLtPMggI1WAHt9sOwZxQLSGpUaDnrdyDsomoRgNnCfKNSXXg=="],
-
-    "is-docker": ["is-docker@2.2.1", "", { "bin": { "is-docker": "cli.js" } }, "sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ=="],
 
     "is-document.all": ["is-document.all@1.0.0", "", { "dependencies": { "call-bound": "^1.0.4" } }, "sha512-+XSoyS05OdBbhFuELhgTCpFNHkpBOJqtsZfUFFpe5QTw+9Sjbh8zitxhQkYAo6wV7e1Vb8cAPvpCk9jGam/82g=="],
 
@@ -2483,15 +1404,11 @@
 
     "is-weakset": ["is-weakset@2.0.4", "", { "dependencies": { "call-bound": "^1.0.3", "get-intrinsic": "^1.2.6" } }, "sha512-mfcwb6IzQyOKTs84CQMrOwW4gQcaTOAWJ0zzJCl2WSPDrWk/OzDaImWFH3djXhb24g4eudZfLRozAvPGw4d9hQ=="],
 
-    "is-wsl": ["is-wsl@2.2.0", "", { "dependencies": { "is-docker": "^2.0.0" } }, "sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww=="],
-
     "isarray": ["isarray@1.0.0", "", {}, "sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ=="],
 
     "isexe": ["isexe@2.0.0", "", {}, "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw=="],
 
     "iterator.prototype": ["iterator.prototype@1.1.5", "", { "dependencies": { "define-data-property": "^1.1.4", "es-object-atoms": "^1.0.0", "get-intrinsic": "^1.2.6", "get-proto": "^1.0.0", "has-symbols": "^1.1.0", "set-function-name": "^2.0.2" } }, "sha512-H0dkQoCa3b2VEeKQBOxFph+JAbcrQdE7KC0UkqwpLmv2EC4P41QXP+rqo9wYodACiG5/WM5s9oDApTU8utwj9g=="],
-
-    "jake": ["jake@10.9.4", "", { "dependencies": { "async": "^3.2.6", "filelist": "^1.0.4", "picocolors": "^1.1.1" }, "bin": { "jake": "bin/cli.js" } }, "sha512-wpHYzhxiVQL+IV05BLE2Xn34zW1S223hvjtqk0+gsPrwd/8JNLXJgZZM/iPFsYc1xyphF+6M6EvdE5E9MBGkDA=="],
 
     "jiti": ["jiti@2.7.0", "", { "bin": { "jiti": "lib/jiti-cli.mjs" } }, "sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ=="],
 
@@ -2528,8 +1445,6 @@
     "language-tags": ["language-tags@1.0.9", "", { "dependencies": { "language-subtag-registry": "^0.3.20" } }, "sha512-MbjN408fEndfiQXbFQ1vnd+1NoLDsnQW41410oQBXiyXDMYH5z505juWa4KUE1LqxRC7DgOgZDbKLxHIwm27hA=="],
 
     "lazystream": ["lazystream@1.0.1", "", { "dependencies": { "readable-stream": "^2.0.5" } }, "sha512-b94GiNHQNy6JNTrt5w6zNyffMrNkXZb3KTkCZJb2V1xaEGCk093vkZ2jk3tpaeP33/OiXC+WvK9AxUebnf5nbw=="],
-
-    "lerc": ["lerc@3.0.0", "", {}, "sha512-Rm4J/WaHhRa93nCN2mwWDZFoRVF18G1f47C+kvQWyHGEZxFpTUi73p7lMVSAndyxGt6lJ2/CFbOcf9ra5p8aww=="],
 
     "levn": ["levn@0.4.1", "", { "dependencies": { "prelude-ls": "^1.2.1", "type-check": "~0.4.0" } }, "sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ=="],
 
@@ -2570,8 +1485,6 @@
     "lmdb": ["lmdb@3.5.6", "", { "dependencies": { "@harperfast/extended-iterable": "^1.0.3", "msgpackr": "^1.11.2", "node-addon-api": "^6.1.0", "node-gyp-build-optional-packages": "5.2.2", "ordered-binary": "^1.5.3", "weak-lru-cache": "^1.2.2" }, "optionalDependencies": { "@lmdb/lmdb-darwin-arm64": "3.5.6", "@lmdb/lmdb-darwin-x64": "3.5.6", "@lmdb/lmdb-linux-arm": "3.5.6", "@lmdb/lmdb-linux-arm64": "3.5.6", "@lmdb/lmdb-linux-x64": "3.5.6", "@lmdb/lmdb-win32-arm64": "3.5.6", "@lmdb/lmdb-win32-x64": "3.5.6" }, "bin": { "download-lmdb-prebuilds": "bin/download-prebuilds.js" } }, "sha512-j3uE8ReKNyUWDjhfEFSJqE/1DLtfTR5Z8yFzVHvBjAk37wNg7HdScjcv8ttPHRvrdgPQMPWxFFI0SsdBzI5lBw=="],
 
     "locate-path": ["locate-path@6.0.0", "", { "dependencies": { "p-locate": "^5.0.0" } }, "sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw=="],
-
-    "lodash": ["lodash@4.18.1", "", {}, "sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q=="],
 
     "lodash.debounce": ["lodash.debounce@4.0.8", "", {}, "sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow=="],
 
@@ -2629,7 +1542,7 @@
 
     "minimist": ["minimist@1.2.8", "", {}, "sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA=="],
 
-    "mkdirp": ["mkdirp@0.5.6", "", { "dependencies": { "minimist": "^1.2.6" }, "bin": { "mkdirp": "bin/cmd.js" } }, "sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw=="],
+    "mkdirp": ["mkdirp@3.0.1", "", { "bin": { "mkdirp": "dist/cjs/src/bin.js" } }, "sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg=="],
 
     "mrmime": ["mrmime@2.0.1", "", {}, "sha512-Y3wQdFg2Va6etvQ5I82yUhGdsKrcYox6p7FfL1LbK2J4V01F9TGlepTIhnK24t7koZibmg82KGglhA1XK5IsLQ=="],
 
@@ -2661,8 +1574,6 @@
 
     "nth-check": ["nth-check@3.0.1", "", { "dependencies": { "boolbase": "^2.0.0" } }, "sha512-GX0gsdbGVCgnRgbeGaubfjpBXyYRWOOCVeYh08bSQvDZqxz5ndXs1OTfAt/h36G1xvI94YIspsI0sVFqAV9+RQ=="],
 
-    "numcodecs": ["numcodecs@0.3.2", "", { "dependencies": { "fflate": "^0.8.0" } }, "sha512-6YSPnmZgg0P87jnNhi3s+FVLOcIn3y+1CTIgUulA3IdASzK9fJM87sUFkpyA+be9GibGRaST2wCgkD+6U+fWKw=="],
-
     "nx": ["nx@24.0.3", "", { "dependencies": { "@clack/core": "1.4.3", "@clack/prompts": "1.7.0", "@emnapi/core": "1.4.5", "@emnapi/runtime": "1.4.5", "@emnapi/wasi-threads": "1.0.4", "@jest/diff-sequences": "30.0.1", "@napi-rs/wasm-runtime": "0.2.4", "@tybys/wasm-util": "0.9.0", "@yarnpkg/lockfile": "1.1.0", "@zkochan/js-yaml": "0.0.7", "ansi-regex": "5.0.1", "ansi-styles": "4.3.0", "argparse": "2.0.1", "balanced-match": "4.0.3", "base64-js": "1.5.1", "bl": "4.1.0", "brace-expansion": "5.0.12", "buffer": "5.7.1", "chalk": "4.1.2", "cli-cursor": "3.1.0", "cli-spinners": "2.6.1", "cliui": "8.0.1", "clone": "1.0.4", "color-convert": "2.0.1", "color-name": "1.1.4", "defaults": "1.0.4", "dotenv": "16.4.7", "dotenv-expand": "12.0.3", "ejs": "5.0.1", "emoji-regex": "8.0.0", "end-of-stream": "1.4.5", "escalade": "3.2.0", "escape-string-regexp": "1.0.5", "fast-string-truncated-width": "3.0.3", "fast-string-width": "3.0.2", "fast-wrap-ansi": "0.2.0", "figures": "3.2.0", "fs-constants": "1.0.0", "get-caller-file": "2.0.5", "has-flag": "4.0.0", "ieee754": "1.2.1", "ignore": "7.0.12", "inherits": "2.0.4", "is-fullwidth-code-point": "3.0.0", "is-interactive": "1.0.0", "is-unicode-supported": "0.1.0", "isexe": "2.0.0", "json5": "2.2.3", "jsonc-parser": "3.3.1", "lines-and-columns": "2.0.3", "log-symbols": "4.1.0", "mimic-fn": "2.1.0", "minimatch": "10.2.5", "minimist": "1.2.8", "npm-run-path": "4.0.1", "once": "1.4.0", "onetime": "5.1.2", "ora": "5.4.1", "path-key": "3.1.1", "picocolors": "1.1.1", "readable-stream": "3.6.2", "require-directory": "2.1.1", "resolve.exports": "2.0.3", "restore-cursor": "3.1.0", "safe-buffer": "5.2.1", "semver": "7.8.5", "signal-exit": "3.0.7", "sisteransi": "1.0.5", "smol-toml": "1.9.0", "string-width": "4.2.3", "string_decoder": "1.3.0", "strip-ansi": "6.0.1", "strip-bom": "3.0.0", "supports-color": "7.2.0", "tar-stream": "2.2.0", "tmp": "0.2.7", "tsconfig-paths": "4.2.0", "tslib": "2.8.1", "undici": "7.30.1", "util-deprecate": "1.0.2", "wcwidth": "1.0.1", "which": "3.0.1", "wrap-ansi": "7.0.0", "wrappy": "1.0.2", "y18n": "5.0.8", "yaml": "2.9.0", "yargs": "17.7.2", "yargs-parser": "21.1.1" }, "optionalDependencies": { "@nx/nx-darwin-arm64": "24.0.3", "@nx/nx-darwin-x64": "24.0.3", "@nx/nx-freebsd-x64": "24.0.3", "@nx/nx-linux-arm-gnueabihf": "24.0.3", "@nx/nx-linux-arm64-gnu": "24.0.3", "@nx/nx-linux-arm64-musl": "24.0.3", "@nx/nx-linux-x64-gnu": "24.0.3", "@nx/nx-linux-x64-musl": "24.0.3", "@nx/nx-win32-arm64-msvc": "24.0.3", "@nx/nx-win32-x64-msvc": "24.0.3" }, "peerDependencies": { "@swc-node/register": "^1.11.1", "@swc/core": "^1.15.8" }, "optionalPeers": ["@swc-node/register", "@swc/core"], "bin": { "nx": "./dist/bin/nx.js", "nx-cloud": "./dist/bin/nx-cloud.js" } }, "sha512-j3Q2ROXntVB95FQVzbIyvYVRCa2vBDBITt9N9Z/u/T7S4Um5OqfuA1os2RHaYT18kKJ7qE52rLG533T5X5U48g=="],
 
     "object-assign": ["object-assign@4.1.1", "", {}, "sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg=="],
@@ -2683,13 +1594,9 @@
 
     "obug": ["obug@3.0.0", "", {}, "sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw=="],
 
-    "ol": ["ol@10.11.0", "", { "dependencies": { "@types/rbush": "4.0.0", "earcut": "^3.0.0", "geotiff": "^3.1.0-beta.0", "pbf": "5.1.2", "rbush": "^4.0.0", "zarrita": "^0.7.1" } }, "sha512-OJ+lrx7kx/1O7Xx18Ff9QkVnwZIEL0OuhJQSy2sYgzzDvyZ2qHvuZEGAajbSstUyBwaS1OtQ4RWnY84tRMDdqg=="],
-
     "once": ["once@1.4.0", "", { "dependencies": { "wrappy": "1" } }, "sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w=="],
 
     "onetime": ["onetime@5.1.2", "", { "dependencies": { "mimic-fn": "^2.1.0" } }, "sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg=="],
-
-    "open": ["open@7.4.2", "", { "dependencies": { "is-docker": "^2.0.0", "is-wsl": "^2.1.1" } }, "sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q=="],
 
     "opener": ["opener@1.5.2", "", { "bin": { "opener": "bin/opener-bin.js" } }, "sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A=="],
 
@@ -2715,8 +1622,6 @@
 
     "parent-module": ["parent-module@1.0.1", "", { "dependencies": { "callsites": "^3.0.0" } }, "sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g=="],
 
-    "parse-headers": ["parse-headers@2.0.6", "", {}, "sha512-Tz11t3uKztEW5FEVZnj1ox8GKblWn+PvHY9TmJV5Mll2uHEwRdR/5Li1OlXoECjLYkApdhWy44ocONwXLiKO5A=="],
-
     "parse-json": ["parse-json@5.2.0", "", { "dependencies": { "@babel/code-frame": "^7.0.0", "error-ex": "^1.3.1", "json-parse-even-better-errors": "^2.3.0", "lines-and-columns": "^1.1.6" } }, "sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg=="],
 
     "parse5": ["parse5@8.0.1", "", { "dependencies": { "entities": "^8.0.0" } }, "sha512-z1e/HMG90obSGeidlli3hj7cbocou0/wa5HacvI3ASx34PecNjNQeaHNo5WIZpWofN9kgkqV1q5YvXe3F0FoPw=="],
@@ -2736,8 +1641,6 @@
     "path-type": ["path-type@4.0.0", "", {}, "sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw=="],
 
     "pathe": ["pathe@2.0.3", "", {}, "sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w=="],
-
-    "pbf": ["pbf@5.1.2", "", { "dependencies": { "resolve-protobuf-schema": "^2.1.0" }, "bin": { "pbf": "bin/pbf" } }, "sha512-mnvGdvOrIvJOBGUEdGkrVXjN8E/VkIJCkf2eS1DH2yv82ORUlLttmDt0rWY38yYZmVwciZwBUvHM20qxBZf40w=="],
 
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
@@ -2771,8 +1674,6 @@
 
     "prop-types": ["prop-types@15.8.1", "", { "dependencies": { "loose-envify": "^1.4.0", "object-assign": "^4.1.1", "react-is": "^16.13.1" } }, "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="],
 
-    "protocol-buffers-schema": ["protocol-buffers-schema@3.6.1", "", {}, "sha512-VG2K63Igkiv9p76tk1lilczEK1cT+kCjKtkdhw1dQZV3k3IXJbd3o6Ho8b9zJZaHSnT2hKe4I+ObmX9w6m5SmQ=="],
-
     "proxy-agent-negotiate": ["proxy-agent-negotiate@1.1.0", "", { "peerDependencies": { "kerberos": "^2.0.0" }, "optionalPeers": ["kerberos"] }, "sha512-N8IBcM3UgCVzz2L2Lqv8DVntDnnC8/hiV4nEDUPkqq72TPUgYWjQc+bdZlBPZK9LzPAvOY//gAt0S0DApoOXWQ=="],
 
     "punycode": ["punycode@2.3.1", "", {}, "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="],
@@ -2780,12 +1681,6 @@
     "qified": ["qified@0.10.1", "", { "dependencies": { "hookified": "^2.1.1" } }, "sha512-+Owyggi9IxT1ePKGafcI87ubSmxol6smwJ+RAHDQlx9+9cPwFWDiKFFCPuWhr9ignlGpZ9vDQLw67N4dcTVFEA=="],
 
     "qs": ["qs@6.16.0", "", { "dependencies": { "es-define-property": "^1.0.1", "side-channel": "^1.1.1" } }, "sha512-h6fhOIaRrID2CbEY2fqs+7t+UXZo+MLAnU5gRIq85uFtdiUPCdsApMlHhXogKVM4HM2DVbIjGNTTYH2OcmP1vA=="],
-
-    "quick-lru": ["quick-lru@6.1.2", "", {}, "sha512-AAFUA5O1d83pIHEhJwWCq/RQcRukCkn/NSm2QsTEMle5f2hP0ChI2+3Xb051PZCkLryI/Ir1MVKviT2FIloaTQ=="],
-
-    "quickselect": ["quickselect@3.0.0", "", {}, "sha512-XdjUArbK4Bm5fLLvlm5KpTFOiOThgfWWI4axAZDWg4E/0mKdZyI9tNEfds27qCi1ze/vwTR16kvmmGhRra3c2g=="],
-
-    "rbush": ["rbush@4.0.1", "", { "dependencies": { "quickselect": "^3.0.0" } }, "sha512-IP0UpfeWQujYC8Jg162rMNc01Rf0gWMMAb2Uxus/Q0qOFw4lCcq6ZnQEZwUoJqWyUGJ9th7JjwI4yIWo+uvoAQ=="],
 
     "react": ["react@19.3.1", "", {}, "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw=="],
 
@@ -2800,8 +1695,6 @@
     "readdir-glob": ["readdir-glob@1.1.3", "", { "dependencies": { "minimatch": "^5.1.0" } }, "sha512-v05I2k7xN8zXvPD9N+z/uhXPaj0sUFCe2rcWZIpBsqxfP7xXFQ0tipAd/wjj1YxWyWtUS5IDJpOG82JKt2EAVA=="],
 
     "readdirp": ["readdirp@5.0.0", "", {}, "sha512-9u/XQ1pvrQtYyMpZe7DXKv2p5CNvyVwzUB6uhLAnQwHMSgKMBR62lc7AHljaeteeHXn11XTAaLLUVZYVZyuRBQ=="],
-
-    "reference-spec-reader": ["reference-spec-reader@0.2.0", "", {}, "sha512-q0mfCi5yZSSHXpCyxjgQeaORq3tvDsxDyzaadA/5+AbAUwRyRuuTh0aRQuE/vAOt/qzzxidJ5iDeu1cLHaNBlQ=="],
 
     "reflect-metadata": ["reflect-metadata@0.2.2", "", {}, "sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q=="],
 
@@ -2831,13 +1724,11 @@
 
     "resolve-pkg-maps": ["resolve-pkg-maps@1.0.0", "", {}, "sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw=="],
 
-    "resolve-protobuf-schema": ["resolve-protobuf-schema@2.1.0", "", { "dependencies": { "protocol-buffers-schema": "^3.3.1" } }, "sha512-kI5ffTiZWmJaS/huM8wZfEMer1eRd7oJQhDuxeCLe3t7N7mX3z94CN0xPxBQxFYQTSNz9T0i+v6inKqSdK8xrQ=="],
-
     "resolve.exports": ["resolve.exports@2.0.3", "", {}, "sha512-OcXjMsGdhL4XnbShKpAcSqPMzQoYkYyhbEaeSko47MjRP9NfEQMhZkXL1DoFlt9LWQn4YttrdnV6X2OiyzBi+A=="],
 
     "restore-cursor": ["restore-cursor@3.1.0", "", { "dependencies": { "onetime": "^5.1.0", "signal-exit": "^3.0.2" } }, "sha512-l+sSefzHpj5qimhFSE5a8nufZYAM3sBSVMAPtYkmC+4EH2anSGaEMXSD0izRQbu9nfyQ9y5JrVmp7E8oZrUjvA=="],
 
-    "rimraf": ["rimraf@2.6.3", "", { "dependencies": { "glob": "^7.1.3" }, "bin": { "rimraf": "./bin.js" } }, "sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA=="],
+    "rimraf": ["rimraf@2.7.1", "", { "dependencies": { "glob": "^7.1.3" }, "bin": { "rimraf": "./bin.js" } }, "sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w=="],
 
     "rolldown": ["rolldown@1.2.15", "", { "dependencies": { "@oxc-project/types": "=0.155.0", "@rolldown/pluginutils": "^1.0.0" }, "optionalDependencies": { "@rolldown/binding-android-arm-eabi": "1.2.15", "@rolldown/binding-android-arm64": "1.2.15", "@rolldown/binding-darwin-arm64": "1.2.15", "@rolldown/binding-darwin-x64": "1.2.15", "@rolldown/binding-freebsd-x64": "1.2.15", "@rolldown/binding-linux-arm-gnueabihf": "1.2.15", "@rolldown/binding-linux-arm64-gnu": "1.2.15", "@rolldown/binding-linux-arm64-musl": "1.2.15", "@rolldown/binding-linux-ppc64-gnu": "1.2.15", "@rolldown/binding-linux-s390x-gnu": "1.2.15", "@rolldown/binding-linux-x64-gnu": "1.2.15", "@rolldown/binding-linux-x64-musl": "1.2.15", "@rolldown/binding-openharmony-arm64": "1.2.15", "@rolldown/binding-win32-arm64-msvc": "1.2.15", "@rolldown/binding-win32-x64-msvc": "1.2.15" }, "bin": { "rolldown": "./bin/cli.mjs" } }, "sha512-6odND+fel5zVw3I4Yc2e69gvguDnX0CAAGiNDZSq4ik5WUcaLrkD2GLuog0XcODbor31hZ5ayEMgVDno+KPV5g=="],
 
@@ -2933,8 +1824,6 @@
 
     "source-map": ["source-map@0.8.0", "", {}, "sha512-d8EqvL+k/SOXCreS/SUzg2ciyHqBBLcN/yuRjFsbvVhHTE2pgei7oAhmPM7kWFbkX6OSMQfUq4KbkF3au9lhYQ=="],
 
-    "source-map-explorer": ["source-map-explorer@2.5.3", "", { "dependencies": { "btoa": "^1.2.1", "chalk": "^4.1.0", "convert-source-map": "^1.7.0", "ejs": "^3.1.5", "escape-html": "^1.0.3", "glob": "^7.1.6", "gzip-size": "^6.0.0", "lodash": "^4.17.20", "open": "^7.3.1", "source-map": "^0.7.4", "temp": "^0.9.4", "yargs": "^16.2.0" }, "bin": { "source-map-explorer": "bin/cli.js", "sme": "bin/cli.js" } }, "sha512-qfUGs7UHsOBE5p/lGfQdaAj/5U/GWYBw2imEpD6UQNkqElYonkow8t+HBL1qqIl3CuGZx7n8/CQo4x1HwSHhsg=="],
-
     "source-map-js": ["source-map-js@1.2.2", "", {}, "sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw=="],
 
     "source-map-support": ["source-map-support@0.5.21", "", { "dependencies": { "buffer-from": "^1.0.0", "source-map": "^0.6.0" } }, "sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w=="],
@@ -2982,8 +1871,6 @@
     "tapable": ["tapable@2.3.3", "", {}, "sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A=="],
 
     "tar-stream": ["tar-stream@2.2.0", "", { "dependencies": { "bl": "^4.0.3", "end-of-stream": "^1.4.1", "fs-constants": "^1.0.0", "inherits": "^2.0.3", "readable-stream": "^3.1.1" } }, "sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ=="],
-
-    "temp": ["temp@0.9.4", "", { "dependencies": { "mkdirp": "^0.5.1", "rimraf": "~2.6.2" } }, "sha512-yYrrsWnrXMcdsnu/7YMYAofM1ktpL5By7vZhf15CrXijWWrEYZks5AXBudalfSWJLlnen/QUJUB5aoB0kqZUGA=="],
 
     "tinybench": ["tinybench@6.2.2", "", {}, "sha512-nIZ2N2dFpjBsg2hgitKu7mA+FvsIJuGJOwysRngmVRRmWgR/UyPjwJj8c/fT/dhm8EkHnF5EOogRf+0Z2qrimA=="],
 
@@ -3045,8 +1932,6 @@
 
     "union": ["union@0.5.0", "", { "dependencies": { "qs": "^6.4.0" } }, "sha512-N6uOhuW6zO95P3Mel2I2zMsbsanvvtgn6jVqJv4vbVcz/JN0OkL9suomjQGmWtxJQXOCqUJvquc1sMeNz/IwlA=="],
 
-    "unzipit": ["unzipit@2.0.0", "", {}, "sha512-DVeVIWUZCAQPNzm5sB0hpsG1GygTTdBnzNtYYEpInkttx5evkyqRgZi6rTczoySqp8hO5jHVKzrH0f23X8FZLg=="],
-
     "unzipper": ["unzipper@0.10.14", "", { "dependencies": { "big-integer": "^1.6.17", "binary": "~0.3.0", "bluebird": "~3.4.1", "buffer-indexof-polyfill": "~1.0.0", "duplexer2": "~0.1.4", "fstream": "^1.0.12", "graceful-fs": "^4.2.2", "listenercount": "~1.0.1", "readable-stream": "~2.3.6", "setimmediate": "~1.0.4" } }, "sha512-ti4wZj+0bQTiX2KmKWuwj7lhV+2n//uXEotUmGuQqrbVZSEGFMbI68+c6JCQ8aAmUWYvtHEz2A8K6wXvueR/6g=="],
 
     "update-browserslist-db": ["update-browserslist-db@1.3.2", "", { "dependencies": { "escalade": "^3.2.0", "picocolors": "^1.1.1" }, "peerDependencies": { "browserslist": ">= 4.21.0" }, "bin": { "update-browserslist-db": "cli.js" } }, "sha512-UQ+MSxlhRm1bzjhU+DcuXfjFO1FzNtqhK5+9Yvlp90ItDLk5vT932A0rFu619nf7RVS+Y/VeaUW1jaRDqZ8VJw=="],
@@ -3077,8 +1962,6 @@
 
     "weak-lru-cache": ["weak-lru-cache@1.2.2", "", {}, "sha512-DEAoo25RfSYMuTGc9vPJzZcZullwIqRDSI9LOy+fkCJPi6hykCnfKaXTuPBDuXAUcqHXyOgFtHNp/kB2FjYHbw=="],
 
-    "web-worker": ["web-worker@1.5.0", "", {}, "sha512-RiMReJrTAiA+mBjGONMnjVDP2u3p9R1vkcGz6gDIrOMT3oGuYwX2WRMYI9ipkphSuE5XKEhydbhNEJh4NY9mlw=="],
-
     "webidl-conversions": ["webidl-conversions@8.0.1", "", {}, "sha512-BMhLD/Sw+GbJC21C/UgyaZX41nPt8bUTg+jWyDeg7e7YN4xOM05YPSIXceACnXVtqyEw/LMClUQMtMZ+PGGpqQ=="],
 
     "whatwg-encoding": ["whatwg-encoding@2.0.0", "", { "dependencies": { "iconv-lite": "0.6.3" } }, "sha512-p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg=="],
@@ -3107,8 +1990,6 @@
 
     "xml-name-validator": ["xml-name-validator@5.0.0", "", {}, "sha512-EvGK8EJ3DhaHfbRlETOWAS5pO9MZITeauHKJyb8wyajUfQUenkIg2MvLDTZ4T/TgIcm3HU0TFBgWWboAZ30UHg=="],
 
-    "xml-utils": ["xml-utils@1.10.2", "", {}, "sha512-RqM+2o1RYs6T8+3DzDSoTRAUfrvaejbVHcp3+thnAtDKo8LskR+HomLajEy5UjTz24rpka7AxVBRR3g2wTUkJA=="],
-
     "xmlchars": ["xmlchars@2.2.0", "", {}, "sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw=="],
 
     "xxhash-wasm": ["xxhash-wasm@1.1.0", "", {}, "sha512-147y/6YNh+tlp6nd/2pWq38i9h6mz/EuQ6njIrmW8D1BS5nCqs0P6DG+m6zTGnNz5I+uhZ0SHxBs9BsPrwcKDA=="],
@@ -3127,15 +2008,11 @@
 
     "yoctocolors": ["yoctocolors@2.1.2", "", {}, "sha512-CzhO+pFNo8ajLM2d2IW/R93ipy99LWjtwblvC1RsoSUMZgyLbYFr221TnSNT7GjGdYui6P459mw9JH/g/zW2ug=="],
 
-    "zarrita": ["zarrita@0.7.3", "", { "dependencies": { "@zarrita/storage": "^0.2.0", "numcodecs": "^0.3.2" } }, "sha512-wChTQ1Ox75INoQCzKAfLWAfB70JJ4KjdW8Sz5x4ZWrFB4Dw+YZdnxHTL0xSdsrB9EmKSeK7fS1Y+I2ibhfGbkw=="],
-
     "zip-stream": ["zip-stream@4.1.1", "", { "dependencies": { "archiver-utils": "^3.0.4", "compress-commons": "^4.1.2", "readable-stream": "^3.6.0" } }, "sha512-9qv4rlDiopXg4E69k+vMHjNN63YFMe9sZMrdlvKnCjlCRWeCBswPPMPUfx+ipsAWq1LXHe70RcbaHdJJpS6hyQ=="],
 
     "zod": ["zod@4.6.6", "", {}, "sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA=="],
 
     "zod-validation-error": ["zod-validation-error@4.0.2", "", { "peerDependencies": { "zod": "^3.25.0 || ^4.0.0" } }, "sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ=="],
-
-    "zstddec": ["zstddec@0.2.0", "", {}, "sha512-oyPnDa1X5c13+Y7mA/FDMNJrn4S8UNBe0KCqtDmor40Re7ALrPN6npFwyYVRRh+PqozZQdeg23QtbcamZnG5rA=="],
 
     "@angular-eslint/builder/@angular-devkit/architect": ["@angular-devkit/architect@0.2202.3", "", { "dependencies": { "@angular-devkit/core": "22.2.3", "rxjs": "7.8.2" }, "bin": { "architect": "bin/cli.js" } }, "sha512-/605FxTg8Kt5fqNuIBVZMfuiNwIf+CTNsiYnHY85/7OTqCNkEwdkXKc3DiFM2KlR/AV2g64GkvHgHqxHzYh34g=="],
 
@@ -3357,15 +2234,7 @@
 
     "figures/escape-string-regexp": ["escape-string-regexp@1.0.5", "", {}, "sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg=="],
 
-    "filelist/minimatch": ["minimatch@5.1.9", "", { "dependencies": { "brace-expansion": "^2.0.1" } }, "sha512-7o1wEA2RyMP7Iu7GNba9vc0RWWGACJOCZBJX2GJWip0ikV+wcOsgVuY9uE8CPiyQhkGFSlhuSkZPavN7u1c2Fw=="],
-
     "flat-cache/flatted": ["flatted@3.4.2", "", {}, "sha512-PjDse7RzhcPkIJwy5t7KPWQSZ9cAbzQXcafsetQoD7sOJRQlGikNbx7yZp2OotDnJyrDcbyRq3Ttb18iYOqkxA=="],
-
-    "fstream/mkdirp": ["mkdirp@3.0.1", "", { "bin": { "mkdirp": "dist/cjs/src/bin.js" } }, "sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg=="],
-
-    "fstream/rimraf": ["rimraf@2.7.1", "", { "dependencies": { "glob": "^7.1.3" }, "bin": { "rimraf": "./bin.js" } }, "sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w=="],
-
-    "geotiff/pako": ["pako@2.2.0", "", {}, "sha512-zJq6RP/5q+TO2OpFV3FHzlPnFjmkb7Nc99a5SNjJE+uu/PkpChs+NIZSSzbBoD+6kjiISXjfYdwj1ZRQ81dz/w=="],
 
     "glob/minimatch": ["minimatch@3.1.5", "", { "dependencies": { "brace-expansion": "^1.1.7" } }, "sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w=="],
 
@@ -3462,12 +2331,6 @@
     "slice-ansi/ansi-styles": ["ansi-styles@6.2.3", "", {}, "sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg=="],
 
     "slice-ansi/is-fullwidth-code-point": ["is-fullwidth-code-point@5.1.0", "", { "dependencies": { "get-east-asian-width": "^1.3.1" } }, "sha512-5XHYaSyiqADb4RnZ1Bdad6cPp8Toise4TzEjcOYDHZkTCbKgiUl7WTUCpNWHuxmDt91wnsZBc9xinNzopv3JMQ=="],
-
-    "source-map-explorer/ejs": ["ejs@3.1.10", "", { "dependencies": { "jake": "^10.8.5" }, "bin": { "ejs": "bin/cli.js" } }, "sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA=="],
-
-    "source-map-explorer/source-map": ["source-map@0.7.6", "", {}, "sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ=="],
-
-    "source-map-explorer/yargs": ["yargs@16.2.2", "", { "dependencies": { "cliui": "^7.0.2", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "require-directory": "^2.1.1", "string-width": "^4.2.0", "y18n": "^5.0.5", "yargs-parser": "^20.2.2" } }, "sha512-Nt9ZJjXTv5R8MHbqby/wXQ6Gi0Bb3TcYZkR1bzuL4yB2OxWPkXknz513gEF0GoA6tn00UpbPvERW8rzCuWCA6w=="],
 
     "source-map-support/source-map": ["source-map@0.6.1", "", {}, "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="],
 
@@ -3984,10 +2847,6 @@
     "ora/cli-cursor/restore-cursor": ["restore-cursor@5.1.0", "", { "dependencies": { "onetime": "^7.0.0", "signal-exit": "^4.1.0" } }, "sha512-oMA2dcrw6u0YfxJQXm342bFKX/E4sG9rbTzO9ptUcR/e8A33cHuvStiYOwH7fszkZlZ1z/ta9AAoPk2F4qIOHA=="],
 
     "ora/string-width/strip-ansi": ["strip-ansi@7.2.0", "", { "dependencies": { "ansi-regex": "^6.2.2" } }, "sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w=="],
-
-    "source-map-explorer/yargs/cliui": ["cliui@7.0.4", "", { "dependencies": { "string-width": "^4.2.0", "strip-ansi": "^6.0.0", "wrap-ansi": "^7.0.0" } }, "sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ=="],
-
-    "source-map-explorer/yargs/yargs-parser": ["yargs-parser@20.2.9", "", {}, "sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w=="],
 
     "unzipper/readable-stream/safe-buffer": ["safe-buffer@5.1.2", "", {}, "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g=="],
 

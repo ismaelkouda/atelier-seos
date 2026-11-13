@@ -1,9 +1,0 @@
-{
-  "name": "@cmz/authentication-domain",
-  "version": "0.0.0",
-  "private": true,
-  "dependencies": {
-    "@cmz/shared-domain": "workspace:*",
-    "rxjs": "catalog:"
-  }
-}

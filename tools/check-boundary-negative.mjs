@@ -2,11 +2,11 @@
 /**
  * check-boundary-negative.mjs
  *
- * Audit A-12 — test negatif de non-regression des frontieres `scope:`.
+ * Test negatif de non-regression des frontieres de couche `type:`.
  *
  * Simule une PR jetable : injecte un import interdit
- * (scope:monitoring → scope:reporting), execute ESLint, exige un echec
- * portant `@nx/enforce-module-boundaries`, puis nettoie le fichier sonde.
+ * (type:domain → type:core), execute ESLint, exige un echec portant
+ * `@nx/enforce-module-boundaries`, puis nettoie le fichier sonde.
  *
  * Si ESLint est vert, la barriere machine est morte — exit 1.
  *
@@ -21,7 +21,7 @@ import { mkdirSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname.replace(/\/$/, '');
-const PROBE_REL = 'libs/monitoring/domain/src/lib/__boundary-negative.probe.ts';
+const PROBE_REL = 'libs/shared/domain/src/lib/__boundary-negative.probe.ts';
 const PROBE_ABS = join(ROOT, PROBE_REL);
 
 /**
@@ -79,9 +79,9 @@ function runEslintOnProbe() {
 
 const PROBE_SOURCE = [
     '// Sonde temporaire — check-boundary-negative.mjs (ne pas committer).',
-    "import type { ReportingSection } from '@cmz/reporting-domain';",
+    "import { SKIP_AUTH } from '@cmz/core';",
     '',
-    'export type BoundaryNegativeProbe = ReportingSection;',
+    'export const boundaryNegativeProbe = SKIP_AUTH;',
     '',
 ].join('\n');
 
@@ -125,11 +125,9 @@ const mentionsBoundary =
     eslintOut.includes('A project tagged with');
 
 if (eslintExit === 0) {
+    console.error('FAIL  violation type:domain → type:core non detectee.');
     console.error(
-        'FAIL  violation scope:monitoring → scope:reporting non detectee.'
-    );
-    console.error(
-        '      La regle @nx/enforce-module-boundaries ne bloque plus — regression A-1/A-12.'
+        '      La regle @nx/enforce-module-boundaries ne bloque plus.'
     );
     if (eslintOut.trim()) console.error(eslintOut);
     process.exit(1);
@@ -144,6 +142,6 @@ if (!mentionsBoundary) {
 }
 
 console.log(
-    'OK  test negatif : import interdit scope:monitoring → scope:reporting rejete par ESLint'
+    'OK  test negatif : import interdit type:domain → type:core rejete par ESLint'
 );
 process.exit(0);

@@ -38,8 +38,6 @@ node_modules
 .env.*
 !.env.example
 **/src/assets/config/env.js
-# Surcharge locale éventuelle (le env.js DEV versionné reste suivi)
-apps/backoffice-angular/public/env.local.js
 **/environments/environment.local.ts
 *.local.json
 
@@ -97,9 +95,6 @@ Thumbs.db
 # ---------------------------------------------------------------------------
 .claude/worktrees
 .claude/settings.local.json
-
-# Checkout local/CI du legacy piné (tools/corpus/checkout-legacy.mjs / B-5)
-.legacy-cmz-backoffice/
 
 # Cache binaire gitleaks (T4-5 / tools/check-secrets.mjs)
 tools/.cache/

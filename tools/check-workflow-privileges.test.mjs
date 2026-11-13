@@ -442,18 +442,16 @@ test('refuse deux étapes de même id qui reçoivent la même remise', () => {
 // Les vrais workflows, pas des gabarits : la liste fermée doit décrire le
 // dépôt tel qu'il est, et refuser qu'un jeton y change d'étape.
 function repositoryWorkflows(transform = {}) {
-    return ['ci.yml', 'corpus-full.yml', 'nightly-integration.yml'].map(
-        (file) => {
-            const content = readFileSync(
-                new URL(`../.github/workflows/${file}`, import.meta.url),
-                'utf8'
-            );
-            return {
-                file,
-                content: transform[file] ? transform[file](content) : content,
-            };
-        }
-    );
+    return ['ci.yml', 'nightly-integration.yml'].map((file) => {
+        const content = readFileSync(
+            new URL(`../.github/workflows/${file}`, import.meta.url),
+            'utf8'
+        );
+        return {
+            file,
+            content: transform[file] ? transform[file](content) : content,
+        };
+    });
 }
 
 test('les remises du dépôt sont exactement celles de la liste fermée', () => {

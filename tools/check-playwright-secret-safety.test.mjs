@@ -124,11 +124,6 @@ function proveServerWitness({ command, root, serverMarker }) {
 
 test('découvre tous les profils Playwright suivis sans liste applicative', () => {
     assert.deepEqual(trackedPlaywrightConfigs(ROOT), [
-        'apps/backoffice-angular/playwright.config.mjs',
-        'apps/backoffice-angular/playwright.memory.config.mjs',
-        'apps/users-management-proof/playwright.config.mjs',
-        'apps/users-management-react-proof/playwright.config.mjs',
-        'apps/users-management-react-proof/playwright.memory.config.mjs',
         'apps/workspace-react-proof/playwright.config.mjs',
         'apps/workspace-react-proof/playwright.memory.config.mjs',
     ]);
@@ -146,12 +141,12 @@ test('reconnaît aussi le nom officiel des configurations component testing', ()
     assert.equal(isPlaywrightConfigPath('app/playwright-helper.ts'), false);
 });
 
-test('inspecte les profils réels et leurs cinq webservers principaux', () => {
+test('inspecte les profils réels et leur webserver principal', () => {
     assert.deepEqual(verifyPlaywrightSecretSafety(ROOT), {
-        configs: 7,
-        primaryConfigs: 4,
-        primaryWebServers: 5,
-        totalWebServers: 9,
+        configs: 2,
+        primaryConfigs: 1,
+        primaryWebServers: 1,
+        totalWebServers: 2,
     });
 });
 

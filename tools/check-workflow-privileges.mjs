@@ -91,20 +91,13 @@ export const ALLOWED_SECRET_HANDOVERS = {
         oracle: {
             'nx-lint': NX_CLOUD,
             'nx-build': NX_CLOUD,
-            'nx-bundle-production': NX_CLOUD,
             'nx-typecheck': NX_CLOUD,
             'nx-test': NX_CLOUD,
         },
     },
-    'corpus-full.yml': {
-        'corpus-full': { 'corpus-full': NX_CLOUD },
-    },
     'nightly-integration.yml': {
         integration: {
-            'nx-build-development': NX_CLOUD,
-            'nx-build-production': NX_CLOUD,
             'nx-build-react-workspace': NX_CLOUD,
-            'nx-build-react-c5': NX_CLOUD,
         },
     },
 };
@@ -694,7 +687,7 @@ export function nxQualificationErrors(workflow) {
             'node tools/nx-migration-plan.mjs candidates "$TARGET"',
         ],
         'qualification-material': [
-            'bun run promote-library-compatibility --app backoffice-angular --library angular-material',
+            'bun run promote-library-compatibility --app library-qualification-angular --library angular-material',
         ],
         'qualification-tailwind-angular': [
             'bun run promote-library-compatibility --app library-qualification-angular --library tailwind',
@@ -703,9 +696,6 @@ export function nxQualificationErrors(workflow) {
             'bun run promote-library-compatibility --app library-qualification-react --library tailwind',
         ],
         'qualification-controls': [
-            'if test "$RUNNER_OS" = Linux; then',
-            'bun run bundle:metrics',
-            'bun run check:bundle-metrics-freshness',
             'bun run check:bun-lock-catalog-integrity',
             'bun run check:dependabot-policy',
             'bun run check:library-setup',
@@ -714,7 +704,7 @@ export function nxQualificationErrors(workflow) {
         'qualification-bundle': [
             'git merge-base --is-ancestor "$SOURCE_SHA" HEAD',
             'git diff-tree --no-commit-id -r --name-only -z "$commit"',
-            'conventions/libraries/angular/angular-material.compat.json|conventions/libraries/angular/tailwind.compat.json|conventions/libraries/react/tailwind.compat.json|apps/backoffice-angular/bundle-metrics.json) ;;',
+            'conventions/libraries/angular/angular-material.compat.json|conventions/libraries/angular/tailwind.compat.json|conventions/libraries/react/tailwind.compat.json) ;;',
             'git bundle create "$RUNNER_TEMP/nx-qualification/candidate.bundle" "$SOURCE_SHA..qualification/nx-$TARGET"',
             'git bundle verify "$RUNNER_TEMP/nx-qualification/candidate.bundle"',
             'printf \'%s\\n\' "$SOURCE_SHA" > "$RUNNER_TEMP/nx-qualification/base-sha.txt"',

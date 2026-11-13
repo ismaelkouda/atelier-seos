@@ -3,8 +3,8 @@
  * Périmètre Prettier produit (B5) — source unique pour format / format:check.
  * Lint-staged doit lister le même sous-ensemble (chemins + extensions).
  *
- * Inclus : apps, libs, tools, deploy + configs monorepo listées.
- * Exclu : docs/**, patterns SEOS vendored, artefacts E-5, *.in — via .prettierignore.
+ * Inclus : apps, libs, tools + configs monorepo listées.
+ * Exclu : docs/**, *.in — via .prettierignore.
  *
  * Usage :
  *   node tools/run-prettier.mjs --write
@@ -22,7 +22,6 @@ export const PRETTIER_PATHS = [
     'apps',
     'libs',
     'tools',
-    'deploy',
     'package.json',
     'nx.json',
     'tsconfig.base.json',

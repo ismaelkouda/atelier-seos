@@ -4,10 +4,10 @@
   "app_name": "library-qualification-react",
   "profile": "react-spa",
   "design_ref": {
-    "path": "designs/users-management-proof.application-design.json",
-    "sha256": "bcbd75141911d69fb31403a57b22e068cc461862c1b74a7dde117062982cc8af"
+    "path": "designs/library-qualification-bench.application-design.json",
+    "sha256": "f7b13669b3f644fff3850a8289030910db948880fdab53b162a7f32f1bb42e50"
   },
-  "experience_id": "operator-web",
+  "experience_id": "visitor-web",
   "generated_files": [
     {
       "path": ".cmz/libraries.json",
@@ -15,9 +15,9 @@
       "sha256": "c3f2551e21438af48d354958e174da65f3188402e8f42d2d5fccf3031c4b7b9b"
     },
     {
-      "path": ".cmz/pages/page_6666666666666666.json",
-      "bytes": 8155,
-      "sha256": "8012bb78d940b90151bed99273882a23ac80695619094fbe25304281cfeaad3d"
+      "path": ".cmz/pages/page_a11ca71000000001.json",
+      "bytes": 3885,
+      "sha256": "e8e5099f928922fc3cd760418ac38cf7964be1c3e5c46663011d7dc044522384"
     },
     {
       "path": "eslint.config.mjs",
@@ -26,18 +26,18 @@
     },
     {
       "path": "index.html",
-      "bytes": 643,
-      "sha256": "89473d07a009c3baff9f28648068eb246b321ce03045edeaa409336dd93cf797"
+      "bytes": 668,
+      "sha256": "a0b85d905d66b468cc1f966ceececaae63e6844f3811ab84f728689484612a0a"
     },
     {
       "path": "project.json",
-      "bytes": 249,
-      "sha256": "e89da9637df2873366ecfdbecbe70ce2225c0ebeaedf325ccd8bf8dc1904506c"
+      "bytes": 248,
+      "sha256": "cc643f0ac8458693c2c7b84a0e5438f2862a8d05f7ea4649d88e926dc2c2020e"
     },
     {
       "path": "public/icon.svg",
-      "bytes": 414,
-      "sha256": "871bf60fc40d327f604f6f440dad284758451aad8a89653ef3b72c42a78dfdba"
+      "bytes": 439,
+      "sha256": "db6df63fae45c9d31f8fe150cffc13da1e410939ffae255d715e66c4494c03bc"
     },
     {
       "path": "src/app/access-policy.spec.ts",
@@ -51,8 +51,8 @@
     },
     {
       "path": "src/app/app.routes.tsx",
-      "bytes": 758,
-      "sha256": "40ebb20c5b475dabf46fafe07d6fe2a5551ee7b691d5f34da29bad56628e6a32"
+      "bytes": 363,
+      "sha256": "3f24ec6b84fc12ad3b6269b8bd4c920bb5b858d98018d60a4d61c09196325167"
     },
     {
       "path": "src/app/app.tsx",
@@ -60,9 +60,9 @@
       "sha256": "36b09813dd6cf32dc7599d94736216dd7095031ce748ab80bdc218a080494ad8"
     },
     {
-      "path": "src/app/pages/page_6666666666666666/page.tsx",
-      "bytes": 330,
-      "sha256": "b8369a370f537fb97be0eda5cdc3d1ea935025f5939eb1a42bda4a3f419b3776"
+      "path": "src/app/pages/page_a11ca71000000001/page.tsx",
+      "bytes": 317,
+      "sha256": "6d56d3b7f06303f38568d2b52ed323865230d77041a55ccd7af6da5e35d015f9"
     },
     {
       "path": "src/main.tsx",
@@ -91,9 +91,9 @@
     },
     {
       "path": "vite.config.mts",
-      "bytes": 1054,
-      "sha256": "b7b8c59d416031298136ea1c12043129833f460abf1916edc76e4bf811db61a5"
+      "bytes": 1144,
+      "sha256": "e7a376999e27cc4c42733879913117e3b5c092a289921f1d123b94ad7ff5341a"
     }
   ],
-  "tree_sha256": "ba5d834768331c09d72d337c425573a191e1f93642ace7510aac8fd5c098773f"
+  "tree_sha256": "c8a29edc3b2f4f29146013768f0c2a75c5cb00d348d08861555038c5456d1546"
 }

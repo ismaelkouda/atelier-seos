@@ -1,8 +1,0 @@
-@import 'tailwindcss' source(none);
-@import '../../../conventions/presentation/tailwind-theme.css';
-
-/* L'auto-détection Tailwind est désactivée ci-dessus : seuls ces chemins
-   applicatifs peuvent influencer le CSS de production. */
-@source '../../../libs/shared/ui/src';
-@source '../../../libs/*/ui/src';
-@source '../../../apps/backoffice-angular/src';

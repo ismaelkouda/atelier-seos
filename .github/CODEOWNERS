@@ -1,18 +1,14 @@
-# CODEOWNERS — relecture obligatoire par zone (audit G-1 / P1-13)
+# CODEOWNERS — relecture obligatoire par zone
 #
-# Objectif : sur un monorepo multi-stack, empêcher qu'une modification du socle,
-# du kernel, d'un module, de la doc ou du corpus passe sans relecture de la
-# zone responsable. La **dernière** règle qui correspond à un fichier l'emporte :
-# ordre = général → spécifique.
+# Objectif : empêcher qu'une modification du socle, du moteur de génération,
+# des sources recopiées dans les produits ou de la documentation passe sans
+# relecture de la zone responsable. La **dernière** règle qui correspond à un
+# fichier l'emporte : ordre = général → spécifique.
 #
 # Format : <motif>  <propriétaires>
-# Comptes (@utilisateur) ou équipes (@organisation/equipe) GitHub.
-#
-# État 2026-09-10 : deux relecteurs humains (@ismaelkouda et @soumailakouda)
-# couvrent chaque zone. Remplacer progressivement chaque zone par une
-# équipe GitHub dédiée (@cmz/socle, @cmz/kernel, @cmz/module-…, @cmz/docs,
-# @cmz/corpus) dès qu'elle existe. Une équipe inexistante est **ignorée sans
-# erreur** : ne jamais laisser une zone sans handle valide.
+# Comptes (@utilisateur) ou équipes (@organisation/equipe) GitHub. Une équipe
+# inexistante est **ignorée sans erreur** : ne jamais laisser une zone sans
+# handle valide.
 #
 # Propriétaires courants — alias local pour lisibilité des diffs.
 # OWNERS = @ismaelkouda @soumailakouda
@@ -23,7 +19,7 @@
 *                                           @ismaelkouda @soumailakouda
 
 # ---------------------------------------------------------------------------
-# Socle du monorepo — impacte tous les packages (ADR-0003 / ADR-0005 / ADR-0006)
+# Socle du monorepo — impacte tous les projets
 # ---------------------------------------------------------------------------
 /package.json                               @ismaelkouda @soumailakouda
 /bun.lock                                   @ismaelkouda @soumailakouda
@@ -32,72 +28,29 @@
 /eslint.config.mjs                          @ismaelkouda @soumailakouda
 /commitlint.config.mjs                      @ismaelkouda @soumailakouda
 /knip.json                                  @ismaelkouda @soumailakouda
-/legacy.lock.json                           @ismaelkouda @soumailakouda
-/Dockerfile                                 @ismaelkouda @soumailakouda
-/.dockerignore                              @ismaelkouda @soumailakouda
-/deploy/                                    @ismaelkouda @soumailakouda
-/apps/backoffice-angular/public/env.js      @ismaelkouda @soumailakouda
 /.husky/                                    @ismaelkouda @soumailakouda
 /.github/                                   @ismaelkouda @soumailakouda
 /tools/                                     @ismaelkouda @soumailakouda
 /tools/check-*.mjs                          @ismaelkouda @soumailakouda
 /tools/vitest-lib.config.ts                 @ismaelkouda @soumailakouda
-/tools/mock-server.mjs                      @ismaelkouda @soumailakouda
-/tools/mock-server/                         @ismaelkouda @soumailakouda
 
 # ---------------------------------------------------------------------------
-# Kernel SEOS — libs transverses (0 couplage métier)
+# Sources génériques recopiées octet pour octet dans chaque produit
 # ---------------------------------------------------------------------------
 /libs/core/                                 @ismaelkouda @soumailakouda
 /libs/shared/                               @ismaelkouda @soumailakouda
 
 # ---------------------------------------------------------------------------
-# Modules fonctionnels — un propriétaire de zone par module (équipe de 1 OK)
-# ---------------------------------------------------------------------------
-/libs/authentication/                       @ismaelkouda @soumailakouda
-/libs/administrative-boundary/              @ismaelkouda @soumailakouda
-/libs/administrative-infrastructure/        @ismaelkouda @soumailakouda
-/libs/communication/                        @ismaelkouda @soumailakouda
-/libs/content-management/                   @ismaelkouda @soumailakouda
-/libs/coverage-areas/                       @ismaelkouda @soumailakouda
-/libs/dashboard/                            @ismaelkouda @soumailakouda
-/libs/finalization/                         @ismaelkouda @soumailakouda
-/libs/interactive-map/                      @ismaelkouda @soumailakouda
-/libs/monitoring/                           @ismaelkouda @soumailakouda
-/libs/processing/                           @ismaelkouda @soumailakouda
-/libs/report-states/                        @ismaelkouda @soumailakouda
-/libs/reporting/                            @ismaelkouda @soumailakouda
-/libs/requests/                             @ismaelkouda @soumailakouda
-/libs/settings-security/                    @ismaelkouda @soumailakouda
-/libs/team-organization/                    @ismaelkouda @soumailakouda
-
-# ---------------------------------------------------------------------------
-# Applications hôtes
+# Bancs de qualification
 # ---------------------------------------------------------------------------
 /apps/                                      @ismaelkouda @soumailakouda
-/apps/backoffice-angular/                   @ismaelkouda @soumailakouda
 
 # ---------------------------------------------------------------------------
-# Documentation, contrats, conventions — validité scientifique & ADR
+# Documentation, contrats, conventions
 # ---------------------------------------------------------------------------
 /docs/                                      @ismaelkouda @soumailakouda
-/docs/adr/                                  @ismaelkouda @soumailakouda
-/docs/architecture/                         @ismaelkouda @soumailakouda
-/docs/guides/                               @ismaelkouda @soumailakouda
-/contracts/                                 @ismaelkouda @soumailakouda
 /conventions/                               @ismaelkouda @soumailakouda
-# best-practices.md déplacé vers conventions/ le 2026-08-03 (J-11) — déjà
-# couvert par la règle /conventions/ ci-dessus, plus de ligne dédiée.
-/LLM_CONTEXT.md                             @ismaelkouda @soumailakouda
+/PROJECT_AUTHORITY.md                       @ismaelkouda @soumailakouda
+/AGENTS.md                                  @ismaelkouda @soumailakouda
 /CLAUDE.md                                  @ismaelkouda @soumailakouda
-/STATUS.md                                  @ismaelkouda @soumailakouda
 /README.md                                  @ismaelkouda @soumailakouda
-
-# ---------------------------------------------------------------------------
-# Outillage corpus SEOS — émission / vérif des paires (livrable scientifique)
-# Plus spécifique que /tools/ : dernier match = relecture corpus
-# ---------------------------------------------------------------------------
-/tools/corpus/                              @ismaelkouda @soumailakouda
-/tools/seos-adapter/                        @ismaelkouda @soumailakouda
-/tools/smoke/                               @ismaelkouda @soumailakouda
-/corpus/                                    @ismaelkouda @soumailakouda

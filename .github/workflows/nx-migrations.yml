@@ -192,7 +192,7 @@ jobs:
         if: steps.migrate.outputs.state == 'ready'
         working-directory: ${{ runner.temp }}/nx-candidate
         run: |
-          bun run promote-library-compatibility --app backoffice-angular --library angular-material | tee "$RUNNER_TEMP/nx-result/material.txt"
+          bun run promote-library-compatibility --app library-qualification-angular --library angular-material | tee "$RUNNER_TEMP/nx-result/material.txt"
           git add conventions/libraries/angular/angular-material.compat.json
           git commit -m 'test(deps): requalifier Angular Material après migration Nx'
           test -z "$(git status --porcelain)"
@@ -215,18 +215,10 @@ jobs:
           git commit -m 'test(deps): requalifier Tailwind React après migration Nx'
           test -z "$(git status --porcelain)"
           echo "Promotion Tailwind React : $SECONDS s" >> "$GITHUB_STEP_SUMMARY"
-      - name: Mesure production canonique Linux et contrôles natifs
+      - name: Contrôles natifs
         if: steps.migrate.outputs.state == 'ready'
         working-directory: ${{ runner.temp }}/nx-candidate
         run: |
-          if test "$RUNNER_OS" = Linux; then
-            bun run bundle:metrics | tee "$RUNNER_TEMP/nx-result/bundle-metrics.txt"
-            git add apps/backoffice-angular/bundle-metrics.json
-            if ! git diff --cached --quiet; then
-              git commit -m 'test(deps): mesurer le bundle Linux après migration Nx'
-            fi
-            bun run check:bundle-metrics-freshness
-          fi
           bun run check:bun-lock-catalog-integrity
           bun run check:dependabot-policy
           bun run check:library-setup
@@ -440,7 +432,7 @@ jobs:
           Bundle Linux SHA256 : $EXPECTED_BUNDLE_SHA256. Journaux et durées attachés au même run.
           Les instructions Nx ont été confrontées avant retrait de migrations.json.
 
-          Commits séparés (migration, chaque matrice et métriques Linux si modifiées) :
+          Commits séparés (migration et chaque matrice) :
           EOF
           git log --reverse --format='- %h %s' "$SOURCE_SHA..refs/remotes/nx-candidate" >> "$RUNNER_TEMP/nx-pr-body.md"
           printf '\nRefs #310\n\nPublication automatique native GitHub Actions.\n' >> "$RUNNER_TEMP/nx-pr-body.md"
@@ -553,7 +545,7 @@ jobs:
         id: qualification-material
         working-directory: ${{ runner.temp }}/nx-qualified-candidate
         run: |
-          bun run promote-library-compatibility --app backoffice-angular --library angular-material | tee "$RUNNER_TEMP/nx-qualification/material.txt"
+          bun run promote-library-compatibility --app library-qualification-angular --library angular-material | tee "$RUNNER_TEMP/nx-qualification/material.txt"
           git add conventions/libraries/angular/angular-material.compat.json
           git commit -m 'test(deps): requalifier Angular Material après migration Nx'
           test -z "$(git status --porcelain)"
@@ -576,18 +568,10 @@ jobs:
           git commit -m 'test(deps): requalifier Tailwind React après migration Nx'
           test -z "$(git status --porcelain)"
           echo "Promotion Tailwind React : $SECONDS s" >> "$GITHUB_STEP_SUMMARY"
-      - name: Mesure production canonique Linux et contrôles natifs
+      - name: Contrôles natifs
         id: qualification-controls
         working-directory: ${{ runner.temp }}/nx-qualified-candidate
         run: |
-          if test "$RUNNER_OS" = Linux; then
-            bun run bundle:metrics | tee "$RUNNER_TEMP/nx-qualification/bundle-metrics.txt"
-            git add apps/backoffice-angular/bundle-metrics.json
-            if ! git diff --cached --quiet; then
-              git commit -m 'test(deps): mesurer le bundle Linux après migration Nx'
-            fi
-            bun run check:bundle-metrics-freshness
-          fi
           bun run check:bun-lock-catalog-integrity
           bun run check:dependabot-policy
           bun run check:library-setup
@@ -604,7 +588,7 @@ jobs:
           while IFS= read -r commit; do
             while IFS= read -r -d '' path; do
               case "$path" in
-                conventions/libraries/angular/angular-material.compat.json|conventions/libraries/angular/tailwind.compat.json|conventions/libraries/react/tailwind.compat.json|apps/backoffice-angular/bundle-metrics.json) ;;
+                conventions/libraries/angular/angular-material.compat.json|conventions/libraries/angular/tailwind.compat.json|conventions/libraries/react/tailwind.compat.json) ;;
                 *) echo "Promotion hors périmètre : $path"; exit 1 ;;
               esac
             done < <(git diff-tree --no-commit-id -r --name-only -z "$commit")

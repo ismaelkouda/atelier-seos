@@ -13,11 +13,9 @@
       "Secret scan (gitleaks)",
       "Docs freshness",
       "Oracle — lint + build + ngc + test",
-      "E2E smoke — login (Playwright)",
-      "Corpus SEOS — structural-only",
+      "E2E smoke (Playwright)",
       "Dead-code (knip)",
       "Dependency audit (bun audit)",
-      "i18n keys (check:i18n)",
       "Third-party licenses (license-checker)",
       "Duplicate files (MD5)"
     ]

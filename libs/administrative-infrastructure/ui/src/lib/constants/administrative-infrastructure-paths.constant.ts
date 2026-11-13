@@ -1,1 +1,0 @@
-export const ADMINISTRATIVE_INFRASTRUCTURE_ROUTE = 'equipments';
