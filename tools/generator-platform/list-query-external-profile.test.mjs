@@ -18,8 +18,16 @@ import {
 } from './core/list-query-v2-compiler.mjs';
 import { renderAngularExternalListQuery } from './renderers/angular-external-list-query.mjs';
 import { renderAngularListQueryV2 } from './renderers/angular-list-query-v2-renderer.mjs';
-import { cmzAngularListQueryHostBindings } from './list-query-v2-targets.mjs';
 
+// Liaisons d'hôte fictives du rendu interne Angular (service du contrat).
+const HOST_BINDINGS = Object.freeze({
+    services: Object.freeze({
+        'settings-api': Object.freeze({
+            module: '@fixture/core',
+            token: 'SETTINGS_API_URL',
+        }),
+    }),
+});
 const ITEM = 'users-list-item-wire';
 const BINDING = Object.freeze({ module: '../session', token: 'USERS_API_URL' });
 const fixture = (name) =>
@@ -145,11 +153,7 @@ test('rendu : chaque profil n’a que son rendu', async () => {
     );
     const internalModel = compile(await inputs({ unread: false }));
     assert.throws(
-        () =>
-            renderAngularListQueryV2(
-                externalModel,
-                cmzAngularListQueryHostBindings
-            ),
+        () => renderAngularListQueryV2(externalModel, HOST_BINDINGS),
         /uses the external profile without its renderer/
     );
     assert.throws(
@@ -206,7 +210,7 @@ function pagePayload(query, item) {
 
 async function decoderModule(model, internal = false) {
     const files = internal
-        ? renderAngularListQueryV2(model, cmzAngularListQueryHostBindings).files
+        ? renderAngularListQueryV2(model, HOST_BINDINGS).files
         : renderAngularExternalListQuery(model, BINDING).files;
     const errorsModule = internal ? '@cmz/shared-domain' : BINDING.module;
     const stub = `export class InvalidPayloadError extends Error { constructor(path, expected) { super(path + ': ' + expected); this.path = path; } }
@@ -263,7 +267,7 @@ test('décodeur projeté exécuté : champ non lu ignoré, champ lu strict', asy
         );
 });
 
-test('décodeur interne exécuté : un champ inconnu reste refusé (Π1)', async () => {
+test('décodeur interne exécuté : un champ inconnu reste refusé', async () => {
     const model = compile(await inputs({ unread: false }));
     const query = model.queries[0];
     const { decodeListUsersResponse } = await decoderModule(model, true);
@@ -303,16 +307,14 @@ test('E5 : un nom lu de prototype est refusé à la compilation et à la validat
 });
 
 test('O-C5-1 : une lecture extérieure à paramètre de chemin est refusée, nommée', async () => {
-    const definition = await fixture(
-        'tasks-actions-processing-type.v2.definition.json'
-    );
+    const definition = await fixture('request-action-types.v2.definition.json');
     const document = await readFile(
         new URL(
-            './fixtures/tasks-actions-processing-type.backend-contract.json',
+            './fixtures/request-action-types.backend-contract.json',
             import.meta.url
         )
     );
-    // Le profil interne accepte cette lecture (Π1)…
+    // Le profil interne accepte cette lecture…
     assert.doesNotThrow(() =>
         compileListQueryV2ExecutionModel({
             definition,

@@ -1,7 +1,7 @@
 // CI #389, X5 : toute lecture de contrat backend du fil X5 passe par la lecture
 // bornée (CONTRACT_GRAPH_LIMITS) : cible et compilateur list-query v2,
 // validation de conception. Un contrat au-delà du budget est refusé ; les
-// contrats légitimes passent (Π1 : sorties list-query internes identiques).
+// contrats légitimes passent.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -11,7 +11,8 @@ import test from 'node:test';
 import { validateApplicationDesignWithDependencies } from './core/application-design.mjs';
 import { CONTRACT_GRAPH_LIMITS } from './core/backend-contract-reader.mjs';
 import { compileListQueryV2ExecutionModel } from './core/list-query-v2-compiler.mjs';
-import { computeListQueryV2Targets } from './list-query-v2-targets.mjs';
+import { computeExternalAngularListQueryTarget } from './list-query-v2-targets.mjs';
+import { repositoryRoot } from './validate-ir.mjs';
 import { createApplicationSessionFixture } from './test-support/application-session-fixture.mjs';
 
 const fixture = (name) =>
@@ -98,8 +99,10 @@ test('cible list-query v2 : contrat au-delà du budget refusé', async (t) => {
     await writeFile(definitionPath, JSON.stringify(definition));
     // Le refus vient de la lecture de la CIBLE, avant le compilateur.
     await assert.rejects(
-        computeListQueryV2Targets({
+        computeExternalAngularListQueryTarget({
             definitionPath: definitionPath.pathname,
+            artifactRoot: repositoryRoot,
+            hostBindings: () => assert.fail('aucun rendu avant la lecture'),
         }),
         /^Error: invalid active backend contract:\nbackend contract is not readable within limits \(OBS_LIMIT\)/
     );

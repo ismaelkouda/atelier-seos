@@ -3,59 +3,19 @@
   "kind": "backend-contract",
   "contract": {
     "id": "cmz-users-list",
-    "title": "Users list client-observed contract",
+    "title": "Users list fictional contract",
     "version": "1.0.0",
     "status": "implemented",
-    "description": "Implemented workspace contract for the paginated SEOS users list; not a verified-live backend claim."
+    "description": "Fictional paginated users list used by the generator unit tests; not a backend claim."
   },
   "sources": [
     {
-      "id": "users-api",
-      "kind": "legacy-code",
-      "authority": "observational",
+      "id": "fictional-api-openapi",
+      "kind": "openapi",
+      "authority": "authoritative",
       "status": "implemented",
-      "snapshot_uri": "libs/settings-security/data/src/lib/sources/users.api.ts",
-      "sha256": "494ecbbee247086faee1d2e03140355d56521341369ecfab3138ee45a0a0e03a"
-    },
-    {
-      "id": "users-response-dto",
-      "kind": "legacy-code",
-      "authority": "observational",
-      "status": "implemented",
-      "snapshot_uri": "libs/settings-security/data/src/lib/dtos/users-response-api.dto.ts",
-      "sha256": "d35bf4a5f3149aec5f45e343b1c4e371610a58f1462efe03ef437349891bdb55"
-    },
-    {
-      "id": "users-filter-dto",
-      "kind": "legacy-code",
-      "authority": "observational",
-      "status": "implemented",
-      "snapshot_uri": "libs/settings-security/data/src/lib/dtos/users-filter-api.dto.ts",
-      "sha256": "29dc1cf3f7e756830a1f376c25fcc672438d3e726617e975aa93e49f38f071c5"
-    },
-    {
-      "id": "users-filter-mapper",
-      "kind": "legacy-code",
-      "authority": "observational",
-      "status": "implemented",
-      "snapshot_uri": "libs/settings-security/data/src/lib/mappers/users-filter.mapper.ts",
-      "sha256": "0d0a6da8e6f7f48891e56e9d1eac0c55129ce00e55b8d877cf8fe441f678e321"
-    },
-    {
-      "id": "paginated-response-dto",
-      "kind": "legacy-code",
-      "authority": "observational",
-      "status": "implemented",
-      "snapshot_uri": "libs/shared/data/src/lib/dtos/simple-response.dto.ts",
-      "sha256": "cba0b8c0db95ca80c36f4bf2ec4a7dd239107807d7ab216ed5abb692ded8ee90"
-    },
-    {
-      "id": "backoffice-auth-interceptor",
-      "kind": "legacy-code",
-      "authority": "observational",
-      "status": "implemented",
-      "snapshot_uri": "apps/backoffice-angular/src/app/interceptors/auth.interceptor.ts",
-      "sha256": "27649aacfb12f0ad945f48bf25081d349ea1ebdcb3ac35a0bc9af57c3de6909e"
+      "snapshot_uri": "tools/generator-platform/fixtures/fictional-api.openapi.json",
+      "sha256": "b796e028bfa1f45f38d62d97681d404c5a82a74373f51d9b84eeed6360738846"
     }
   ],
   "services": [
@@ -71,22 +31,22 @@
       ],
       "evidence": [
         {
-          "source_id": "users-api",
-          "locator": "inject(SETTINGS_API_URL)"
+          "source_id": "fictional-api-openapi",
+          "locator": "#/servers/0"
         }
       ]
     }
   ],
   "security_schemes": [
     {
-      "id": "backoffice-session-bearer",
+      "id": "session-bearer",
       "kind": "bearer",
       "status": "implemented",
-      "description": "Bearer attached by the backoffice host unless SKIP_AUTH is true.",
+      "description": "Bearer attached by the application session.",
       "evidence": [
         {
-          "source_id": "backoffice-auth-interceptor",
-          "locator": "Authorization: Bearer"
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/securitySchemes/session-bearer"
         }
       ]
     }
@@ -103,11 +63,14 @@
           "description": "Stable user identifier.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.id"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/id"
             }
           ]
         },
@@ -116,11 +79,14 @@
           "description": "User first name.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.first_name"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/first_name"
             }
           ]
         },
@@ -129,11 +95,14 @@
           "description": "User last name.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.last_name"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/last_name"
             }
           ]
         },
@@ -142,11 +111,14 @@
           "description": "User email address.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.email"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/email"
             }
           ]
         },
@@ -155,11 +127,14 @@
           "description": "User phone number.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.phone"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/phone"
             }
           ]
         },
@@ -168,11 +143,14 @@
           "description": "Profile display name.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.profile"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/profile"
             }
           ]
         },
@@ -181,12 +159,15 @@
           "description": "Optional role code.",
           "required": true,
           "nullable": true,
-          "type": { "kind": "primitive", "name": "string" },
-          "allowed_values": ["supervisor", "team-leader", "agent"],
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "allowed_values": ["admin", "editor", "viewer"],
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.role"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/role"
             }
           ]
         },
@@ -195,73 +176,96 @@
           "description": "User lifecycle status.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "allowed_values": ["active", "inactive", "blocked", "pending"],
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.status"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/status"
             }
           ]
         },
         {
           "name": "created_at",
-          "description": "Creation timestamp as exposed by the legacy DTO.",
+          "description": "Creation timestamp.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.created_at"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/created_at"
             }
           ]
         },
         {
           "name": "updated_at",
-          "description": "Last update timestamp as exposed by the legacy DTO.",
+          "description": "Last update timestamp.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "string" },
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
           "evidence": [
             {
-              "source_id": "users-response-dto",
-              "locator": "UsersItemApiDto.updated_at"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-item-wire/properties/updated_at"
             }
           ]
         }
       ],
       "evidence": [
-        { "source_id": "users-response-dto", "locator": "UsersItemApiDto" }
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/schemas/users-list-item-wire"
+        }
       ]
     },
     {
       "id": "users-list-items-wire",
       "kind": "array",
       "status": "implemented",
-      "description": "User items carried by one observed pagination page.",
-      "items": { "kind": "model", "model_id": "users-list-item-wire" },
+      "description": "User items carried by one page.",
+      "items": {
+        "kind": "model",
+        "model_id": "users-list-item-wire"
+      },
       "evidence": [
-        { "source_id": "paginated-response-dto", "locator": "Paginate<T>.data" }
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/schemas/users-list-items-wire"
+        }
       ]
     },
     {
       "id": "users-list-page-wire",
       "kind": "object",
       "status": "implemented",
-      "description": "Pagination projection consumed by the legacy users mapper.",
+      "description": "Pagination fields of one users page.",
       "fields": [
         {
           "name": "current_page",
           "description": "Current one-based page.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "integer" },
-          "constraints": { "minimum": 1 },
+          "type": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "constraints": {
+            "minimum": 1
+          },
           "evidence": [
             {
-              "source_id": "paginated-response-dto",
-              "locator": "Paginate.current_page"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-page-wire/properties/current_page"
             }
           ]
         },
@@ -270,11 +274,14 @@
           "description": "Items for the current page.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "model", "model_id": "users-list-items-wire" },
+          "type": {
+            "kind": "model",
+            "model_id": "users-list-items-wire"
+          },
           "evidence": [
             {
-              "source_id": "paginated-response-dto",
-              "locator": "Paginate.data"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-page-wire/properties/data"
             }
           ]
         },
@@ -283,12 +290,17 @@
           "description": "Last available page.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "integer" },
-          "constraints": { "minimum": 1 },
+          "type": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "constraints": {
+            "minimum": 1
+          },
           "evidence": [
             {
-              "source_id": "paginated-response-dto",
-              "locator": "Paginate.last_page"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-page-wire/properties/last_page"
             }
           ]
         },
@@ -297,12 +309,17 @@
           "description": "Configured page size.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "integer" },
-          "constraints": { "minimum": 1 },
+          "type": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "constraints": {
+            "minimum": 1
+          },
           "evidence": [
             {
-              "source_id": "paginated-response-dto",
-              "locator": "Paginate.per_page"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-page-wire/properties/per_page"
             }
           ]
         },
@@ -311,32 +328,40 @@
           "description": "Total matching users.",
           "required": true,
           "nullable": false,
-          "type": { "kind": "primitive", "name": "integer" },
-          "constraints": { "minimum": 0 },
+          "type": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "constraints": {
+            "minimum": 0
+          },
           "evidence": [
             {
-              "source_id": "paginated-response-dto",
-              "locator": "Paginate.total"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/users-list-page-wire/properties/total"
             }
           ]
         }
       ],
       "evidence": [
-        { "source_id": "paginated-response-dto", "locator": "Paginate<T>" }
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/schemas/users-list-page-wire"
+        }
       ]
     }
   ],
   "operations": [
     {
-      "id": "settings-security.list-users",
+      "id": "accounts.list-users",
       "service_id": "settings-api",
       "status": "implemented",
       "description": "Loads one filtered page of users.",
       "method": "GET",
-      "path": "/settings-and-security/users",
+      "path": "/accounts/users",
       "access": {
         "mode": "authenticated",
-        "security_scheme_ids": ["backoffice-session-bearer"],
+        "security_scheme_ids": ["session-bearer"],
         "permissions": []
       },
       "request": {
@@ -344,12 +369,20 @@
           {
             "name": "page",
             "in": "query",
-            "description": "One-based page requested by the users facade.",
+            "description": "One-based page requested.",
             "required": true,
-            "type": { "kind": "primitive", "name": "integer" },
-            "constraints": { "minimum": 1 },
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "constraints": {
+              "minimum": 1
+            },
             "evidence": [
-              { "source_id": "users-api", "locator": "?page=${page}" }
+              {
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1accounts~1users/get/parameters/0"
+              }
             ]
           },
           {
@@ -357,12 +390,17 @@
             "in": "query",
             "description": "Combined first-name, last-name or email search.",
             "required": false,
-            "type": { "kind": "primitive", "name": "string" },
-            "constraints": { "min_length": 1 },
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "constraints": {
+              "min_length": 1
+            },
             "evidence": [
               {
-                "source_id": "users-filter-dto",
-                "locator": "UsersFilterApiDto.search"
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1accounts~1users/get/parameters/1"
               }
             ]
           },
@@ -371,12 +409,17 @@
             "in": "query",
             "description": "Profile display-name filter.",
             "required": false,
-            "type": { "kind": "primitive", "name": "string" },
-            "constraints": { "min_length": 1 },
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "constraints": {
+              "min_length": 1
+            },
             "evidence": [
               {
-                "source_id": "users-filter-dto",
-                "locator": "UsersFilterApiDto.profile"
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1accounts~1users/get/parameters/2"
               }
             ]
           },
@@ -385,12 +428,17 @@
             "in": "query",
             "description": "Mapped wire role filter.",
             "required": false,
-            "type": { "kind": "primitive", "name": "string" },
-            "constraints": { "pattern": "^(supervisor|team-leader|agent)$" },
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "constraints": {
+              "pattern": "^(admin|editor|viewer)$"
+            },
             "evidence": [
               {
-                "source_id": "users-filter-mapper",
-                "locator": "rolesMapper.mapToDto"
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1accounts~1users/get/parameters/3"
               }
             ]
           },
@@ -399,11 +447,14 @@
             "in": "query",
             "description": "Boolean active-status filter.",
             "required": false,
-            "type": { "kind": "primitive", "name": "boolean" },
+            "type": {
+              "kind": "primitive",
+              "name": "boolean"
+            },
             "evidence": [
               {
-                "source_id": "users-filter-mapper",
-                "locator": "params.is_active"
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1accounts~1users/get/parameters/4"
               }
             ]
           }
@@ -425,20 +476,25 @@
             },
             "evidence": [
               {
-                "source_id": "users-response-dto",
-                "locator": "UsersResponseApiDto"
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1accounts~1users/get/responses/200/content/application~1json"
               }
             ]
           },
           "evidence": [
             {
-              "source_id": "users-api",
-              "locator": "HttpClient.get<UsersResponseApiDto>"
+              "source_id": "fictional-api-openapi",
+              "locator": "#/paths/~1accounts~1users/get/responses/200"
             }
           ]
         }
       ],
-      "evidence": [{ "source_id": "users-api", "locator": "UsersApi.readAll" }]
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/paths/~1accounts~1users/get"
+        }
+      ]
     }
   ]
 }

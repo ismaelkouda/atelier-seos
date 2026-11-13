@@ -1,16 +1,13 @@
 // X2, oracles des gardes (revue et validation X2) : jeton de service déclaré
 // et lié au contrat de la définition par la coque, chaque moitié de la garde
-// « coque avec session », et typage par défaut du mode atelier.
+// « coque avec session », et typage laissé au produit.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import test from 'node:test';
 
-import {
-    computeActionRequestV2Targets,
-    computeExternalAngularActionRequestTarget,
-} from './action-request-v2-targets.mjs';
+import { computeExternalAngularActionRequestTarget } from './action-request-v2-targets.mjs';
 import {
     assertShellServiceBinding,
     planExternalActionRequest,
@@ -216,7 +213,9 @@ test('X2 : chaque moitié de la garde « coque avec session » refuse seule', as
     assert.deepEqual(await snapshotTree(product.root, []), before);
 });
 
-test('garantie 8 : le mode atelier type-check toujours une commande 2.1 par défaut (V-X2-4)', async (t) => {
+// Le mode atelier, qui type-checkait la sortie dans l'atelier, est retiré :
+// seule la voie extérieure existe, et le typage revient au produit.
+test('V-X2-4 : la voie extérieure laisse le typage au compilateur du produit', async (t) => {
     const fixture = await createApplicationSessionFixture({
         domain: 'observatory',
     });
@@ -226,18 +225,8 @@ test('garantie 8 : le mode atelier type-check toujours une commande 2.1 par déf
         'definitions/observatory-enter.json'
     );
     const hostBindings = { services: fixture.hostBindings.services };
-    // Le module de session lié n'existe pas dans l'atelier : la sortie ne
-    // type-check pas, et le mode atelier doit le dire.
-    await assert.rejects(
-        computeActionRequestV2Targets({
-            definitionPath,
-            artifactRoot: fixture.root,
-            hostBindings,
-            target: 'angular',
-        }),
-        /generated target \S+ does not typecheck[\s\S]*TS2307/
-    );
-    // Même entrée, voie extérieure : le typage revient au produit.
+    // Le module de session lié n'existe pas dans l'atelier : la voie
+    // extérieure ne type-check pas ici, le compilateur du produit le fera.
     const external = await computeExternalAngularActionRequestTarget({
         definitionPath,
         definitionDocument: await readFile(definitionPath),

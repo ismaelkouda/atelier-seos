@@ -1,0 +1,211 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "backend-contract",
+  "contract": {
+    "id": "cmz-request-action-types",
+    "title": "Request action types fictional contract",
+    "version": "1.0.0",
+    "status": "implemented",
+    "description": "Fictional request action types list used by the generator unit tests; not a backend claim."
+  },
+  "sources": [
+    {
+      "id": "fictional-api-openapi",
+      "kind": "openapi",
+      "authority": "authoritative",
+      "status": "implemented",
+      "snapshot_uri": "tools/generator-platform/fixtures/fictional-api.openapi.json",
+      "sha256": "b796e028bfa1f45f38d62d97681d404c5a82a74373f51d9b84eeed6360738846"
+    }
+  ],
+  "services": [
+    {
+      "id": "request-api",
+      "status": "implemented",
+      "description": "Request API selected by the REQUEST_API_URL host token.",
+      "base_urls": [
+        {
+          "environment": "test",
+          "url": "https://request.example.test/"
+        }
+      ],
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/servers/1"
+        }
+      ]
+    }
+  ],
+  "security_schemes": [
+    {
+      "id": "session-bearer",
+      "kind": "bearer",
+      "status": "implemented",
+      "description": "Bearer attached by the application session.",
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/securitySchemes/session-bearer"
+        }
+      ]
+    }
+  ],
+  "models": [
+    {
+      "id": "request-action-type-wire",
+      "kind": "object",
+      "status": "implemented",
+      "description": "Wire action type and the contact channels allowed for that type.",
+      "fields": [
+        {
+          "name": "code",
+          "description": "Stable action-type code.",
+          "required": true,
+          "nullable": false,
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/request-action-type-wire/properties/code"
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "description": "Human-readable action-type name.",
+          "required": true,
+          "nullable": false,
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/request-action-type-wire/properties/name"
+            }
+          ]
+        },
+        {
+          "name": "channels",
+          "description": "Contact channel codes allowed for this action type.",
+          "required": true,
+          "nullable": false,
+          "type": {
+            "kind": "array",
+            "items": {
+              "kind": "primitive",
+              "name": "string"
+            }
+          },
+          "allowed_values": ["sms", "email", "voice"],
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/request-action-type-wire/properties/channels"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/schemas/request-action-type-wire"
+        }
+      ]
+    },
+    {
+      "id": "request-action-type-list-wire",
+      "kind": "array",
+      "status": "implemented",
+      "description": "Collection carried by the simple response envelope.",
+      "items": {
+        "kind": "model",
+        "model_id": "request-action-type-wire"
+      },
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/schemas/request-action-type-list-wire"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "requests.list-action-types",
+      "service_id": "request-api",
+      "status": "implemented",
+      "description": "Loads the action types available for one request.",
+      "method": "GET",
+      "path": "/requests/{id}/action-types",
+      "access": {
+        "mode": "authenticated",
+        "security_scheme_ids": ["session-bearer"],
+        "permissions": []
+      },
+      "request": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Request identifier, encoded as one path segment.",
+            "required": true,
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "constraints": {
+              "min_length": 1
+            },
+            "evidence": [
+              {
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1requests~1{id}~1action-types/get/parameters/0"
+              }
+            ]
+          }
+        ]
+      },
+      "responses": [
+        {
+          "status": 200,
+          "outcome": "success",
+          "description": "Request action types available.",
+          "body": {
+            "media_type": "application/json",
+            "model_id": "request-action-type-list-wire",
+            "envelope": {
+              "kind": "object",
+              "data_field": "data",
+              "error_field": "error",
+              "message_field": "message"
+            },
+            "evidence": [
+              {
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1requests~1{id}~1action-types/get/responses/200/content/application~1json"
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/paths/~1requests~1{id}~1action-types/get/responses/200"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/paths/~1requests~1{id}~1action-types/get"
+        }
+      ]
+    }
+  ]
+}

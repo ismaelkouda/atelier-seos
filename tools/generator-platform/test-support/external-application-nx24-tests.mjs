@@ -183,7 +183,10 @@ test('T16 : référence historique exhaustive et seul delta Nx24 qualifié', asy
     }
 });
 
-test('T16 : le même delta égale les six sorties natives Nx 24.0.2 archivées', async () => {
+// L'archive d'origine (empreinte de manifeste ci-dessous) comptait six paires ;
+// les trois paires d'applications retirées de l'atelier en ont été ôtées. Les
+// trois paires restantes gardent leurs octets et leurs empreintes propres.
+test('T16 : le même delta égale les trois sorties natives Nx 24.0.2 archivées', async () => {
     const fixture = JSON.parse(
         await readFile(
             new URL('./fixtures/nx24-shell-migrations.json', import.meta.url),
@@ -199,7 +202,7 @@ test('T16 : le même delta égale les six sorties natives Nx 24.0.2 archivées',
         fixture.archive_manifest_sha256,
         'c87f922b0a825776738829592e105d4332fb576e691604be88b789868ad9167c'
     );
-    assert.equal(fixture.pairs.length, 6);
+    assert.equal(fixture.pairs.length, 3);
     for (const pair of fixture.pairs) {
         assert.equal(hash(pair.before), pair.before_sha256);
         assert.equal(hash(pair.after), pair.after_sha256);

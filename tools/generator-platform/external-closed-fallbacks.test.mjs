@@ -11,7 +11,6 @@ import ts from 'typescript';
 import { templateViolations } from './core/external-page-realization-structure.mjs';
 import { parserList } from './core/page-grammar/parser-contract.mjs';
 import { grammarSection } from './core/page-grammar/work-order.mjs';
-import { angularPageHostBindings } from './page-composition.fixture.mjs';
 import { renderAngularPageComposition } from './renderers/angular-page-composition-renderer.mjs';
 import {
     composedProduct,
@@ -20,6 +19,13 @@ import {
 
 const HTML = 'page.component.html';
 const SESSION_MODULE = '../../../../../session';
+// Liaisons d'hôte du profil sans session : le rendu d'une commande ne lit
+// aucun service, la table reste vide (rendu identique à l'ancienne fixture).
+const PLAIN_HOST = Object.freeze({
+    schema_version: '1.0.0',
+    kind: 'angular-page-host-bindings',
+    services: {},
+});
 const SESSION_HOST = Object.freeze({
     schema_version: '1.1.0',
     kind: 'angular-page-host-bindings',
@@ -87,7 +93,7 @@ const PROFILES = Object.freeze({
                 command_nodes: [node],
             },
             RENDERED,
-            angularPageHostBindings
+            PLAIN_HOST
         ),
     extérieur: (node, session = { effects: [] }) =>
         renderAngularPageComposition(

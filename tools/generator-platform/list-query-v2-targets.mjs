@@ -21,20 +21,13 @@ import {
 } from './core/list-query-collection.mjs';
 import { conformanceFixture } from './core/list-query-conformance.mjs';
 import { renderListQueryConformanceSpec } from './renderers/angular-list-query-conformance-spec.mjs';
-import { typecheckGenerated } from './core/typecheck-generated.mjs';
 import { renderAngularExternalListQuery } from './renderers/angular-external-list-query.mjs';
-import { renderAngularListQueryV2 } from './renderers/angular-list-query-v2-renderer.mjs';
-import { renderReactListQueryV2 } from './renderers/react-list-query-v2-renderer.mjs';
 import {
     loadJson,
     repositoryRoot,
     validateJsonSchema,
 } from './validate-ir.mjs';
 
-const DEFAULT_DEFINITION = resolve(
-    repositoryRoot,
-    'tools/generator-platform/fixtures/site-group-select.v2.definition.json'
-);
 const BACKEND_SCHEMA = new URL(
     './schemas/backend-contract.schema.json',
     import.meta.url
@@ -47,23 +40,6 @@ const ANGULAR_PROFILE = new URL(
     './profiles/angular-nx.profile.json',
     import.meta.url
 );
-const REACT_PROFILE = new URL(
-    './profiles/react-typescript.profile.json',
-    import.meta.url
-);
-
-export const cmzAngularListQueryHostBindings = Object.freeze({
-    services: Object.freeze({
-        'settings-api': Object.freeze({
-            module: '@cmz/core',
-            token: 'SETTINGS_API_URL',
-        }),
-        'report-api': Object.freeze({
-            module: '@cmz/core',
-            token: 'REPORT_API_URL',
-        }),
-    }),
-});
 
 function failOnErrors(label, errors) {
     if (errors.length > 0) {
@@ -155,89 +131,6 @@ async function computeListQueryV2Model(
     return { definition, model, backendContract };
 }
 
-async function materializeAngularTarget(model, artifactPlan, hostBindings) {
-    const profile = await loadJson(ANGULAR_PROFILE);
-    const rendered = renderAngularListQueryV2(model, hostBindings);
-    const files = await canonicalizeGeneratedFiles(rendered.files);
-    const bound = bindRenderedArtifacts(artifactPlan, files, {
-        'src/index.ts': 'public-api',
-        [`src/${rendered.queryId}.decoder.ts`]: 'response-decoder',
-        [`src/${rendered.queryId}.facade.ts`]: 'execution-controller',
-        [`src/${rendered.queryId}.source.ts`]: 'integration-client',
-        'src/models.ts': 'domain-model',
-    });
-    typecheckGenerated(bound.files, profile.id, repositoryRoot);
-    return {
-        ...rendered,
-        ...bound,
-        manifest: buildGenerationManifest(model, artifactPlan, profile, bound),
-    };
-}
-
-async function materializeReactTarget(model, artifactPlan) {
-    const profile = await loadJson(REACT_PROFILE);
-    const rendered = renderReactListQueryV2(model);
-    const files = await canonicalizeGeneratedFiles(rendered.files);
-    const bound = bindRenderedArtifacts(artifactPlan, files, {
-        'src/errors.ts': 'response-decoder',
-        'src/index.ts': 'public-api',
-        [`src/${rendered.queryId}.client.ts`]: 'integration-client',
-        [`src/${rendered.queryId}.decoder.ts`]: 'response-decoder',
-        [`src/use-${rendered.queryId}.ts`]: 'execution-controller',
-        'src/models.ts': 'domain-model',
-    });
-    typecheckGenerated(bound.files, profile.id, repositoryRoot);
-    return {
-        ...rendered,
-        ...bound,
-        manifest: buildGenerationManifest(model, artifactPlan, profile, bound),
-    };
-}
-
-export async function computeListQueryV2Targets({
-    definitionPath = DEFAULT_DEFINITION,
-    definitionDocument,
-    hostBindings = cmzAngularListQueryHostBindings,
-} = {}) {
-    const { definition, model } = await computeListQueryV2Model(
-        definitionPath,
-        definitionDocument
-    );
-    const artifactPlan = buildArtifactPlan(model, 'list-query-execution-model');
-    const [angular, react] = await Promise.all([
-        materializeAngularTarget(model, artifactPlan, hostBindings),
-        materializeReactTarget(model, artifactPlan),
-    ]);
-    return { definition, model, artifactPlan, angular, react };
-}
-
-export async function computeAngularListQueryV2Target({
-    definitionPath = DEFAULT_DEFINITION,
-    hostBindings = cmzAngularListQueryHostBindings,
-} = {}) {
-    const { definition, model } = await computeListQueryV2Model(definitionPath);
-    const artifactPlan = buildArtifactPlan(model, 'list-query-execution-model');
-    return {
-        definition,
-        model,
-        artifactPlan,
-        ...(await materializeAngularTarget(model, artifactPlan, hostBindings)),
-    };
-}
-
-export async function computeReactListQueryV2Target({
-    definitionPath = DEFAULT_DEFINITION,
-} = {}) {
-    const { definition, model } = await computeListQueryV2Model(definitionPath);
-    const artifactPlan = buildArtifactPlan(model, 'list-query-execution-model');
-    return {
-        definition,
-        model,
-        artifactPlan,
-        ...(await materializeReactTarget(model, artifactPlan)),
-    };
-}
-
 // X5 C3a : lecture d'un produit EXTÉRIEUR. Définition et contrat lus dans le
 // produit ; profil extérieur ; rendu extérieur seul. L'atelier ne type-check
 // pas cette sortie : le compilateur installé dans le produit le fait, sur le
@@ -271,7 +164,7 @@ export async function computeExternalAngularListQueryTarget({
         ...rendered,
         ...bound,
         manifest: buildGenerationManifest(model, artifactPlan, profile, bound),
-        // C3b : hors du plan d'artefacts (Π1), publié à côté du modèle.
+        // C3b : hors du plan d'artefacts, publié à côté du modèle.
         conformanceSpec: {
             path: `src/${rendered.queryId}.contract.spec.ts`,
             content: renderListQueryConformanceSpec(

@@ -18,13 +18,20 @@ import {
     resolvePageCollection,
 } from './core/list-query-collection.mjs';
 import { renderAngularListQueryV2 } from './renderers/angular-list-query-v2-renderer.mjs';
-import { renderReactListQueryV2 } from './renderers/react-list-query-v2-renderer.mjs';
-import { cmzAngularListQueryHostBindings } from './list-query-v2-targets.mjs';
 
 const fixture = (name) =>
     readFile(new URL(`./fixtures/${name}`, import.meta.url), 'utf8').then(
         JSON.parse
     );
+// Liaisons d'hôte fictives du rendu interne Angular (service du contrat).
+const HOST_BINDINGS = Object.freeze({
+    services: Object.freeze({
+        'settings-api': Object.freeze({
+            module: '@fixture/core',
+            token: 'SETTINGS_API_URL',
+        }),
+    }),
+});
 const PAGE = 'users-list-page-wire';
 const NAMED = 'users-list-items-wire';
 const ITEM = 'users-list-item-wire';
@@ -55,11 +62,7 @@ async function compile(contract) {
 
 function rendered(model) {
     return {
-        angular: renderAngularListQueryV2(
-            model,
-            cmzAngularListQueryHostBindings
-        ).files,
-        react: renderReactListQueryV2(model).files,
+        angular: renderAngularListQueryV2(model, HOST_BINDINGS).files,
     };
 }
 

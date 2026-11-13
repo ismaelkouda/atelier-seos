@@ -1,0 +1,329 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Fictional API for the generator unit tests",
+    "version": "1.0.0",
+    "description": "Fictional document: it describes no real backend."
+  },
+  "servers": [
+    {
+      "url": "https://settings.example.test/",
+      "description": "Settings API selected by the SETTINGS_API_URL host token."
+    },
+    {
+      "url": "https://request.example.test/",
+      "description": "Request API selected by the REQUEST_API_URL host token."
+    },
+    {
+      "url": "https://test.invalid/auth/",
+      "description": "Authentication service consumed through the runtime AUTH_API_URL token."
+    }
+  ],
+  "paths": {
+    "/accounts/users": {
+      "get": {
+        "operationId": "accounts.list-users",
+        "description": "Loads one filtered page of users.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "description": "One-based page requested.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "Combined first-name, last-name or email search.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "profile",
+            "in": "query",
+            "required": false,
+            "description": "Profile display-name filter.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "description": "Mapped wire role filter.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "required": false,
+            "description": "Boolean active-status filter.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered users page available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/users-list-page-wire"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/catalogue/stores": {
+      "get": {
+        "operationId": "catalogue.list-stores",
+        "description": "Loads stores for an authenticated select control.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Store list available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/store-select-list-wire"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests/{id}/action-types": {
+      "get": {
+        "operationId": "requests.list-action-types",
+        "description": "Loads the action types available for one request.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Request identifier, encoded as one path segment.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request action types available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/request-action-type-list-wire"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forgot-password": {
+      "post": {
+        "operationId": "authentication.forgot-password",
+        "description": "Requests password-reset instructions for an email address.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/forgot-password-request-wire"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password-reset request accepted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forgot-password-result-wire"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "users-list-item-wire": {
+        "type": "object",
+        "description": "Wire user item returned by the paginated users endpoint.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable user identifier."
+          },
+          "first_name": {
+            "type": "string",
+            "description": "User first name."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "User last name."
+          },
+          "email": {
+            "type": "string",
+            "description": "User email address."
+          },
+          "phone": {
+            "type": "string",
+            "description": "User phone number."
+          },
+          "profile": {
+            "type": "string",
+            "description": "Profile display name."
+          },
+          "role": {
+            "type": "string",
+            "description": "Optional role code."
+          },
+          "status": {
+            "type": "string",
+            "description": "User lifecycle status."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Creation timestamp."
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "Last update timestamp."
+          }
+        }
+      },
+      "users-list-items-wire": {
+        "type": "array",
+        "description": "User items carried by one page.",
+        "items": {
+          "$ref": "#/components/schemas/users-list-item-wire"
+        }
+      },
+      "users-list-page-wire": {
+        "type": "object",
+        "description": "Pagination fields of one users page.",
+        "properties": {
+          "current_page": {
+            "type": "integer",
+            "description": "Current one-based page."
+          },
+          "data": {
+            "$ref": "#/components/schemas/users-list-items-wire",
+            "description": "Items for the current page."
+          },
+          "last_page": {
+            "type": "integer",
+            "description": "Last available page."
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Configured page size."
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total matching users."
+          }
+        }
+      },
+      "store-select-wire": {
+        "type": "object",
+        "description": "Wire item returned by the store list endpoint.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable store identifier."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable store name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Store description carried on the wire but not exposed by the read model."
+          }
+        }
+      },
+      "store-select-list-wire": {
+        "type": "array",
+        "description": "Collection carried by the simple response envelope.",
+        "items": {
+          "$ref": "#/components/schemas/store-select-wire"
+        }
+      },
+      "request-action-type-wire": {
+        "type": "object",
+        "description": "Wire action type and the contact channels allowed for that type.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Stable action-type code."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable action-type name."
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Contact channel codes allowed for this action type."
+          }
+        }
+      },
+      "request-action-type-list-wire": {
+        "type": "array",
+        "description": "Collection carried by the simple response envelope.",
+        "items": {
+          "$ref": "#/components/schemas/request-action-type-wire"
+        }
+      },
+      "forgot-password-request-wire": {
+        "type": "object",
+        "description": "Payload of the password-reset request.",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Account email address."
+          }
+        }
+      },
+      "forgot-password-result-wire": {
+        "type": "object",
+        "description": "Data carried by the forgot-password response envelope.",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Password reset request result message."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "session-bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Bearer attached by the application session."
+      }
+    }
+  }
+}

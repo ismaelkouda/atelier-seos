@@ -44,7 +44,7 @@ const model = (id, fields) => ({
     evidence: [],
 });
 
-// Contrat fictif de forme Régions : créateur imbriqué NULLABLE dont l'id est
+// Contrat fictif : créateur imbriqué NULLABLE dont l'id est
 // un uuid, objet-valeur SANS champ, booléen et horodatage non lus.
 async function contract() {
     const data = await fixture('users-list.backend-contract.json');
@@ -440,10 +440,10 @@ test('C4 (limite de E) : câblage de la cible, la fixture d’une PAGE couvre to
 // pas un filtrage « champs lus seulement ». Ici, une liste dont l'élément porte
 // des champs NON lus (dont un modèle imbriqué), par le câblage de la cible.
 test('C5 (limite de E) : câblage de la cible, la fixture d’une LISTE couvre aussi les champs non lus', async (t) => {
-    const definition = await fixture('site-group-select.v2.definition.json');
-    const contract = await fixture('site-group-select.backend-contract.json');
+    const definition = await fixture('store-select.v2.definition.json');
+    const contract = await fixture('store-select.backend-contract.json');
     const item = contract.models.find(
-        (entry) => entry.id === 'site-group-select-wire'
+        (entry) => entry.id === 'store-select-wire'
     );
     const base = item.fields.find((entry) => entry.name === 'name');
     // Modèle imbriqué copié d'un modèle du contrat, preuves comprises : le

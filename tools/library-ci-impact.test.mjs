@@ -18,9 +18,9 @@ describe('impact CI des preuves bibliothèque', () => {
     it('garde seulement le contrat rapide pour une PR applicative ou documentaire', () => {
         assert.deepEqual(
             classifyLibraryCiImpact([
-                'apps/backoffice-angular/src/app/app.ts',
-                'docs/architecture/audit.md',
-                'libs/requests/ui/src/lib/requests.component.ts',
+                'apps/demo-angular/src/app/app.ts',
+                'docs/guides/contribuer.md',
+                'libs/demo/ui/src/lib/demo.component.ts',
             ]),
             NONE
         );

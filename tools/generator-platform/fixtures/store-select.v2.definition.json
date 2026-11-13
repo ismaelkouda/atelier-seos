@@ -2,29 +2,35 @@
   "schema_version": "2.0.0",
   "kind": "list-query",
   "feature": {
-    "id": "coverage-area-site-groups",
-    "name": "Site group options",
-    "description": "Options used by active coverage-area forms."
+    "id": "catalogue-stores",
+    "name": "Store options",
+    "description": "Options used by store selection forms."
   },
   "backend_contract": {
-    "uri": "tools/generator-platform/fixtures/site-group-select.backend-contract.json",
-    "id": "cmz-site-group-select",
+    "uri": "tools/generator-platform/fixtures/store-select.backend-contract.json",
+    "id": "cmz-store-select",
     "version": "1.0.0",
-    "sha256": "79dcdf2f1fb5738d78975a97264b617bf2b85a4d86598c61de577d632a0b79cd"
+    "sha256": "95753b36fdb987398738bdf6f8f406f8738541317e48e0e66dc34403103b1396"
   },
   "operations": [
     {
-      "id": "list-site-groups",
+      "id": "list-stores",
       "operation_ref": {
-        "operation_id": "coverage-areas.list-site-groups"
+        "operation_id": "catalogue.list-stores"
       },
       "success_response_status": 200,
       "read_model": {
         "id": "select-option",
         "description": "Generic option consumed by select controls.",
         "fields": [
-          { "name": "value", "source_field": "id" },
-          { "name": "label", "source_field": "name" }
+          {
+            "name": "value",
+            "source_field": "id"
+          },
+          {
+            "name": "label",
+            "source_field": "name"
+          }
         ]
       },
       "execution": {
@@ -38,7 +44,9 @@
           "on_superseded": true,
           "on_destroy": true
         },
-        "retry": { "mode": "none" },
+        "retry": {
+          "mode": "none"
+        },
         "stale_data": {
           "on_reload": "preserve",
           "on_error": "preserve"

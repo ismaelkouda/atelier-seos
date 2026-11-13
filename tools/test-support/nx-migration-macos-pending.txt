@@ -110,9 +110,7 @@ Ran update-24-0-0-add-ready-when-signal from @nx/web
   Sets `readyWhen: { signal: true }` on `@nx/web:file-server` targets that get no `readyWhen` from their own configuration or `targetDefaults`, so tasks that depend on them with `waitFor: 'ready'` start once the server is listening. Those targets also get their build target as a dependency.
 
 Changes:
-  [37mUPDATE[39m apps/backoffice-angular/project.json
   [37mUPDATE[39m apps/library-qualification-angular/project.json
-  [37mUPDATE[39m apps/users-management-proof/project.json
 
 
 ── Migration 12 of 14 · @nx/angular:update-24-0-0-add-ready-when-signal ───
@@ -121,9 +119,7 @@ Ran update-24-0-0-add-ready-when-signal from @nx/angular
   Sets `readyWhen: { signal: true }` on `@angular/build:dev-server`, `@angular-devkit/build-angular:dev-server`, `@angular-devkit/build-angular:ssr-dev-server` and `@nx/angular:dev-server` targets that get no `readyWhen` from their own configuration or `targetDefaults`, so tasks that depend on them with `waitFor: 'ready'` start once the server is listening.
 
 Changes:
-  [37mUPDATE[39m apps/backoffice-angular/project.json
   [37mUPDATE[39m apps/library-qualification-angular/project.json
-  [37mUPDATE[39m apps/users-management-proof/project.json
 
 
 ── Migration 13 of 14 · @nx/angular:update-24-0-0-remove-scam-generator-defaults ───
@@ -141,7 +137,6 @@ Ran update-24-0-0-add-ready-signal-plugin from @nx/vite
 
 Changes:
   [37mUPDATE[39m apps/library-qualification-react/vite.config.mts
-  [37mUPDATE[39m apps/users-management-react-proof/vite.config.mts
   [37mUPDATE[39m apps/workspace-react-proof/vite.config.mts
 
 [2m↷ Prompt phase skipped. The migration reported nothing left for the AI step to do.[22m

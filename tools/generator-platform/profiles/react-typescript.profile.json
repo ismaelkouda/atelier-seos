@@ -1,9 +1,0 @@
-{
-  "schema_version": "1.0.0",
-  "id": "react-typescript",
-  "version": "1.0.0",
-  "package_name": "generated-{domain}-react",
-  "output_root": "packages/generated/{domain}-react",
-  "external_dependencies": ["react >= 18"],
-  "runtime_contract": "React hooks and an authentication-aware FetchPort supplied by the host application"
-}

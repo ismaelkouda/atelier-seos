@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "backend-contract",
+  "contract": {
+    "id": "cmz-store-select",
+    "title": "Store select fictional contract",
+    "version": "1.0.0",
+    "status": "implemented",
+    "description": "Fictional store options list used by the generator unit tests; not a backend claim."
+  },
+  "sources": [
+    {
+      "id": "fictional-api-openapi",
+      "kind": "openapi",
+      "authority": "authoritative",
+      "status": "implemented",
+      "snapshot_uri": "tools/generator-platform/fixtures/fictional-api.openapi.json",
+      "sha256": "b796e028bfa1f45f38d62d97681d404c5a82a74373f51d9b84eeed6360738846"
+    }
+  ],
+  "services": [
+    {
+      "id": "settings-api",
+      "status": "implemented",
+      "description": "Settings API selected by the SETTINGS_API_URL host token.",
+      "base_urls": [
+        {
+          "environment": "test",
+          "url": "https://settings.example.test/"
+        }
+      ],
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/servers/0"
+        }
+      ]
+    }
+  ],
+  "security_schemes": [
+    {
+      "id": "session-bearer",
+      "kind": "bearer",
+      "status": "implemented",
+      "description": "Bearer attached by the application session.",
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/securitySchemes/session-bearer"
+        }
+      ]
+    }
+  ],
+  "models": [
+    {
+      "id": "store-select-wire",
+      "kind": "object",
+      "status": "implemented",
+      "description": "Wire item returned by the store list endpoint.",
+      "fields": [
+        {
+          "name": "id",
+          "description": "Stable store identifier.",
+          "required": true,
+          "nullable": false,
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/store-select-wire/properties/id"
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "description": "Human-readable store name.",
+          "required": true,
+          "nullable": false,
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/store-select-wire/properties/name"
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "description": "Store description carried on the wire but not exposed by the read model.",
+          "required": true,
+          "nullable": false,
+          "type": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/components/schemas/store-select-wire/properties/description"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/schemas/store-select-wire"
+        }
+      ]
+    },
+    {
+      "id": "store-select-list-wire",
+      "kind": "array",
+      "status": "implemented",
+      "description": "Collection carried by the simple response envelope.",
+      "items": {
+        "kind": "model",
+        "model_id": "store-select-wire"
+      },
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/components/schemas/store-select-list-wire"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "catalogue.list-stores",
+      "service_id": "settings-api",
+      "status": "implemented",
+      "description": "Loads stores for an authenticated select control.",
+      "method": "GET",
+      "path": "/catalogue/stores",
+      "access": {
+        "mode": "authenticated",
+        "security_scheme_ids": ["session-bearer"],
+        "permissions": []
+      },
+      "request": {
+        "parameters": []
+      },
+      "responses": [
+        {
+          "status": 200,
+          "outcome": "success",
+          "description": "Store list available.",
+          "body": {
+            "media_type": "application/json",
+            "model_id": "store-select-list-wire",
+            "envelope": {
+              "kind": "object",
+              "data_field": "data",
+              "error_field": "error",
+              "message_field": "message"
+            },
+            "evidence": [
+              {
+                "source_id": "fictional-api-openapi",
+                "locator": "#/paths/~1catalogue~1stores/get/responses/200/content/application~1json"
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "source_id": "fictional-api-openapi",
+              "locator": "#/paths/~1catalogue~1stores/get/responses/200"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "source_id": "fictional-api-openapi",
+          "locator": "#/paths/~1catalogue~1stores/get"
+        }
+      ]
+    }
+  ]
+}

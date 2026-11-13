@@ -18,16 +18,10 @@ const [definition, backendDocument] = await Promise.all([
 const [parameterizedDefinitionDocument, parameterizedBackendDocument] =
     await Promise.all([
         readFile(
-            new URL(
-                'fixtures/tasks-actions-processing-type.v2.definition.json',
-                root
-            )
+            new URL('fixtures/request-action-types.v2.definition.json', root)
         ),
         readFile(
-            new URL(
-                'fixtures/tasks-actions-processing-type.backend-contract.json',
-                root
-            )
+            new URL('fixtures/request-action-types.backend-contract.json', root)
         ),
     ]);
 const canonicalDefinition = JSON.parse(definition.toString('utf8'));
@@ -80,7 +74,7 @@ function compileParameterized(overrides = {}) {
         definition,
         backendContractDocument,
         backendContractUri:
-            'tools/generator-platform/fixtures/tasks-actions-processing-type.backend-contract.json',
+            'tools/generator-platform/fixtures/request-action-types.backend-contract.json',
     });
 }
 
@@ -191,7 +185,7 @@ test('compile un contrat v2 en modèle d’exécution neutre et déterministe', 
     assert.equal(query.wire_model.unknown_fields, 'reject');
     assert.doesNotMatch(
         JSON.stringify(first),
-        /angular|react|rxjs|seos|httpclient|httpcontext/i
+        /angular|react|rxjs|httpclient|httpcontext/i
     );
 });
 
@@ -255,7 +249,7 @@ test('compile le cas réel avec un path lié et un tableau enum imbriqué', () =
         kind: 'object',
         fields: [
             {
-                name: 'reportUniqId',
+                name: 'requestId',
                 type: { kind: 'primitive', name: 'string' },
                 required: true,
                 constraints: { min_length: 1 },
@@ -266,21 +260,21 @@ test('compile le cas réel avec un path lié et un tableau enum imbriqué', () =
         {
             name: 'id',
             in: 'path',
-            source_field: 'reportUniqId',
+            source_field: 'requestId',
             type: { kind: 'primitive', name: 'string' },
             required: true,
             constraints: { min_length: 1 },
         },
     ]);
     assert.deepEqual(query.wire_model.fields[2], {
-        name: 'operators',
+        name: 'channels',
         type: {
             kind: 'array',
             items: { kind: 'primitive', name: 'string' },
         },
         required: true,
         nullable: false,
-        allowed_values: ['mtn', 'orange', 'moov'],
+        allowed_values: ['sms', 'email', 'voice'],
     });
     assert.deepEqual(
         query.read_model.fields.map(({ name, source_field, type }) => ({
@@ -300,8 +294,8 @@ test('compile le cas réel avec un path lié et un tableau enum imbriqué', () =
                 type: { kind: 'primitive', name: 'string' },
             },
             {
-                name: 'operators',
-                source_field: 'operators',
+                name: 'channels',
+                source_field: 'channels',
                 type: {
                     kind: 'array',
                     items: { kind: 'primitive', name: 'string' },
@@ -311,7 +305,7 @@ test('compile le cas réel avec un path lié et un tableau enum imbriqué', () =
     );
 });
 
-test('compile C5 users en page typée avec cinq query parameters', () => {
+test('compile la liste paginée users en page typée avec cinq query parameters', () => {
     const first = compileUsers();
     const second = compileUsers();
     const query = first.queries[0];
@@ -343,7 +337,7 @@ test('compile C5 users en page typée avec cinq query parameters', () => {
                 name: 'role',
                 type: { kind: 'primitive', name: 'string' },
                 required: false,
-                constraints: { pattern: '^(supervisor|team-leader|agent)$' },
+                constraints: { pattern: '^(admin|editor|viewer)$' },
             },
             {
                 name: 'isActive',
@@ -473,7 +467,7 @@ test('reste indépendant du framework backend et canonicalise ses noms wire', ()
     );
 });
 
-test('refuse les pages ambiguës et les query parameters hors périmètre C5', () => {
+test('refuse les pages ambiguës et les query parameters hors périmètre prouvé', () => {
     const wrongPage = structuredClone(usersBackend);
     const pageModel = wrongPage.models.find(
         (model) => model.id === 'users-list-page-wire'
@@ -549,8 +543,7 @@ test('refuse une liaison path absente, renommée ou élargie hors forme prouvée
     );
 
     const twoParameters = structuredClone(parameterizedBackend);
-    twoParameters.operations[0].path =
-        '/processing-actions/{id}/{kind}/report-types';
+    twoParameters.operations[0].path = '/requests/{id}/{kind}/action-types';
     twoParameters.operations[0].request.parameters.push({
         ...structuredClone(twoParameters.operations[0].request.parameters[0]),
         name: 'kind',
@@ -570,8 +563,7 @@ test('refuse une liaison path absente, renommée ou élargie hors forme prouvée
     );
 
     const repeatedPlaceholder = structuredClone(parameterizedBackend);
-    repeatedPlaceholder.operations[0].path =
-        '/processing-actions/{id}/report-types/{id}';
+    repeatedPlaceholder.operations[0].path = '/requests/{id}/action-types/{id}';
     assert.throws(
         () =>
             compileParameterized({
@@ -585,7 +577,7 @@ test('refuse les objets et tableaux récursifs au-delà du cas imbriqué prouvé
     const objectArray = structuredClone(parameterizedBackend);
     objectArray.models[0].fields[2].type.items = {
         kind: 'model',
-        model_id: 'tasks-actions-processing-type-wire',
+        model_id: 'request-action-type-wire',
     };
     delete objectArray.models[0].fields[2].allowed_values;
     assert.throws(
@@ -625,7 +617,7 @@ test('le validateur tue les mutants de binding path et de tableau enum', () => {
     );
 
     const unboundPath = structuredClone(model);
-    unboundPath.queries[0].transport.path = '/processing-actions/report-types';
+    unboundPath.queries[0].transport.path = '/requests/action-types';
     assert.match(
         validateListQueryV2ExecutionModel(unboundPath).join('\n'),
         /invalid path binding id/
@@ -633,7 +625,7 @@ test('le validateur tue les mutants de binding path et de tableau enum', () => {
 
     const repeatedPlaceholder = structuredClone(model);
     repeatedPlaceholder.queries[0].transport.path =
-        '/processing-actions/{id}/report-types/{id}';
+        '/requests/{id}/action-types/{id}';
     assert.match(
         validateListQueryV2ExecutionModel(repeatedPlaceholder).join('\n'),
         /invalid path binding id/

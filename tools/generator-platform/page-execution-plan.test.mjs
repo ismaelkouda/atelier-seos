@@ -66,12 +66,9 @@ async function compilePrimitive(kind, fixture) {
     return documentArtifact(`generated/${model.model_id}.json`, model);
 }
 
-const [siteGroups, reportTypes, forgotPassword] = await Promise.all([
-    compilePrimitive('list-query', 'site-group-select.v2.definition.json'),
-    compilePrimitive(
-        'list-query',
-        'tasks-actions-processing-type.v2.definition.json'
-    ),
+const [stores, requestTypes, forgotPassword] = await Promise.all([
+    compilePrimitive('list-query', 'store-select.v2.definition.json'),
+    compilePrimitive('list-query', 'request-action-types.v2.definition.json'),
     compilePrimitive('action-request', 'forgot-password.v2.definition.json'),
 ]);
 
@@ -79,8 +76,8 @@ function modelOf(artifact) {
     return JSON.parse(artifact.document.toString('utf8'));
 }
 
-const siteGroupsModel = modelOf(siteGroups);
-const reportTypesModel = modelOf(reportTypes);
+const storesModel = modelOf(stores);
+const requestTypesModel = modelOf(requestTypes);
 const forgotPasswordModel = modelOf(forgotPassword);
 
 function evidence() {
@@ -148,11 +145,10 @@ function page(overrides = {}) {
         ],
         loads: [
             {
-                id: 'load-site-groups',
+                id: 'load-stores',
                 operation_ref: {
-                    contract_id: siteGroupsModel.backend_contract.id,
-                    operation_id:
-                        siteGroupsModel.queries[0].transport.operation_id,
+                    contract_id: storesModel.backend_contract.id,
+                    operation_id: storesModel.queries[0].transport.operation_id,
                 },
                 parameter_bindings: [],
                 loading_state_id: 'loading',
@@ -161,18 +157,18 @@ function page(overrides = {}) {
                 error_state_id: 'query-failed',
             },
             {
-                id: 'load-report-types',
+                id: 'load-request-types',
                 operation_ref: {
-                    contract_id: reportTypesModel.backend_contract.id,
+                    contract_id: requestTypesModel.backend_contract.id,
                     operation_id:
-                        reportTypesModel.queries[0].transport.operation_id,
+                        requestTypesModel.queries[0].transport.operation_id,
                 },
                 parameter_bindings: [
                     {
                         parameter_name: 'id',
                         parameter_in: 'path',
                         source_kind: 'route',
-                        source_ref: 'report-id',
+                        source_ref: 'request-id',
                     },
                 ],
                 loading_state_id: 'loading',
@@ -183,30 +179,28 @@ function page(overrides = {}) {
         ],
         data_bindings: [
             {
-                id: 'site-group-options',
+                id: 'store-options',
                 operation_ref: {
-                    contract_id: siteGroupsModel.backend_contract.id,
-                    operation_id:
-                        siteGroupsModel.queries[0].transport.operation_id,
+                    contract_id: storesModel.backend_contract.id,
+                    operation_id: storesModel.queries[0].transport.operation_id,
                 },
                 response_status:
-                    siteGroupsModel.queries[0].transport
-                        .success_response_status,
-                model_id: queryBindingModelId(siteGroupsModel.queries[0]),
+                    storesModel.queries[0].transport.success_response_status,
+                model_id: queryBindingModelId(storesModel.queries[0]),
                 field_names: [],
                 visible_in_state_ids: ['ready'],
             },
             {
-                id: 'report-type-options',
+                id: 'request-type-options',
                 operation_ref: {
-                    contract_id: reportTypesModel.backend_contract.id,
+                    contract_id: requestTypesModel.backend_contract.id,
                     operation_id:
-                        reportTypesModel.queries[0].transport.operation_id,
+                        requestTypesModel.queries[0].transport.operation_id,
                 },
                 response_status:
-                    reportTypesModel.queries[0].transport
+                    requestTypesModel.queries[0].transport
                         .success_response_status,
-                model_id: queryBindingModelId(reportTypesModel.queries[0]),
+                model_id: queryBindingModelId(requestTypesModel.queries[0]),
                 field_names: [],
                 visible_in_state_ids: ['ready'],
             },
@@ -230,12 +224,12 @@ function page(overrides = {}) {
                         id: 'options',
                         kind: 'list',
                         accessible_name: 'Available options',
-                        content: 'Site groups and report types.',
+                        content: 'Stores and request types.',
                         control_ids: [],
                         action_ids: [],
                         data_binding_ids: [
-                            'site-group-options',
-                            'report-type-options',
+                            'store-options',
+                            'request-type-options',
                         ],
                     },
                     {
@@ -275,8 +269,8 @@ function pageContract(pageValue = page()) {
             audience_ids: ['operator'],
         },
         backend_contracts: [
-            siteGroupsModel,
-            reportTypesModel,
+            storesModel,
+            requestTypesModel,
             forgotPasswordModel,
         ].map((model) => ({
             id: model.backend_contract.id,
@@ -295,7 +289,7 @@ function pageContract(pageValue = page()) {
 function compile(overrides = {}) {
     return compilePageExecutionPlan({
         pageContract: pageContract(),
-        listQueryModels: [siteGroups, reportTypes],
+        listQueryModels: [stores, requestTypes],
         actionRequestModels: [forgotPassword],
         applicationDesignSchema,
         pageExecutionPlanSchema,
@@ -310,17 +304,17 @@ test('compiles two queries and one command into independent content-addressed no
     assert.equal(plan.page.state_mode, 'independent-nodes');
     assert.deepEqual(
         plan.query_nodes.map((node) => node.id),
-        ['load-report-types', 'load-site-groups']
+        ['load-request-types', 'load-stores']
     );
     assert.deepEqual(
         plan.command_nodes.map((node) => node.id),
         ['submit-password-recovery']
     );
-    assert.equal(plan.query_nodes[0].primitive_ref.sha256, reportTypes.sha256);
+    assert.equal(plan.query_nodes[0].primitive_ref.sha256, requestTypes.sha256);
     assert.deepEqual(plan.query_nodes[0].input_bindings, [
         {
-            input_field: 'reportUniqId',
-            source: { kind: 'route', ref: 'report-id' },
+            input_field: 'requestId',
+            source: { kind: 'route', ref: 'request-id' },
             target: { kind: 'backend-parameter', in: 'path', name: 'id' },
             type: { kind: 'primitive', name: 'string' },
         },
@@ -341,11 +335,11 @@ test('compiles two queries and one command into independent content-addressed no
         ]),
         [
             [
-                'report-type-options',
-                'load-report-types',
-                'report-action-type-option',
+                'request-type-options',
+                'load-request-types',
+                'request-action-type-option',
             ],
-            ['site-group-options', 'load-site-groups', 'select-option'],
+            ['store-options', 'load-stores', 'select-option'],
         ]
     );
     assert.ok(
@@ -408,7 +402,7 @@ test('standalone replay validation rejects broken producers and capability drift
     );
 
     const hiddenInvalidation = structuredClone(compile());
-    hiddenInvalidation.command_nodes[0].invalidates = ['load-site-groups'];
+    hiddenInvalidation.command_nodes[0].invalidates = ['load-stores'];
     assert.ok(
         validatePageExecutionPlan(
             hiddenInvalidation,
@@ -423,11 +417,11 @@ test('rejects an ambiguous output producer instead of binding by operation only'
     const ambiguous = page();
     ambiguous.loads.push({
         ...structuredClone(ambiguous.loads[0]),
-        id: 'load-site-groups-again',
+        id: 'load-stores-again',
     });
     assert.throws(
         () => compile({ pageContract: pageContract(ambiguous) }),
-        /site-group-options has ambiguous producer nodes.*producer_node_id/
+        /store-options has ambiguous producer nodes.*producer_node_id/
     );
 });
 
@@ -438,8 +432,8 @@ test('rejects weaker page access, missing primitives, and stale artifact hashes'
         /requires stronger access/
     );
     assert.throws(
-        () => compile({ listQueryModels: [siteGroups] }),
-        /load-report-types has no primitive/
+        () => compile({ listQueryModels: [stores] }),
+        /load-request-types has no primitive/
     );
     assert.throws(
         () =>
@@ -454,8 +448,8 @@ test('rejects weaker page access, missing primitives, and stale artifact hashes'
         () =>
             compile({
                 listQueryModels: [
-                    { ...siteGroups, uri: '../escaped-model.json' },
-                    reportTypes,
+                    { ...stores, uri: '../escaped-model.json' },
+                    requestTypes,
                 ],
             }),
         /uri must be a normalized relative path/
@@ -472,12 +466,12 @@ test('compiles caller-declared invalidation to one named page query', () => {
         model
     );
     const invalidatingPage = page();
-    invalidatingPage.actions[0].invalidates_load_ids = ['load-site-groups'];
+    invalidatingPage.actions[0].invalidates_load_ids = ['load-stores'];
     const plan = compile({
         pageContract: pageContract(invalidatingPage),
         actionRequestModels: [callerDeclared],
     });
-    assert.deepEqual(plan.command_nodes[0].invalidates, ['load-site-groups']);
+    assert.deepEqual(plan.command_nodes[0].invalidates, ['load-stores']);
     assert.ok(
         plan.required_capabilities.includes(
             'action.invalidation.caller-declared@1'
@@ -543,7 +537,7 @@ test('rejects absent, unknown, or policy-incompatible invalidation targets', () 
     );
 
     const forbiddenTarget = page();
-    forbiddenTarget.actions[0].invalidates_load_ids = ['load-site-groups'];
+    forbiddenTarget.actions[0].invalidates_load_ids = ['load-stores'];
     assert.throws(
         () => compile({ pageContract: pageContract(forbiddenTarget) }),
         /declares invalidation targets but its action-request policy is none/

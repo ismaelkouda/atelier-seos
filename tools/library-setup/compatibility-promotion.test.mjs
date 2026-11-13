@@ -87,7 +87,7 @@ function execution(overrides = {}, root = ROOT) {
         changes: [
             {
                 op: 'create',
-                path: 'apps/backoffice-angular/proof',
+                path: 'apps/demo-angular/proof',
                 mode: '100644',
                 sha256_after: '1'.repeat(64),
             },
@@ -99,7 +99,7 @@ function execution(overrides = {}, root = ROOT) {
     };
     const format = git(root, ['rev-parse', '--show-object-format']);
     const planInputs = {
-        app: 'backoffice-angular',
+        app: 'demo-angular',
         library: sourceRecipe.library,
         platform: sourceRecipe.platform,
         commit: git(root, ['rev-parse', '--verify', 'HEAD']),
@@ -170,7 +170,7 @@ function verification(root = ROOT) {
         recipe: recipe(root),
         recipeRegistry: recipes(root),
         track: track(root),
-        app: 'backoffice-angular',
+        app: 'demo-angular',
         execution: execution({}, root),
     });
 }
@@ -248,7 +248,7 @@ test('la preuve vient d’un résultat complet dont plan et change-set sont reca
                 recipe: recipe(),
                 recipeRegistry: recipes(),
                 track: track(),
-                app: 'backoffice-angular',
+                app: 'demo-angular',
                 execution: forgedPlan,
             }),
         /plan_id ne correspond pas/
@@ -263,7 +263,7 @@ test('la preuve vient d’un résultat complet dont plan et change-set sont reca
                 recipe: recipe(),
                 recipeRegistry: recipes(),
                 track: track(),
-                app: 'backoffice-angular',
+                app: 'demo-angular',
                 execution: forgedChangeSet,
             }),
         /change_set_id ne correspond pas/
@@ -278,7 +278,7 @@ test('la preuve vient d’un résultat complet dont plan et change-set sont reca
                 recipe: recipe(),
                 recipeRegistry: recipes(),
                 track: track(),
-                app: 'backoffice-angular',
+                app: 'demo-angular',
                 execution: forgedAdapter,
             }),
         /adaptateur qualifié absent, invalide ou différent/
@@ -429,7 +429,7 @@ test('aucune liste déclarative ne remplace les oracles, coexistence comprise', 
                     recipe: recipe(),
                     recipeRegistry: recipes(),
                     track: track(),
-                    app: 'backoffice-angular',
+                    app: 'demo-angular',
                     execution: { ...execution(), runtimeProofs },
                 }),
             /preuves exécutées/
@@ -465,7 +465,7 @@ test('app, publication, commit, runner et vecteur de versions sont liés', () =>
                 recipe: recipe(),
                 recipeRegistry: recipes(),
                 track: track(),
-                app: 'backoffice-angular',
+                app: 'demo-angular',
                 execution: execution({ published: true }),
             }),
         /dry-run non publié/
@@ -477,7 +477,7 @@ test('app, publication, commit, runner et vecteur de versions sont liés', () =>
                 recipe: recipe(),
                 recipeRegistry: recipes(),
                 track: track(),
-                app: 'backoffice-angular',
+                app: 'demo-angular',
                 execution: execution({
                     plan: { framework_version: outsideFramework },
                 }),

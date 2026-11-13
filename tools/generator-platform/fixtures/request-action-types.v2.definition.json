@@ -1,0 +1,72 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "list-query",
+  "feature": {
+    "id": "request-action-types",
+    "name": "Request action type options",
+    "description": "Action types and allowed channels used by a request form."
+  },
+  "backend_contract": {
+    "uri": "tools/generator-platform/fixtures/request-action-types.backend-contract.json",
+    "id": "cmz-request-action-types",
+    "version": "1.0.0",
+    "sha256": "835fdc18deb39eccb8222688a2db9009d5f1820dbe74a4e262bde1ceede40438"
+  },
+  "operations": [
+    {
+      "id": "list-request-action-types",
+      "operation_ref": {
+        "operation_id": "requests.list-action-types"
+      },
+      "success_response_status": 200,
+      "input": {
+        "fields": [
+          {
+            "name": "requestId",
+            "parameter_ref": {
+              "name": "id",
+              "in": "path"
+            }
+          }
+        ]
+      },
+      "read_model": {
+        "id": "request-action-type-option",
+        "description": "Action type option with the contact channels allowed for it.",
+        "fields": [
+          {
+            "name": "value",
+            "source_field": "code"
+          },
+          {
+            "name": "label",
+            "source_field": "name"
+          },
+          {
+            "name": "channels",
+            "source_field": "channels"
+          }
+        ]
+      },
+      "execution": {
+        "cache": {
+          "mode": "host",
+          "scope": "principal",
+          "refresh": "bypass"
+        },
+        "concurrency": "latest-wins",
+        "cancellation": {
+          "on_superseded": true,
+          "on_destroy": true
+        },
+        "retry": {
+          "mode": "none"
+        },
+        "stale_data": {
+          "on_reload": "preserve",
+          "on_error": "preserve"
+        }
+      }
+    }
+  ]
+}

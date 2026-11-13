@@ -34,12 +34,6 @@ import {
     ANGULAR_PAGE_COMPOSITION_CAPABILITIES,
     renderAngularPageComposition,
 } from './renderers/angular-page-composition-renderer.mjs';
-import { renderReactActionRequestV2 } from './renderers/react-action-request-v2-renderer.mjs';
-import { renderReactListQueryV2 } from './renderers/react-list-query-v2-renderer.mjs';
-import {
-    REACT_PAGE_COMPOSITION_CAPABILITIES,
-    renderReactPageComposition,
-} from './renderers/react-page-composition-renderer.mjs';
 import {
     loadJson,
     repositoryRoot,
@@ -48,10 +42,6 @@ import {
 
 const ANGULAR_PROFILE = new URL(
     './profiles/angular-nx.profile.json',
-    import.meta.url
-);
-const REACT_PROFILE = new URL(
-    './profiles/react-typescript.profile.json',
     import.meta.url
 );
 const PLAN_SCHEMA = new URL(
@@ -222,45 +212,6 @@ export const EXTERNAL_COMPOSITION_COMMAND_OPTIONS = Object.freeze({
     ...COMPOSITION_COMMAND_OPTIONS,
     deferServiceAddress: true,
 });
-
-async function renderReactPrimitive(node, model) {
-    const kind =
-        model.kind === 'list-query-execution-model' ? 'query' : 'command';
-    const artifactPlan = buildArtifactPlan(model, model.kind);
-    const rendered =
-        kind === 'query'
-            ? renderReactListQueryV2(model)
-            : renderReactActionRequestV2(model, {
-                  allowAuthenticated: true,
-                  allowCallerDeclaredInvalidation: true,
-                  allowRequiredStringFields: true,
-                  allowStatusEnvelope: true,
-              });
-    const files = await canonicalizeGeneratedFiles(rendered.files);
-    const bindings = Object.fromEntries(
-        Object.keys(files).map((path) => {
-            if (path === 'src/index.ts') return [path, 'public-api'];
-            if (path === 'src/models.ts') return [path, 'domain-model'];
-            if (path === 'src/errors.ts') return [path, 'response-decoder'];
-            if (path === 'src/validation.ts') return [path, 'input-validator'];
-            if (path.endsWith('.decoder.ts')) return [path, 'response-decoder'];
-            if (path.endsWith('.client.ts'))
-                return [path, 'integration-client'];
-            if (path.includes('/use-') || path.startsWith('src/use-')) {
-                return [path, 'execution-controller'];
-            }
-            fail(`${node.id} produced an unclassified file ${path}`);
-        })
-    );
-    return {
-        kind,
-        nodeId: node.id,
-        target: {
-            ...rendered,
-            ...bindRenderedArtifacts(artifactPlan, files, bindings),
-        },
-    };
-}
 
 async function resolveCompositionNodes(plan, artifactRoot, capabilities) {
     const planSchema = await loadJson(PLAN_SCHEMA);
@@ -447,45 +398,6 @@ export async function computeAngularPageCompositionTarget({
         plan,
         artifactPlan,
         angular: {
-            ...bound,
-            manifest: buildGenerationManifest(
-                plan,
-                artifactPlan,
-                profile,
-                bound
-            ),
-        },
-    };
-}
-
-export async function computeReactPageCompositionTarget({
-    plan,
-    artifactRoot = repositoryRoot,
-} = {}) {
-    if (plan?.schema_version === '1.1.0')
-        fail('PAGE_SESSION_REACT_UNSUPPORTED');
-    const [profile, inputs] = await Promise.all([
-        loadJson(REACT_PROFILE),
-        resolveCompositionNodes(
-            plan,
-            artifactRoot,
-            REACT_PAGE_COMPOSITION_CAPABILITIES
-        ),
-    ]);
-    const resolvedNodes = inputs.resolved;
-    const renderedNodes = [];
-    for (const { node, model } of resolvedNodes) {
-        renderedNodes.push(await renderReactPrimitive(node, model));
-    }
-    const rendered = renderReactPageComposition(plan, renderedNodes);
-    const files = await canonicalizeGeneratedFiles(rendered.files);
-    const artifactPlan = buildArtifactPlan(plan, 'page-execution-plan');
-    const bound = bindRenderedArtifacts(artifactPlan, files, rendered.bindings);
-    typecheckGenerated(bound.files, 'react-page-composition', repositoryRoot);
-    return {
-        plan,
-        artifactPlan,
-        react: {
             ...bound,
             manifest: buildGenerationManifest(
                 plan,

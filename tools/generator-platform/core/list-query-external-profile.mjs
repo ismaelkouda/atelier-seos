@@ -11,7 +11,7 @@
 //   (`on_error: clear`).
 //
 // Le profil se décrit lui-même dans le modèle : `ignore` n'est valide
-// qu'avec TOUTE cette politique. Le profil interne garde `reject` (Π1).
+// qu'avec TOUTE cette politique. Le profil interne garde `reject`.
 
 import { isPrototypeName } from './page-grammar/registries.mjs';
 

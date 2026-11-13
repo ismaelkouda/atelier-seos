@@ -2,44 +2,59 @@
   "schema_version": "2.0.0",
   "kind": "list-query",
   "feature": {
-    "id": "settings-security-users",
+    "id": "accounts-users",
     "name": "Paginated users list",
-    "description": "Filtered users list used by the C5 external vertical slice."
+    "description": "Filtered users list used by the generator unit tests."
   },
   "backend_contract": {
     "uri": "tools/generator-platform/fixtures/users-list.backend-contract.json",
     "id": "cmz-users-list",
     "version": "1.0.0",
-    "sha256": "c61ca12448f1aa1f23f7cff5b11bcca9a5ff5495e87e3e56dd93b2d0f1e4c5a1"
+    "sha256": "94050f60d882c4ca7258c649dc675ff7be24d1988e235502a7e3a3af3e6199d7"
   },
   "operations": [
     {
       "id": "list-users",
       "operation_ref": {
-        "operation_id": "settings-security.list-users"
+        "operation_id": "accounts.list-users"
       },
       "success_response_status": 200,
       "input": {
         "fields": [
           {
             "name": "page",
-            "parameter_ref": { "name": "page", "in": "query" }
+            "parameter_ref": {
+              "name": "page",
+              "in": "query"
+            }
           },
           {
             "name": "search",
-            "parameter_ref": { "name": "search", "in": "query" }
+            "parameter_ref": {
+              "name": "search",
+              "in": "query"
+            }
           },
           {
             "name": "profile",
-            "parameter_ref": { "name": "profile", "in": "query" }
+            "parameter_ref": {
+              "name": "profile",
+              "in": "query"
+            }
           },
           {
             "name": "role",
-            "parameter_ref": { "name": "role", "in": "query" }
+            "parameter_ref": {
+              "name": "role",
+              "in": "query"
+            }
           },
           {
             "name": "isActive",
-            "parameter_ref": { "name": "is_active", "in": "query" }
+            "parameter_ref": {
+              "name": "is_active",
+              "in": "query"
+            }
           }
         ]
       },
@@ -55,17 +70,44 @@
       },
       "read_model": {
         "id": "user-list-item",
-        "description": "User item and display fields consumed by the C5 users page.",
+        "description": "User item and display fields.",
         "fields": [
-          { "name": "uniqId", "source_field": "id" },
-          { "name": "firstName", "source_field": "first_name" },
-          { "name": "lastName", "source_field": "last_name" },
-          { "name": "email", "source_field": "email" },
-          { "name": "phone", "source_field": "phone" },
-          { "name": "profile", "source_field": "profile" },
-          { "name": "role", "source_field": "role" },
-          { "name": "status", "source_field": "status" },
-          { "name": "updatedAt", "source_field": "updated_at" }
+          {
+            "name": "userId",
+            "source_field": "id"
+          },
+          {
+            "name": "firstName",
+            "source_field": "first_name"
+          },
+          {
+            "name": "lastName",
+            "source_field": "last_name"
+          },
+          {
+            "name": "email",
+            "source_field": "email"
+          },
+          {
+            "name": "phone",
+            "source_field": "phone"
+          },
+          {
+            "name": "profile",
+            "source_field": "profile"
+          },
+          {
+            "name": "role",
+            "source_field": "role"
+          },
+          {
+            "name": "status",
+            "source_field": "status"
+          },
+          {
+            "name": "updatedAt",
+            "source_field": "updated_at"
+          }
         ]
       },
       "execution": {
@@ -79,7 +121,9 @@
           "on_superseded": true,
           "on_destroy": true
         },
-        "retry": { "mode": "none" },
+        "retry": {
+          "mode": "none"
+        },
         "stale_data": {
           "on_reload": "preserve",
           "on_error": "preserve"

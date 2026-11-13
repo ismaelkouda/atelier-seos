@@ -16,8 +16,8 @@ import { createApplicationSessionFixture } from './test-support/application-sess
 test('chemin d’opération : segments [A-Za-z0-9_.-]+, sans . ni .., sans encodage', () => {
     for (const path of [
         '/',
-        '/v1.0/backoffice/login',
-        '/v1.0/backoffice/privacy/accept',
+        '/v1.0/console/login',
+        '/v1.0/console/privacy/accept',
         '/a-b/c_d',
         '/v2.1.3/x',
     ])
