@@ -8,7 +8,10 @@ import {
 } from 'node:fs';
 import { dirname, relative, resolve, sep } from 'node:path';
 
-import { scaffoldTailwind } from '../scaffold-tailwind-core.mjs';
+import {
+    angularTailwindSources,
+    scaffoldTailwind,
+} from '../scaffold-tailwind-core.mjs';
 
 const ADAPTER_VERSION = '1.0.0';
 const MATERIAL_THEME = `// Include theming for Angular Material with \`mat.theme()\`.
@@ -190,29 +193,14 @@ function applyAngularTailwind(workspace, context, track) {
     ) {
         fail('version Tailwind exacte absente de la piste qualifiée');
     }
-    const reference = 'apps/backoffice-angular';
-    const postcss = readRegular(workspace, `${reference}/.postcssrc.json`);
-    const referenceCss = readRegular(
-        workspace,
-        `${reference}/src/tailwind.css`
-    );
-    const source = `@source '../../../apps/backoffice-angular/src';`;
-    if (referenceCss.split(source).length !== 2) {
-        fail(
-            'la source applicative Tailwind de référence est absente ou ambiguë'
-        );
-    }
-    const generated = referenceCss.replace(
-        source,
-        `@source '../../../apps/${context.project.name}/src';`
-    );
+    const { postcss, css } = angularTailwindSources(workspace);
     writeOwned(workspace, `${context.appRoot}/.postcssrc.json`, postcss, {
         createOnly: true,
     });
     writeOwned(
         workspace,
         `${context.sourceRoot}/tailwind.css`,
-        `/* Adaptateur qualifié CMZ, tailwindcss@${version}. */\n${generated}`,
+        `/* Adaptateur qualifié CMZ, tailwindcss@${version}. */\n${css}`,
         { createOnly: true }
     );
     const styles = context.project.targets?.build?.options?.styles;
@@ -264,9 +252,10 @@ function descriptorInputs(repository, platform, library) {
     const paths = ['tools/library-setup/qualified-adapters.mjs'];
     if (platform === 'angular' && library === 'tailwind') {
         paths.push(
-            'apps/backoffice-angular/.postcssrc.json',
-            'apps/backoffice-angular/src/tailwind.css',
-            'conventions/presentation/tailwind-theme.css'
+            'conventions/libraries/angular/tailwind.postcssrc.json',
+            'conventions/libraries/angular/tailwind.template.css',
+            'conventions/presentation/tailwind-theme.css',
+            'tools/scaffold-tailwind-core.mjs'
         );
     }
     if (platform === 'react' && library === 'tailwind') {

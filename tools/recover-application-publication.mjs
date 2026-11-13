@@ -7,7 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { recoverApplicationPublication } from './generator-platform/core/application-publication.mjs';
 import { repositoryRoot } from './generator-platform/validate-ir.mjs';
 
-const GUIDE = 'docs/architecture/external-application-creation.md';
+const GUIDE = 'docs/etape-b/external-application-creation.md';
 
 function fail(message) {
     throw Object.assign(new Error(message), { code: 'CMZ_CLI_USAGE' });

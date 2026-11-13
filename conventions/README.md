@@ -144,7 +144,7 @@ worktree Git jetable. Le schematic, le sandbox, le navigateur et le harnais
 de qualification. Les commandes `create-app`, `add-library` et `create-module`
 exposent leur contrat opérationnel stable avec `--explain`. Le runbook court
 associé est
-[`runbook-commandes-creation.md`](../docs/architecture/runbook-commandes-creation.md).
+[`runbook-commandes-creation.md`](../docs/etape-b/runbook-commandes-creation.md).
 Intégration `create-app` et gouvernance d’upgrade :
 [`docs/architecture/library-setup-runtime-plan.md`](../docs/architecture/library-setup-runtime-plan.md).
 

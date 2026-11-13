@@ -76,13 +76,18 @@ function fixture(t, { libraries = [] } = {}) {
     );
     copy(
         root,
-        'apps/backoffice-angular/.postcssrc.json',
-        'apps/backoffice-angular/.postcssrc.json'
+        'conventions/libraries/angular/tailwind.postcssrc.json',
+        'conventions/libraries/angular/tailwind.postcssrc.json'
     );
     copy(
         root,
-        'apps/backoffice-angular/src/tailwind.css',
-        'apps/backoffice-angular/src/tailwind.css'
+        'conventions/libraries/angular/tailwind.template.css',
+        'conventions/libraries/angular/tailwind.template.css'
+    );
+    copy(
+        root,
+        'tools/scaffold-tailwind-core.mjs',
+        'tools/scaffold-tailwind-core.mjs'
     );
     copy(
         root,
@@ -197,8 +202,8 @@ test('Tailwind dérive les fichiers relus et câble exactement l’app cible', (
     const css = readFileSync(join(root, 'apps/demo/src/tailwind.css'), 'utf8');
     assert.match(css, /Adaptateur qualifié CMZ, tailwindcss@4\.3\.3/);
     assert.match(css, /@import 'tailwindcss' source\(none\)/);
-    assert.match(css, /@source '\.\.\/\.\.\/\.\.\/apps\/demo\/src'/);
-    assert.doesNotMatch(css, /apps\/backoffice-angular\/src/);
+    assert.match(css, /@source '\.\/';/);
+    assert.doesNotMatch(css, /@source '\.\.\//);
     const project = JSON.parse(
         readFileSync(join(root, 'apps/demo/project.json'), 'utf8')
     );
@@ -328,7 +333,7 @@ test('les conflits et la dérive d’une entrée qualifiée échouent fermés', 
 
     const before = qualifiedAdapterDescriptor(root, 'angular', 'tailwind');
     writeFileSync(
-        join(root, 'apps/backoffice-angular/.postcssrc.json'),
+        join(root, 'conventions/libraries/angular/tailwind.postcssrc.json'),
         '{"plugins":{}}\n'
     );
     const after = qualifiedAdapterDescriptor(root, 'angular', 'tailwind');

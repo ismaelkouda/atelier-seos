@@ -22,7 +22,7 @@ test('sélectionne la recette par plateforme Nx et ne mute jamais le registre pa
     ).tracks[0].status;
     const first = loadLibraryConfiguration(
         repository,
-        'backoffice-angular',
+        'library-qualification-angular',
         'tailwind',
         { requiredTrackStatus: status }
     );
@@ -37,7 +37,7 @@ test('sélectionne la recette par plateforme Nx et ne mute jamais le registre pa
 
     const second = loadLibraryConfiguration(
         repository,
-        'backoffice-angular',
+        'library-qualification-angular',
         'tailwind',
         { requiredTrackStatus: status }
     );

@@ -69,13 +69,6 @@ export const REVIEWED_EVENTS = [
 // Écritures de job acceptées. Toute autre écriture échoue : l'ajouter ici est
 // une décision relue, pas un effet de bord.
 export const ALLOWED_JOB_WRITES = {
-    'runtime-version-alignment.yml': {
-        events: ['schedule', 'workflow_dispatch', 'workflow_run'],
-        jobs: {
-            publish: ['actions', 'contents'],
-            'publish-bundle': ['actions', 'contents'],
-        },
-    },
     'nx-migrations.yml': {
         events: ['pull_request', 'schedule', 'workflow_dispatch'],
         jobs: {
@@ -230,14 +223,7 @@ export function eventViolations(file, workflow) {
     if (events === null || events.length === 0)
         return [`${file} : déclencheurs \`on\` absents ou illisibles.`];
     return events
-        .filter(
-            (event) =>
-                !REVIEWED_EVENTS.includes(event) &&
-                !(
-                    file === 'runtime-version-alignment.yml' &&
-                    event === 'workflow_run'
-                )
-        )
+        .filter((event) => !REVIEWED_EVENTS.includes(event))
         .map(
             (event) =>
                 `${file} : événement \`${event}\` non relu ; ce garde ne vaut que pour ${REVIEWED_EVENTS.join(', ')}.`

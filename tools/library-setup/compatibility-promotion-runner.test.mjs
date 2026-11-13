@@ -59,7 +59,11 @@ function repository(t) {
         );
         removeTemporaryFixture(root, 'cmz-promotion-runner-');
     });
-    for (const path of ['conventions', 'tools', 'apps/backoffice-angular']) {
+    for (const path of [
+        'conventions',
+        'tools',
+        'apps/library-qualification-angular',
+    ]) {
         cpSync(join(SOURCE, path), join(root, path), { recursive: true });
     }
     for (const path of [
@@ -183,18 +187,18 @@ test('la commande promeut uniquement la piste réellement qualifiée', async (t)
     const root = repository(t);
     const source = loadLibraryConfiguration(
         root,
-        'backoffice-angular',
+        'library-qualification-angular',
         'angular-material',
         { requiredTrackStatus: 'candidate' }
     );
     const result = await promoteCompatibilityTrack({
         repository: root,
-        app: 'backoffice-angular',
+        app: 'library-qualification-angular',
         library: 'angular-material',
         execute: async () =>
             fakeExecution(
                 root,
-                'backoffice-angular',
+                'library-qualification-angular',
                 'angular-material',
                 requiredProofIds(source.recipe, validateRecipes(root).recipes)
             ),
@@ -203,7 +207,7 @@ test('la commande promeut uniquement la piste réellement qualifiée', async (t)
     assert.equal(result.verification.track_sha256.length, 64);
     const selected = loadLibraryConfiguration(
         root,
-        'backoffice-angular',
+        'library-qualification-angular',
         'angular-material'
     );
     assert.equal(selected.track.status, 'verified');
@@ -223,12 +227,12 @@ test('une preuve incomplète restaure la matrice octet pour octet', async (t) =>
         () =>
             promoteCompatibilityTrack({
                 repository: root,
-                app: 'backoffice-angular',
+                app: 'library-qualification-angular',
                 library: 'angular-material',
                 execute: async () =>
                     fakeExecution(
                         root,
-                        'backoffice-angular',
+                        'library-qualification-angular',
                         'angular-material',
                         ['material-component-compiles']
                     ),
@@ -249,7 +253,7 @@ test('le verrou sérialise les promotions et récupère un propriétaire mort', 
             () =>
                 promoteCompatibilityTrack({
                     repository: root,
-                    app: 'backoffice-angular',
+                    app: 'library-qualification-angular',
                     library: 'angular-material',
                     execute: async () => {
                         executed = true;
@@ -288,19 +292,19 @@ test('une édition concurrente de matrice est conservée et bloque la promotion'
         () =>
             promoteCompatibilityTrack({
                 repository: root,
-                app: 'backoffice-angular',
+                app: 'library-qualification-angular',
                 library: 'angular-material',
                 execute: async () => {
                     writeFileSync(path, edited);
                     const source = loadLibraryConfiguration(
                         root,
-                        'backoffice-angular',
+                        'library-qualification-angular',
                         'angular-material',
                         { requiredTrackStatus: 'candidate' }
                     );
                     return fakeExecution(
                         root,
-                        'backoffice-angular',
+                        'library-qualification-angular',
                         'angular-material',
                         requiredProofIds(
                             source.recipe,

@@ -671,7 +671,7 @@ publication restent des étapes séparées. Un shell ne certifie aucune règle
 métier. La qualification utilise uniquement des fixtures fictives.
 
 Lire
-[le protocole extérieur](./docs/architecture/external-application-creation.md)
+[le protocole extérieur](./docs/etape-b/external-application-creation.md)
 et le runbook avant de proposer une commande. Le registre d’exécution est celui
 du projet choisi et de son autorité. Dans le seul exemple SEOS,
 `commandes-a-lancer.md` conserve les permissions particulières déjà décidées.

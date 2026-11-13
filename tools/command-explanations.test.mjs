@@ -13,7 +13,7 @@ import {
 } from './command-explanations.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const RUNBOOK = 'docs/architecture/runbook-commandes-creation.md';
+const RUNBOOK = 'docs/etape-b/runbook-commandes-creation.md';
 const TOP_LEVEL_KEYS = [
     'schema_version',
     'command',

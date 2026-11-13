@@ -6,7 +6,7 @@
   "install": {
     "method": "reference-derived",
     "reference_tool": "tools/scaffold-tailwind.mjs",
-    "notes": "Ni @nx/angular:application ni Angular n'ont de schematic Tailwind. Le script dérive `.postcssrc.json`, `src/tailwind.css` (`@import 'tailwindcss' source(none)` + sources explicites + `@theme`) et l'entrée du tableau `styles` de `project.json` depuis l'app de référence `backoffice-angular`. Tailwind a déjà changé de mécanisme une fois (v3 tailwind.config.js + @tailwind → v4 @import + @theme) : ne jamais figer la forme ici, dériver."
+    "notes": "Ni @nx/angular:application ni Angular n'ont de schematic Tailwind. Le script écrit `.postcssrc.json` et `src/tailwind.css` (`@import 'tailwindcss' source(none)` + source bornée à l'application + `@theme`) depuis les gabarits génériques `conventions/libraries/angular/tailwind.postcssrc.json` et `tailwind.template.css`, puis ajoute l'entrée du tableau `styles` de `project.json`. Tailwind a déjà changé de mécanisme une fois (v3 tailwind.config.js + @tailwind → v4 @import + @theme) : ne jamais figer la forme ici, dériver."
   },
   "static_invariants": [
     {

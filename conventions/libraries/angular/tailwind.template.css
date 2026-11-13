@@ -1,0 +1,6 @@
+@import 'tailwindcss' source(none);
+@import '../../../conventions/presentation/tailwind-theme.css';
+
+/* L'auto-détection Tailwind est désactivée ci-dessus : le scan reste borné aux
+   sources de l'application Angular cible. */
+@source './';

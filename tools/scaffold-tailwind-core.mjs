@@ -1,7 +1,8 @@
 import { existsSync, lstatSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, relative, resolve, sep } from 'node:path';
 
-const ANGULAR_REFERENCES = ['backoffice-angular'];
+const ANGULAR_TEMPLATE = 'conventions/libraries/angular/tailwind.template.css';
+const ANGULAR_POSTCSS = 'conventions/libraries/angular/tailwind.postcssrc.json';
 const REACT_TEMPLATE = 'conventions/libraries/react/tailwind.template.css';
 
 function fail(message) {
@@ -83,43 +84,29 @@ function replaceOnce(content, search, replacement, label) {
     return content.replace(search, replacement);
 }
 
-function angularReference(repository) {
-    const existing = ANGULAR_REFERENCES.filter((name) =>
-        existsSync(safePath(repository, `apps/${name}/.postcssrc.json`))
-    );
-    if (existing.length === 0) {
-        fail('aucune référence Angular Tailwind disponible');
+// Gabarits génériques de l'atelier : aucune application de référence n'est lue.
+// Le scan Tailwind reste borné aux sources de l'application cible (`@source './'`).
+export function angularTailwindSources(repository) {
+    const postcss = readRegular(repository, ANGULAR_POSTCSS);
+    const css = readRegular(repository, ANGULAR_TEMPLATE);
+    if (
+        !postcss.includes('@tailwindcss/postcss') ||
+        !css.includes("@import 'tailwindcss' source(none);") ||
+        !css.includes("@source './';")
+    ) {
+        fail(`${ANGULAR_TEMPLATE}: source Angular bornée absente`);
     }
-    const candidates = existing.map((name) => ({
-        name,
-        postcss: readRegular(repository, `apps/${name}/.postcssrc.json`),
-    }));
-    const [first, ...rest] = candidates;
-    if (rest.some(({ postcss }) => postcss !== first.postcss)) {
-        fail(`références Angular divergentes : ${existing.join(', ')}`);
-    }
-    return first;
+    return { postcss, css };
 }
 
 function scaffoldAngular(repository, app, version) {
     const appRoot = `apps/${app}`;
-    const reference = angularReference(repository);
-    const referenceCss = readRegular(
-        repository,
-        `apps/${reference.name}/src/tailwind.css`
-    );
-    const source = `@source '../../../apps/${reference.name}/src';`;
-    const generated = replaceOnce(
-        referenceCss,
-        source,
-        `@source '../../../apps/${app}/src';`,
-        'source applicative Angular'
-    );
-    writeNew(repository, `${appRoot}/.postcssrc.json`, reference.postcss);
+    const sources = angularTailwindSources(repository);
+    writeNew(repository, `${appRoot}/.postcssrc.json`, sources.postcss);
     writeNew(
         repository,
         `${appRoot}/src/tailwind.css`,
-        `/* Adaptateur qualifié CMZ, tailwindcss@${version}. */\n${generated}`
+        `/* Adaptateur qualifié CMZ, tailwindcss@${version}. */\n${sources.css}`
     );
 
     const projectPath = `${appRoot}/project.json`;
