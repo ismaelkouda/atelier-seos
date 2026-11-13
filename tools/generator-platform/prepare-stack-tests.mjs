@@ -11,31 +11,7 @@ import {
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { computeTargets } from './render-targets.mjs';
-import {
-    computeEvolvableCompositionTargets,
-    directorContractPath,
-} from './check-evolvable-composition.mjs';
-import { computeWorkflowTargets } from './workflow-targets.mjs';
-import {
-    computeAngularListQueryV2Target,
-    computeReactListQueryV2Target,
-} from './list-query-v2-targets.mjs';
-import {
-    computeAngularActionRequestV2Target,
-    computeReactActionRequestV2Target,
-} from './action-request-v2-targets.mjs';
-import { renderBehaviorGraphEngine } from './renderers/behavior-graph-renderer.mjs';
-import {
-    renderAngularBehaviorGraphService,
-    renderReactBehaviorGraphHook,
-} from './renderers/behavior-graph-stack-adapters.mjs';
-import { renderPresentationFlowEngine } from './renderers/presentation-flow-renderer.mjs';
-import {
-    renderAngularPresentationFlowService,
-    renderReactPresentationFlowHook,
-} from './renderers/presentation-flow-stack-adapters.mjs';
-import { loadJson } from './validate-ir.mjs';
+import { computeAngularPageCompositionTarget } from './page-composition-targets.mjs';
 import {
     createApplicationSessionFixture,
     SESSION_FIXTURE_DOMAINS,
@@ -50,20 +26,11 @@ const generatorRoot = dirname(fileURLToPath(import.meta.url));
 const outputRoot = resolve(generatorRoot, '.stack-test-runtime');
 const target = process.argv[2];
 
-if (!['angular', 'reactjs'].includes(target)) {
+if (target !== 'angular') {
     throw new Error(
-        'Usage: node tools/generator-platform/prepare-stack-tests.mjs <angular|reactjs>'
+        'Usage: node tools/generator-platform/prepare-stack-tests.mjs angular'
     );
 }
-
-const computeListQueryV2Target =
-    target === 'angular'
-        ? computeAngularListQueryV2Target
-        : computeReactListQueryV2Target;
-const computeActionRequestV2Target =
-    target === 'angular'
-        ? computeAngularActionRequestV2Target
-        : computeReactActionRequestV2Target;
 
 async function writeTargetFiles(root, files) {
     for (const [relativePath, content] of Object.entries(files)) {
@@ -309,175 +276,24 @@ export const consumedRoutes: Routes = appRoutes.map((route) => {
     );
 }
 
-const [
-    actionRequest,
-    authorizedActionRequest,
-    workflowAction,
-    contract,
-    listQueryV2,
-    publicListQueryV2,
-    parameterizedListQueryV2,
-    actionRequestV2,
-    usersListQuery,
-] = await Promise.all([
-    computeTargets(),
-    computeEvolvableCompositionTargets(),
-    computeWorkflowTargets(),
-    loadJson(directorContractPath),
-    computeListQueryV2Target(),
-    computeListQueryV2Target({
-        definitionPath: resolve(
-            generatorRoot,
-            'fixtures/editorial-blocks.v2.definition.json'
-        ),
-    }),
-    computeListQueryV2Target({
-        definitionPath: resolve(
-            generatorRoot,
-            'fixtures/tasks-actions-processing-type.v2.definition.json'
-        ),
-    }),
-    computeActionRequestV2Target(),
-    computeListQueryV2Target({
-        definitionPath: resolve(
-            generatorRoot,
-            'fixtures/users-list.v2.definition.json'
-        ),
-    }),
-]);
-const sourceKey = target === 'angular' ? 'angular' : 'react';
 const targetRoot = resolve(outputRoot, target);
-const [fixtureSupport, pageCompositionTargets] = await Promise.all([
-    import('./page-composition.fixture.mjs'),
-    import('./page-composition-targets.mjs'),
-]);
-const [fixture, usersFixture] = await Promise.all([
-    fixtureSupport.createPageCompositionFixture(),
-    fixtureSupport.createUsersPageCompositionFixture(),
-]);
-let pageComposition;
-let usersPageComposition;
-try {
-    const computePageCompositionTarget =
-        target === 'angular'
-            ? (input) =>
-                  pageCompositionTargets.computeAngularPageCompositionTarget({
-                      ...input,
-                      hostBindings: fixtureSupport.angularPageHostBindings,
-                  })
-            : (input) =>
-                  pageCompositionTargets.computeReactPageCompositionTarget(
-                      input
-                  );
-    [pageComposition, usersPageComposition] = await Promise.all([
-        computePageCompositionTarget({
-            plan: fixture.plan,
-            artifactRoot: fixture.root,
-        }),
-        computePageCompositionTarget({
-            plan: usersFixture.plan,
-            artifactRoot: usersFixture.root,
-        }),
-    ]);
-} finally {
-    await Promise.all([
-        rm(fixture.root, { recursive: true, force: true }),
-        rm(usersFixture.root, { recursive: true, force: true }),
-    ]);
-}
-const runtimeConfigurationFiles =
-    target === 'angular'
-        ? {
-              'tsconfig.json': `${JSON.stringify(
-                  {
-                      extends: '../../../../tsconfig.base.json',
-                      compilerOptions: {
-                          emitDecoratorMetadata: true,
-                          experimentalDecorators: true,
-                      },
-                      include: ['**/*.ts'],
-                  },
-                  null,
-                  4
-              )}\n`,
-          }
-        : {};
-
-const behaviorGraphEngineSource = renderBehaviorGraphEngine(
-    contract.evolution.behavior_graph
-);
-const behaviorGraphFiles =
-    target === 'angular'
-        ? {
-              'behavior-graph-engine.ts': behaviorGraphEngineSource,
-              'behavior-graph.service.ts': renderAngularBehaviorGraphService(),
-          }
-        : {
-              'behavior-graph-engine.ts': behaviorGraphEngineSource,
-              'use-behavior-graph.ts': renderReactBehaviorGraphHook(),
-          };
-
-const presentationFlowEngineSource = renderPresentationFlowEngine(
-    contract.evolution.presentation
-);
-const presentationFlowFiles =
-    target === 'angular'
-        ? {
-              'presentation-flow-engine.ts': presentationFlowEngineSource,
-              'presentation-flow.service.ts':
-                  renderAngularPresentationFlowService(),
-          }
-        : {
-              'presentation-flow-engine.ts': presentationFlowEngineSource,
-              'use-presentation-flow.ts': renderReactPresentationFlowHook(),
-          };
+const runtimeConfigurationFiles = {
+    'tsconfig.json': `${JSON.stringify(
+        {
+            extends: '../../../../tsconfig.base.json',
+            compilerOptions: {
+                emitDecoratorMetadata: true,
+                experimentalDecorators: true,
+            },
+            include: ['**/*.ts'],
+        },
+        null,
+        4
+    )}\n`,
+};
 
 await rm(targetRoot, { recursive: true, force: true });
-await Promise.all([
-    writeTargetFiles(targetRoot, runtimeConfigurationFiles),
-    writeTargetFiles(
-        resolve(targetRoot, 'action-request'),
-        actionRequest[sourceKey].files
-    ),
-    writeTargetFiles(
-        resolve(targetRoot, 'action-request-authorized'),
-        authorizedActionRequest.targets[sourceKey].files
-    ),
-    writeTargetFiles(
-        resolve(targetRoot, 'workflow-action'),
-        workflowAction[sourceKey].files
-    ),
-    writeTargetFiles(resolve(targetRoot, 'list-query-v2'), listQueryV2.files),
-    writeTargetFiles(
-        resolve(targetRoot, 'list-query-v2-public'),
-        publicListQueryV2.files
-    ),
-    writeTargetFiles(
-        resolve(targetRoot, 'list-query-v2-tasks-actions-processing-type'),
-        parameterizedListQueryV2.files
-    ),
-    writeTargetFiles(
-        resolve(targetRoot, 'list-query-v2-users'),
-        usersListQuery.files
-    ),
-    writeTargetFiles(
-        resolve(targetRoot, 'action-request-v2'),
-        actionRequestV2.files
-    ),
-    writeTargetFiles(
-        resolve(targetRoot, 'page-composition-v2'),
-        pageComposition[sourceKey].files
-    ),
-    writeTargetFiles(
-        resolve(targetRoot, 'page-composition-users-v2'),
-        usersPageComposition[sourceKey].files
-    ),
-    writeTargetFiles(resolve(targetRoot, 'behavior-graph'), behaviorGraphFiles),
-    writeTargetFiles(
-        resolve(targetRoot, 'presentation-flow'),
-        presentationFlowFiles
-    ),
-]);
+await writeTargetFiles(targetRoot, runtimeConfigurationFiles);
 
 if (target === 'angular') {
     const otherTargets = await runtimeFileHashes(targetRoot);
@@ -566,14 +382,11 @@ if (target === 'angular') {
                 hostBindings.session.module = '../../../session';
                 hostBindings.services[domain + '-service'].module =
                     '../../../../../session';
-                const result =
-                    await pageCompositionTargets.computeAngularPageCompositionTarget(
-                        {
-                            plan: page.plan,
-                            artifactRoot: data.root,
-                            hostBindings,
-                        }
-                    );
+                const result = await computeAngularPageCompositionTarget({
+                    plan: page.plan,
+                    artifactRoot: data.root,
+                    hostBindings,
+                });
                 await writeSessionFiles(
                     `src/app/pages/${id}/execution`,
                     Object.fromEntries(

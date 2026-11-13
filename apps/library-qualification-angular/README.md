@@ -5,5 +5,5 @@ déploiement. Elle sert exclusivement à qualifier les recettes de bibliothèque
 sur une application neutre avant leur promotion en `verified`.
 
 Elle ne reçoit aucun code métier. Toute bibliothèque présente dans
-`.cmz/libraries.json` doit avoir été ajoutée par `add-library` et prouvée par les
-oracles runtime du workspace.
+`.cmz/libraries.json` doit avoir été ajoutée par `add-library` et prouvée par
+les oracles runtime du workspace.

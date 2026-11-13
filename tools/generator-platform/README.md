@@ -15,19 +15,19 @@ model. Every service, security scheme, model, field, parameter, body, response,
 and operation carries evidence pointing to an immutable source snapshot.
 
 `core/backend-contract.mjs` adds the cross-document invariants that JSON Schema
-alone cannot prove: unique identities, resolved references, exact recursive
-type shapes, access/security consistency, path-parameter equivalence, at least
-one success response, closed envelope shapes, used sources, workspace-contained
+alone cannot prove: unique identities, resolved references, exact recursive type
+shapes, access/security consistency, path-parameter equivalence, at least one
+success response, closed envelope shapes, used sources, workspace-contained
 regular snapshots, and exact SHA-256 provenance. This is the P0.1 vocabulary;
 the three publication adapters below are its only current ingestion paths.
 
 Named backend models preserve their real top-level shape (`object`, `array`, or
 `scalar`) so normalization never invents an `items` wrapper around an array.
-Typed validation constraints are accepted only where meaningful;
-contradictory bounds and invalid regular expressions fail closed.
+Typed validation constraints are accepted only where meaningful; contradictory
+bounds and invalid regular expressions fail closed.
 
-Lifecycle is evidence-backed and monotonic: an analogue remains `reference`;
-the target contract starts `planned`, becomes `implemented` only with target
+Lifecycle is evidence-backed and monotonic: an analogue remains `reference`; the
+target contract starts `planned`, becomes `implemented` only with target
 implementation evidence, and reaches `verified-live` only with corresponding
 evidence. A reference source cannot be re-labelled to satisfy a planned target,
 and the contract status always equals its least mature target entity.
@@ -72,11 +72,11 @@ parents, and every path component must remain regular and inside the workspace.
 
 ```yaml
 x-cmz-contract:
-  authority: declared
-  contract_id: clean-street-api
-  lifecycle: planned
-  service_id: public-api
-  source_id: clean-street-openapi
+    authority: declared
+    contract_id: clean-street-api
+    lifecycle: planned
+    service_id: public-api
+    source_id: clean-street-openapi
 ```
 
 Each server carries `x-cmz-environment`. Local component references,
@@ -91,9 +91,8 @@ closed. Lifecycle and authority are exact pairs: `reference/observational`,
 collection variables `baseUrl`, `cmz_contract_id`, `cmz_contract_version`,
 `cmz_environment`, `cmz_service_id`, and `cmz_source_id`. It always emits an
 observational `reference` contract. Example request/response bodies become
-opaque scalar JSON models; the adapter deliberately never infers fields or
-types from examples. At least one saved success response per request is
-required.
+opaque scalar JSON models; the adapter deliberately never infers fields or types
+from examples. At least one saved success response per request is required.
 
 ```bash
 bun run compile:backend-contract -- --adapter openapi \
@@ -130,9 +129,9 @@ bun run check:application-designs
 
 `create-app` renders an approved web experience as an Angular 22/PWA shell by
 default, or as a React SPA with the explicit `--profile react-spa` option. Its
-nominal command computes and publishes the immutable plan directly, compiles
-the candidate with the profile-native compiler (`ngc` or `tsc`), then executes
-a no-cache production build and lint in the real Nx graph. `--dry-run` remains
+nominal command computes and publishes the immutable plan directly, compiles the
+candidate with the profile-native compiler (`ngc` or `tsc`), then executes a
+no-cache production build and lint in the real Nx graph. `--dry-run` remains
 available for inspection and `--expect-plan` makes prior plan review enforceable
 when needed. Failure rolls the output back to a hash-verified candidate.
 
@@ -164,8 +163,8 @@ authority. `prepare:page-realization` binds one page contract and the protected
 workspace inventory to a work order. The LLM may write exactly the listed page
 files. The work order also carries the closed `screen` role node, the
 application profile, and the selected stack-native archetype contract (`shape`,
-`forbid`, path and SHA-256); the LLM cannot choose or rewrite that form.
-Angular uses `page.component.*` + `ngc`; React uses `page.tsx`, SCSS Modules, a
+`forbid`, path and SHA-256); the LLM cannot choose or rewrite that form. Angular
+uses `page.component.*` + `ngc`; React uses `page.tsx`, SCSS Modules, a
 colocated test, and `tsc`. `verify:page-realization` rejects protected-workspace
 drift, unauthorized or missing files, direct network calls, backend endpoint
 literals, incomplete evidence, or missing exact `data-cmz-id` mappings before
@@ -182,14 +181,14 @@ An optional approved `presentation-evidence` manifest can bind structured
 design, screenshots, wireframes, tokens or component mappings to that same work
 order. Every local source is size- and hash-verified, belongs to the exact page,
 and remains `untrusted-content` with `presentation-only` authority. It cannot
-override backend, behavior, access, composition or archetype contracts. The
-work order records `presentation_evidence: null` when no reference is supplied,
-so visual fidelity is never claimed implicitly. See
+override backend, behavior, access, composition or archetype contracts. The work
+order records `presentation_evidence: null` when no reference is supplied, so
+visual fidelity is never claimed implicitly. See
 [`ADR-0066`](../../docs/adr/0066-preuve-presentation-bornee-pour-realisation-llm.md).
 
 A target-neutral execution plan may reference the byte-identical page contract
-published in another stack-specific shell. This is accepted only as an
-explicit `published-replica` binding: both app manifests must name the same
+published in another stack-specific shell. This is accepted only as an explicit
+`published-replica` binding: both app manifests must name the same
 content-addressed design and experience, both contracts must have the plan's
 page id and SHA-256, and deterministic plan replay must remain exact. The full
 source/target binding is included in the work order. Arbitrary aliases remain
@@ -208,9 +207,9 @@ base tree is then compared with what is actually on disk: final type and bytes
 on every supported platform, and the executable bit where the file system makes
 it meaningful (currently non-Windows platforms). Git remains a complementary
 inventory of paths; it is no longer the proof that protected bytes are
-unchanged. A SHA establishes content identity, not human approval:
-the authority must first be reviewed and merged separately on the protected
-branch. See [`ADR-0098`](../../docs/adr/0098-lier-guidance-layout-au-work-order-v5-par-commit-git.md).
+unchanged. A SHA establishes content identity, not human approval: the authority
+must first be reviewed and merged separately on the protected branch. See
+[`ADR-0098`](../../docs/adr/0098-lier-guidance-layout-au-work-order-v5-par-commit-git.md).
 
 ```bash
 bun run prepare:page-realization -- --app my-app --page <page_id> --dry-run
@@ -285,11 +284,11 @@ bunx nx run users-management-proof:build:production --skipNxCache
 
 La permission fine de création est désormais portée par l’action du design,
 compilée dans le plan et gardée dans la composition avant tout POST. Le host
-fournit un `Signal<boolean>` par permission ; la composition expose
-`authorized` et `deniedBehavior`, puis échoue avec une erreur typée si un appel
-direct tente de contourner le contrôle visible. Cette garde frontend ne remplace
-jamais l’autorisation backend. La page visible reste un placeholder tant qu’une
-preuve de présentation n’est pas approuvée.
+fournit un `Signal<boolean>` par permission ; la composition expose `authorized`
+et `deniedBehavior`, puis échoue avec une erreur typée si un appel direct tente
+de contourner le contrôle visible. Cette garde frontend ne remplace jamais
+l’autorisation backend. La page visible reste un placeholder tant qu’une preuve
+de présentation n’est pas approuvée.
 
 ### Demand-driven composition registry
 
@@ -301,11 +300,11 @@ workspace-contained and non-symbolic. A registry change during `create-module`
 invalidates resume, while `--abort` remains able to restore from the journaled
 composition snapshot.
 
-Maturity is an adoption gate, not a documentation label. `create-module`
-rejects an `experimental` entry before any workspace write unless the initial
-command carries `--allow-experimental`. That explicit consent neither promotes
-the composition nor weakens generation, build, lint, graph, formatting, or
-lockfile gates; it is intentionally invalid on `--resume` and `--abort`.
+Maturity is an adoption gate, not a documentation label. `create-module` rejects
+an `experimental` entry before any workspace write unless the initial command
+carries `--allow-experimental`. That explicit consent neither promotes the
+composition nor weakens generation, build, lint, graph, formatting, or lockfile
+gates; it is intentionally invalid on `--resume` and `--abort`.
 
 ```bash
 bun run check:composition-registry
@@ -313,8 +312,8 @@ bun run check:composition-registry
 
 The registry is intentionally not a feature wish list. New compositions enter
 only after their generator and business cases exist; unsupported kinds remain
-rejected rather than approximated. `list-query` remains experimental because
-its sole case is the retained source of a removed POC. `action-request` is also
+rejected rather than approximated. `list-query` remains experimental because its
+sole case is the retained source of a removed POC. `action-request` is also
 experimental: its generators and isolated runtime proofs are reproducible, but
 the Staff audit of 2026-09-15 identified unresolved production blockers. Their
 v1 evidence remains available for migration work; neither may be adopted by
@@ -323,8 +322,8 @@ default.
 ### Migrate a frozen list-query v1 definition
 
 The v2 contract does not repeat HTTP, authentication, or wire DTO facts. It
-content-addresses one canonical backend contract, maps its wire fields to a
-read model, and makes cache, concurrency, cancellation, retry, and stale-data
+content-addresses one canonical backend contract, maps its wire fields to a read
+model, and makes cache, concurrency, cancellation, retry, and stale-data
 behavior explicit. Migration therefore requires a reviewed decisions file; it
 never guesses these policies.
 
@@ -407,18 +406,18 @@ one new file with exclusive-create semantics, and is idempotent when given a
 valid v2 input. The initial v2 subset is deliberately narrow: JSON mutations
 with no parameters and primitive object fields. Unsupported shapes fail closed.
 
-Before writing, the command also compiles the definition and exact backend
-bytes into one internal, target-neutral execution model. That model keeps the
-business input, request DTO, response DTO and result projection separate,
-resolves public authentication to `omit`, and records the remote-success commit
-boundary. A host-side failure after that boundary becomes
-`committed-with-local-error`; only the local post-success effect may be retried,
-never the already-committed remote mutation.
+Before writing, the command also compiles the definition and exact backend bytes
+into one internal, target-neutral execution model. That model keeps the business
+input, request DTO, response DTO and result projection separate, resolves public
+authentication to `omit`, and records the remote-success commit boundary. A
+host-side failure after that boundary becomes `committed-with-local-error`; only
+the local post-success effect may be retried, never the already-committed remote
+mutation.
 
-`forgot-password.v2.definition.json` is the first active-code contract proof.
-It is traced to the Angular client, endpoint, DTO, envelope, interceptor, and
-test configuration sources. Its status means “implemented client observation,”
-not “server verified live.”
+`forgot-password.v2.definition.json` is the first active-code contract proof. It
+is traced to the Angular client, endpoint, DTO, envelope, interceptor, and test
+configuration sources. Its status means “implemented client observation,” not
+“server verified live.”
 
 The Angular target now renders six ordinary TypeScript artifacts from that same
 compiled model: models, input validation, strict response decoder, HTTP client,
@@ -430,9 +429,9 @@ Bearer. Invalid input fails before HTTP; unknown response fields fail before the
 domain result; duplicate submission is rejected without disturbing the active
 request.
 
-This renderer deliberately supports only the active `forgot-password` shape.
-The React target now consumes the same compiled model and artifact plan. Its
-client delegates service resolution, transport, and authentication policy to an
+This renderer deliberately supports only the active `forgot-password` shape. The
+React target now consumes the same compiled model and artifact plan. Its client
+delegates service resolution, transport, and authentication policy to an
 explicit host port; it does not call a global fetch or create authentication.
 The generated hook runs with real React primitives, rejects concurrent submit,
 and stops publishing state after unmount without claiming that the remote
@@ -467,18 +466,18 @@ primitive reference; every output binding resolves to one explicit
 The compiler proof uses two real list queries (including one route-parameter
 binding) and one real action request. It rejects stale hashes, missing or
 ambiguous primitives, weaker page access, incompatible controls, ambiguous
-producers, and caller-declared invalidation while product intent cannot name
-its targets. A standalone replay validator checks the closed schema and the
-exact canonical capability union. No composition root or joint HTTP execution
-is claimed yet; those are the next C3/C4 proofs.
+producers, and caller-declared invalidation while product intent cannot name its
+targets. A standalone replay validator checks the closed schema and the exact
+canonical capability union. No composition root or joint HTTP execution is
+claimed yet; those are the next C3/C4 proofs.
 
 C3 materializes Angular and React composition targets from that plan. Each node
 is rendered through the already-proven v2 primitive renderer into its own
 `src/nodes/<node-id>` boundary. Angular emits a minimal `PageComposition`
 service and an explicit provider list. React emits a hook factory whose clients
 and host `FetchPort` remain explicit dependencies. Both targets negotiate the
-same bounded capability set and recheck every referenced file and SHA-256
-before rendering.
+same bounded capability set and recheck every referenced file and SHA-256 before
+rendering.
 
 The same command publishes one explicitly selected composition target or both
 targets in one transaction:
@@ -491,27 +490,27 @@ bun run generate:page-composition --plan <plan.json> \
 ```
 
 `angular` remains the default so existing automation cannot acquire a second
-target silently. Angular host bindings are required for `angular` and `all`,
-and rejected for `reactjs`: they describe an Angular host contract and must not
-be presented as React configuration. With `all`, the command verifies that both
+target silently. Angular host bindings are required for `angular` and `all`, and
+rejected for `reactjs`: they describe an Angular host contract and must not be
+presented as React configuration. With `all`, the command verifies that both
 renderers use the exact same input digest and artifact plan, then publishes the
 two targets atomically through the shared Change Set, lock and rollback path.
 
-The output deliberately contains no component or template. React composition
-is now materialized, executed by the native stack gate and transactionally
+The output deliberately contains no component or template. React composition is
+now materialized, executed by the native stack gate and transactionally
 publishable, but it is not yet bound to a React application shell. That absence
 must not be hidden by manually copying generated files into an unrelated proof
 application.
 
 C4 prepares both generated outputs for their native stack suites and tests them
-from external consumers. The hermetic hosts observe the two GET requests and
-the POST together, including payload, host authentication, cache bypass,
-targeted invalidation, cancellation and double-submit rejection. The React C5
-oracle also proves permission revocation after rerender and preserves the
-remote mutation success when the subsequent local refresh fails. These oracles
-import no generator internals and add no production runtime. C5 remains the
-representative Angular UI vertical slice; the React visual application is the
-next increment, not a claim made by this runtime proof.
+from external consumers. The hermetic hosts observe the two GET requests and the
+POST together, including payload, host authentication, cache bypass, targeted
+invalidation, cancellation and double-submit rejection. The React C5 oracle also
+proves permission revocation after rerender and preserves the remote mutation
+success when the subsequent local refresh fails. These oracles import no
+generator internals and add no production runtime. C5 remains the representative
+Angular UI vertical slice; the React visual application is the next increment,
+not a claim made by this runtime proof.
 
 PLAT-2 adds two independent, fail-closed ingestion paths:
 
@@ -634,8 +633,8 @@ storage, verifies the real `statfs` profile before writing, and rejects every
 other filesystem. The suite actually `SIGKILL`s a child publisher after each
 critical rename. A blocking `macos-15`/APFS and `ubuntu-24.04`/ext4 CI matrix
 runs the same recovery suite and a real-filesystem publication probe.
-User-facing target names are `angular` and `reactjs`;
-`angular-nx` and `react-typescript` remain internal profile identifiers. See the
+User-facing target names are `angular` and `reactjs`; `angular-nx` and
+`react-typescript` remain internal profile identifiers. See the
 [`action-request` authoring guide](../../docs/guides/creer-une-action-request.md).
 
 The implementation keeps candidate/change-set orchestration in
@@ -677,16 +676,16 @@ behavioral, not a source-string search: the director Oracle executes denied and
 granted paths on both generated runtimes.
 
 As of PLAT-5J, `expected_gaps` is empty: `composition.persisted-instance`,
-`behavior.graph`, and `presentation.flow` are all now proven by real
-execution and moved into the supported set — every capability declared by
-`evolvable-composition.contract.json` is now covered by an executable
-oracle, not a schema-shape check. `decision_satisfied` therefore reports
-`true`. This does **not** by itself promote the contract from
-characterization to a blocking acceptance gate: `contract.status` stays
-`"characterization"`, `promotion_rule.success` also requires every
-invariant to be verified by executable oracles (a separate, broader claim
-this probe does not itself adjudicate), and this script never mutates
-`contract.status` or triggers any promotion mechanism.
+`behavior.graph`, and `presentation.flow` are all now proven by real execution
+and moved into the supported set — every capability declared by
+`evolvable-composition.contract.json` is now covered by an executable oracle,
+not a schema-shape check. `decision_satisfied` therefore reports `true`. This
+does **not** by itself promote the contract from characterization to a blocking
+acceptance gate: `contract.status` stays `"characterization"`,
+`promotion_rule.success` also requires every invariant to be verified by
+executable oracles (a separate, broader claim this probe does not itself
+adjudicate), and this script never mutates `contract.status` or triggers any
+promotion mechanism.
 
 ## Author a bounded workflow-action
 
@@ -721,8 +720,8 @@ and manifests, and refuses to overwrite an existing directory unless
   responsibilities that every renderer must materialize exhaustively.
 - `schemas/change-set.schema.json` defines deterministic `create`, `replace`,
   `preserve`, `delete`, and `unchanged` planning results. The planner supports
-  `generator-owned/replace` and the single proven
-  `human-owned/preserve` slot; every other ownership pair fails closed.
+  `generator-owned/replace` and the single proven `human-owned/preserve` slot;
+  every other ownership pair fails closed.
 - `generation-control-manifest.json` is emitted beside the Evidence,
   Semantic/Behavior, and Artifact Plan documents. It gives these root-level
   control-plane files explicit `generator-owned/replace` ownership and drift
@@ -801,8 +800,8 @@ The check verifies both JSON Schemas and cross-document invariants:
 - compilation and runtime execution of the independent `support` definition on
   Angular and ReactJS, without authentication-specific generated names;
 - persisted manifest equality and deterministic tree hashes;
-- schema-valid, deterministic Artifact Plans shared by Angular and ReactJS,
-  with exhaustive renderer bindings and fail-closed stale-plan detection;
+- schema-valid, deterministic Artifact Plans shared by Angular and ReactJS, with
+  exhaustive renderer bindings and fail-closed stale-plan detection;
 - deterministic, schema-valid dry-runs for absent, unchanged, evolved, drifted,
   and obsolete generated artifacts, with explicit proof that no file changes;
 - effective publication on an existing output for `action-request` and

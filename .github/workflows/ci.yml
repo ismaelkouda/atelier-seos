@@ -113,8 +113,7 @@ jobs:
       - name: check:command-explanations (CLI explicables)
         run: bun run check:command-explanations
 
-      # SIMPL-6 — ces trois audits globaux restent directement bloquants ici ;
-      # create-module ne répète localement que les checks de ses sorties.
+      # Ces trois audits globaux restent directement bloquants ici.
       - name: check:project-names (ADR-0003 nommage @cmz/)
         run: node tools/check-project-names.mjs
 
@@ -126,12 +125,6 @@ jobs:
       - name: check:declared-deps (graphe déclaré complet)
         run: bun run check:declared-deps
 
-      # Audit staff 2026-08-29 — retire-module.mjs / check-no-orphan-references.mjs
-      # doivent rester fiables : suite node:test dédiée (transaction, restauration
-      # sur échec, bun install combiné à la finalisation, chemins d'exemption).
-      - name: check:retire-module (suite retire-module.mjs)
-        run: bun run check:retire-module
-
       # Une violation de couche doit faire échouer ESLint (barrière machine)
       - name: check:boundary-negative (import de couche interdit)
         run: bun run check:boundary-negative
@@ -142,26 +135,15 @@ jobs:
       - name: check:framework-purity (0 couplage Angular en domain/constants)
         run: bun run check:framework-purity
 
-      # PLAT-1…3 / ADR-0030 — le modèle sémantique canonique est validé hors
-      # des profils cibles. Provenance, convergence des deux sources, compilation
-      # des deux renderers et manifests déterministes sont bloquants ensemble.
-      - name: check:generator-platform (Evidence + Semantic IR + renderers)
+      # Moteur de l'étape B : tests node:test, puis type-check et test natif
+      # Angular des deux produits de session fictifs.
+      - name: check:generator-platform (moteur de l'étape B)
         run: bun run check:generator-platform
 
       # Conception sans code manuel — chaque artefact versionné doit rester
       # complet, target-neutral et traçable vers un contrat backend exact.
       - name: check:application-designs (contrats de conception)
         run: bun run check:application-designs
-
-      # Preuve versionnée non simulée : Postman analogue reste reference, le
-      # contrat cible planned autorise seul la conception, puis le renderer et
-      # le harnais de page passent ngc, Nx build, ESLint et les tests réels.
-      - name: check:application-pipeline (preuve bout-en-bout réelle)
-        run: bun run check:application-pipeline
-
-      # Une composition n'est automatisée qu'après des preuves métier relisibles.
-      - name: check:composition-registry (maturité fondée sur les cas)
-        run: bun run check:composition-registry
 
       # Un rôle n'existe que s'il a un producteur IR, un consommateur réel et
       # une forme cible validée. La première tranche verticale couvre `screen`.

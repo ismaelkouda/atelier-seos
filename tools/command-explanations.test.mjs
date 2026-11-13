@@ -48,12 +48,6 @@ const EXPECTED_PHASES = {
         'plan',
         'publication',
     ],
-    'create-module': [
-        'preconditions',
-        'journal-and-generation',
-        'configuration',
-        'targeted-checks-and-completion',
-    ],
 };
 
 function exactKeys(value, keys) {
@@ -64,7 +58,6 @@ test('le contrat explain est fermé, versionné et complet pour chaque commande'
     assert.deepEqual(EXPLAINED_COMMANDS, [
         'create-app',
         'add-library',
-        'create-module',
         'prepare:application-workspace',
     ]);
     for (const command of EXPLAINED_COMMANDS) {
@@ -116,24 +109,13 @@ test('le contrat explain est fermé, versionné et complet pour chaque commande'
     }
 });
 
-test('seul create-module annonce un journal et des commandes de reprise manuelles', () => {
-    for (const command of [
-        'create-app',
-        'add-library',
-        'prepare:application-workspace',
-    ]) {
+test('aucune commande expliquée n’annonce de journal ni de reprise manuelle', () => {
+    for (const command of EXPLAINED_COMMANDS) {
         const transaction = commandExplanation(command).transaction;
         assert.equal(transaction.journal, null);
         assert.equal(transaction.resume_command, null);
         assert.equal(transaction.abort_command, null);
     }
-    const transaction = commandExplanation('create-module').transaction;
-    assert.equal(
-        transaction.journal,
-        '.cmz/create-module-transactions/<module>/state.json'
-    );
-    assert.match(transaction.resume_command, /--resume --module <nom>$/);
-    assert.match(transaction.abort_command, /--abort --module <nom>$/);
 });
 
 test('--explain fonctionne hors workspace et ne crée aucun fichier', (t) => {
@@ -181,8 +163,6 @@ test('le runbook reste court et couvre chaque commande et chaque reprise', () =>
         assert.match(content, new RegExp(`## .*${command}`));
         assert.match(content, new RegExp(`bun run ${command} --explain`));
     }
-    assert.match(content, /--resume --module <nom>/);
-    assert.match(content, /--abort --module <nom>/);
 });
 
 test('un appelant ne peut pas modifier la source de vérité partagée', () => {

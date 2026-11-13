@@ -14,19 +14,50 @@ import { resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { sha256, stableStringify } from './core/generation-manifest.mjs';
+import {
+    generationTreeSha256,
+    sha256,
+    stableStringify,
+} from './core/generation-manifest.mjs';
+import { controlPlaneManifestFilename } from './core/generation-change-set.mjs';
 import {
     commitDirectoryTransaction,
     GENERATION_PROCESS_HOSTNAME,
     recoverInterruptedTransactions,
+    withGenerationLock,
 } from './core/generation-transaction.mjs';
-import { generateActionRequest } from './generate-action-request.mjs';
 import { loadJson } from './validate-ir.mjs';
 
-const actionDefinitionUrl = new URL(
-    'sources/support-request.definition.json',
-    import.meta.url
-);
+// Sortie de génération fictive, au format vérifié par la reprise : un
+// manifeste de contrôle et un manifeste de cible, chacun avec ses artefacts.
+function artifact(path, content) {
+    return {
+        path,
+        artifact_id: 'fixture',
+        owner: 'generator-owned',
+        write_policy: 'replace',
+        bytes: Buffer.byteLength(content),
+        sha256: sha256(content),
+    };
+}
+
+async function writeGenerationOutput(outputRoot) {
+    const semantic = `${JSON.stringify({ domain: { id: 'support' } })}\n`;
+    const index = 'export {};\n';
+    const control = [artifact('semantic-model.json', semantic)];
+    const target = [artifact('src/index.ts', index)];
+    await mkdir(resolve(outputRoot, 'angular/src'), { recursive: true });
+    await writeFile(resolve(outputRoot, 'semantic-model.json'), semantic);
+    await writeFile(resolve(outputRoot, 'angular/src/index.ts'), index);
+    await writeFile(
+        resolve(outputRoot, controlPlaneManifestFilename),
+        `${JSON.stringify({ files: control, tree_sha256: generationTreeSha256(control) }, null, 2)}\n`
+    );
+    await writeFile(
+        resolve(outputRoot, 'angular/generation-manifest.json'),
+        `${JSON.stringify({ files: target, tree_sha256: generationTreeSha256(target) }, null, 2)}\n`
+    );
+}
 const crashPublicationChildUrl = new URL(
     'test-support/crash-publication-child.mjs',
     import.meta.url
@@ -101,11 +132,7 @@ test('a stale local lock is reclaimed but a live lock is never stolen', async ()
         '.generated-support.generation-lock'
     );
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         await mkdir(lockRoot);
         await writeFile(
             resolve(lockRoot, 'owner.json'),
@@ -116,19 +143,10 @@ test('a stale local lock is reclaimed but a live lock is never stolen', async ()
                 started_at: new Date(0).toISOString(),
             })}\n`
         );
-        const reviewed = await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-            dryRun: true,
-        });
-        const recovered = await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-            applyChangeSetId: reviewed.changeSet.change_set_id,
-        });
-        assert.equal(recovered.publication.status, 'applied');
+        assert.equal(
+            await withGenerationLock(outputRoot, async () => 'applied'),
+            'applied'
+        );
 
         await mkdir(lockRoot);
         await writeFile(
@@ -140,20 +158,8 @@ test('a stale local lock is reclaimed but a live lock is never stolen', async ()
                 started_at: new Date().toISOString(),
             })}\n`
         );
-        const blockedPlan = await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-            dryRun: true,
-        });
         await assert.rejects(
-            () =>
-                generateActionRequest({
-                    definitionPath: fileURLToPath(actionDefinitionUrl),
-                    outputRoot,
-                    target: 'all',
-                    applyChangeSetId: blockedPlan.changeSet.change_set_id,
-                }),
+            () => withGenerationLock(outputRoot, async () => 'stolen'),
             /another generation owns/
         );
     } finally {
@@ -171,11 +177,7 @@ test('recovery restores the previous output after a crash between renames', asyn
         '.generated-support.generation-transaction-crashed'
     );
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         const journal = await transactionJournal(
             outputRoot,
             true,
@@ -215,11 +217,7 @@ test('recovery restores the previous output after the publisher is actually SIGK
     const candidateRoot = resolve(transactionRoot, 'candidate');
     const journalPath = resolve(transactionRoot, 'transaction-journal.json');
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         const journal = await transactionJournal(outputRoot, true, 'prepared');
         await mkdir(transactionRoot);
         await cp(outputRoot, candidateRoot, { recursive: true });
@@ -262,11 +260,7 @@ test('recovery verifies the new output after the publisher is actually SIGKILLed
     const candidateRoot = resolve(transactionRoot, 'candidate');
     const journalPath = resolve(transactionRoot, 'transaction-journal.json');
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         const journal = await transactionJournal(outputRoot, true, 'prepared');
         await mkdir(transactionRoot);
         await cp(outputRoot, candidateRoot, { recursive: true });
@@ -308,11 +302,7 @@ test('recovery finalizes a published candidate only when its hashes match the jo
         '.generated-support.generation-transaction-published'
     );
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         const journal = await transactionJournal(
             outputRoot,
             true,
@@ -353,11 +343,7 @@ test('recovery refuses a published tree whose artifact bytes contradict its jour
     );
     const semanticPath = resolve(outputRoot, 'semantic-model.json');
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         const journal = await transactionJournal(
             outputRoot,
             true,
@@ -401,11 +387,7 @@ test('initial-generation recovery verifies output even before the published phas
         '.generated-support.generation-transaction-initial-published'
     );
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         const journal = await transactionJournal(outputRoot, false, 'prepared');
         await mkdir(transactionRoot);
         await writeFile(
@@ -437,11 +419,7 @@ test('recovery rejects an over-specified transaction journal', async () => {
         '.generated-support.generation-transaction-invalid-journal'
     );
     try {
-        await generateActionRequest({
-            definitionPath: fileURLToPath(actionDefinitionUrl),
-            outputRoot,
-            target: 'all',
-        });
+        await writeGenerationOutput(outputRoot);
         const journal = await transactionJournal(outputRoot, true, 'prepared');
         journal.undeclared_field = true;
         await mkdir(transactionRoot);

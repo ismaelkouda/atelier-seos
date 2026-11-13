@@ -1,4 +1,4 @@
-# Runbook humain — créer une app, ajouter une bibliothèque, créer un module
+# Runbook humain — créer une app, ajouter une bibliothèque, préparer un produit
 
 Ce guide sert à comprendre et dépanner les commandes de création. Il ne remplace
 pas leurs contrôles : en cas de doute, la commande échoue sans publier.
@@ -10,7 +10,6 @@ Avant une première utilisation ou après une évolution du socle :
 ```bash
 bun run create-app --explain
 bun run add-library --explain
-bun run create-module --explain
 bun run prepare:application-workspace --explain
 ```
 
@@ -105,51 +104,6 @@ Une erreur `qualified-track` signifie que la qualification est absente ou
 périmée. Elle se corrige dans le chantier de qualification, pas en contournant
 `add-library`.
 
-## 3. `create-module`
-
-But : générer les projets Nx d'un module, les câbler et vérifier le résultat.
-
-```bash
-bun run create-module --definition <definition.json> \
-  [--allow-experimental] [--dry-run]
-bun run create-module --resume --module <nom>
-bun run create-module --abort --module <nom>
-```
-
-Ce qui peut changer : `libs/<nom>/**`, les attaches ciblées dans
-`eslint.config.mjs` et `tsconfig.base.json`, et `bun.lock` si Bun doit le
-synchroniser. Les octets de ces fichiers, de `knip.json` et de `package.json`
-sont protégés par le journal pour permettre une restauration sûre.
-
-Journal : `.cmz/create-module-transactions/<nom>/state.json`. Ses états sont
-`planned`, `generated` et `configured`. Il conserve aussi un snapshot immuable
-de la définition. Le verrou de cycle de vie partagé est actuellement sous
-`.cmz/retire-module-transactions/.lock/`. Ce nom historique est conservé pour la
-reprise des transactions existantes ; le code partagé porte désormais le nom
-neutre `workspace-transaction`.
-
-Le chemin nominal n'exécute que les validations utiles aux sorties touchées :
-installation Bun sans scripts, build de chaque projet créé, lint de cette liste
-et Prettier sous `libs/<nom>`. Les audits globaux des noms, targets et
-dépendances restent des steps directes et bloquantes de la CI ; ils ne sont pas
-répétés pendant chaque création locale.
-
-En cas d'échec normal, la commande tente un rollback complet. Si le message dit
-que le journal est conservé, ou après un arrêt brutal :
-
-1. arrêter toute autre création ou suppression de module ;
-2. lire `state.json` et noter `status`, `gitHead`, `gitBranch` et `outputRoot` ;
-3. exécuter `git status` sans modifier les fichiers ;
-4. si les changements correspondent à la transaction, reprendre avec
-   `bun run create-module --resume --module <nom>` ;
-5. pour renoncer et restaurer les octets initiaux, utiliser
-   `bun run create-module --abort --module <nom>` ;
-6. si la commande refuse une dérive externe, conserver le journal et faire une
-   revue humaine : elle refuse volontairement d'écraser un travail ambigu.
-
-`--allow-experimental` vaut uniquement pour la création initiale. Il ne saute
-aucun contrôle et ne doit pas être ajouté à `--resume` ou `--abort`.
-
 ## Lecture rapide d'un échec
 
 - Argument ou précondition : rien ne doit avoir été publié.
@@ -160,9 +114,9 @@ aucun contrôle et ne doit pas être ajouté à `--resume` ou `--abort`.
 - Qualification périmée : requalifier la bibliothèque, ne pas forcer la CLI.
 
 Après succès, lire le diff comme du code Angular/Nx normal. Aucun runtime de
-générateur n'est requis par l'application ou le module produit.
+générateur n'est requis par l'application produite.
 
-## 4. `prepare:application-workspace` et shells extérieurs
+## 3. `prepare:application-workspace` et shells extérieurs
 
 Ce mode EXT-01 est au point de relecture T1–T18 ; la qualification production
 T19–T28 reste distincte. Ne pas créer le vrai produit avant son étape validée.
@@ -193,7 +147,7 @@ environnement réel. Un échec arrête la suite et reçoit son analyse. Voir
 L'opérateur autorisé lance les commandes relues pour son projet ; ces exemples
 ne sont pas des autorisations d'exécution.
 
-## 5. Compiler les documents extérieurs — EXT-03a
+## 4. Compiler les documents extérieurs — EXT-03a
 
 Voir le [protocole EXT-03a](./external-application-creation.md) pour les
 commandes, plans, refus et quatre preuves natives distinctes.

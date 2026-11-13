@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { pathToFileURL } from 'node:url';
 
-import { verifyPageRealization } from './generator-platform/core/page-realization.mjs';
 import {
     parseClosedArguments,
     publicationResult,
@@ -12,7 +11,7 @@ import {
     publicExternalPageRealizationPlan,
     publishExternalPageRealization,
 } from './generator-platform/core/external-page-realization.mjs';
-import { loadJson, repositoryRoot } from './generator-platform/validate-ir.mjs';
+import { repositoryRoot } from './generator-platform/validate-ir.mjs';
 
 const EXTERNAL_USAGE =
     'Produit extérieur (X4) :\n  bun run verify:page-realization --target-root <absolu> --app <app> --page <page_id> (--dry-run | --apply <plan_id>)\n';
@@ -71,87 +70,17 @@ async function mainExternal(argv) {
     }
 }
 
-function fail(message) {
-    throw new Error(message);
-}
-
-export function parseArgs(argv) {
-    const options = {};
-    for (let index = 0; index < argv.length; index += 1) {
-        const argument = argv[index];
-        if (argument === '--app') options.appName = argv[++index];
-        else if (argument === '--page') options.pageId = argv[++index];
-        else if (argument === '--work-order')
-            options.workOrderId = argv[++index];
-        else fail(`Argument inconnu : ${argument}`);
-    }
-    if (!options.appName || !options.pageId || !options.workOrderId)
-        fail('--app, --page et --work-order sont requis.');
-    if (!/^[a-f0-9]{64}$/.test(options.workOrderId))
-        fail('--work-order exige un identifiant SHA-256.');
-    return options;
-}
-
 export async function main(argv = process.argv.slice(2)) {
     if (argv.includes('--target-root')) return mainExternal(argv);
-    const options = parseArgs(argv);
-    const [
-        evidenceSchema,
-        presentationEvidenceSchema,
-        pageExecutionPlanSchema,
-        applicationDesignSchema,
-        layoutBindingSchema,
-        layoutExampleSetSchema,
-    ] = await Promise.all([
-        loadJson(
-            new URL(
-                './generator-platform/schemas/page-realization-evidence.schema.json',
-                import.meta.url
-            )
-        ),
-        loadJson(
-            new URL(
-                './generator-platform/schemas/presentation-evidence.schema.json',
-                import.meta.url
-            )
-        ),
-        loadJson(
-            new URL(
-                './generator-platform/schemas/page-execution-plan.schema.json',
-                import.meta.url
-            )
-        ),
-        loadJson(
-            new URL(
-                './generator-platform/schemas/application-design.schema.json',
-                import.meta.url
-            )
-        ),
-        loadJson(
-            new URL(
-                './generator-platform/schemas/presentation-layout-binding.schema.json',
-                import.meta.url
-            )
-        ),
-        loadJson(
-            new URL(
-                './generator-platform/schemas/presentation-layout-example-set.schema.json',
-                import.meta.url
-            )
-        ),
-    ]);
-    const report = verifyPageRealization({
-        workspaceRoot: repositoryRoot,
-        ...options,
-        evidenceSchema,
-        presentationEvidenceSchema,
-        pageExecutionPlanSchema,
-        applicationDesignSchema,
-        layoutBindingSchema,
-        layoutExampleSetSchema,
-    });
-    console.log(JSON.stringify(report, null, 2));
-    if (!report.ok) process.exitCode = 1;
+    if (argv.includes('--help')) {
+        process.stdout.write(EXTERNAL_USAGE);
+        return;
+    }
+    console.error(
+        '❌ --target-root est requis : seul le mode produit extérieur existe.'
+    );
+    process.stderr.write(EXTERNAL_USAGE);
+    process.exitCode = 1;
 }
 
 if (

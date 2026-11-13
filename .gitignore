@@ -104,9 +104,8 @@ __screenshots__/
 
 .nx/polygraph
 
-# Transactions durables de retrait de module — jamais versionner les sauvegardes
+# Verrou et transactions durables de l'atelier (retire-app) — jamais versionnés
 /.cmz/retire-module-transactions/
-/.cmz/create-module-transactions/
 /apps/.*.create-app-candidate-*
 /apps/.*.generation-lock/
 /.cmz/retire-app-transactions/
