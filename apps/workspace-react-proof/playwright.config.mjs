@@ -47,7 +47,7 @@ export default defineConfig({
         locale: 'fr-FR',
         reducedMotion: 'reduce',
         serviceWorkers: 'block',
-        timezoneId: 'Africa/Abidjan',
+        timezoneId: 'UTC',
         trace: 'retain-on-failure',
         video: 'off',
     },
