@@ -138,7 +138,7 @@ jobs:
           test "$(bun --version)" = "$expected"
       - working-directory: trusted-main
         run: bun install --frozen-lockfile --ignore-scripts
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: runtime-alignment-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/runtime-alignment
