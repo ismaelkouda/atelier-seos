@@ -10,7 +10,7 @@
     "uri": "tools/generator-platform/fixtures/users-list.backend-contract.json",
     "id": "cmz-users-list",
     "version": "1.0.0",
-    "sha256": "94050f60d882c4ca7258c649dc675ff7be24d1988e235502a7e3a3af3e6199d7"
+    "sha256": "a83b900ffd49c8627d72178878a8aebf8457c9690d7ae52887af100e6d7829a2"
   },
   "operations": [
     {

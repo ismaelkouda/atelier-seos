@@ -15,18 +15,18 @@
       "authority": "authoritative",
       "status": "implemented",
       "snapshot_uri": "tools/generator-platform/fixtures/fictional-api.openapi.json",
-      "sha256": "b796e028bfa1f45f38d62d97681d404c5a82a74373f51d9b84eeed6360738846"
+      "sha256": "fb15848c317df6c62b59956e7ea745e27c38d23804688691b7454c9dce1e3f13"
     }
   ],
   "services": [
     {
-      "id": "settings-api",
+      "id": "directory-api",
       "status": "implemented",
-      "description": "Settings API selected by the SETTINGS_API_URL host token.",
+      "description": "Directory API selected by the DIRECTORY_API_URL host token.",
       "base_urls": [
         {
           "environment": "test",
-          "url": "https://settings.example.test/"
+          "url": "https://directory.example.test/"
         }
       ],
       "evidence": [
@@ -134,7 +134,7 @@
   "operations": [
     {
       "id": "catalogue.list-stores",
-      "service_id": "settings-api",
+      "service_id": "directory-api",
       "status": "implemented",
       "description": "Loads stores for an authenticated select control.",
       "method": "GET",

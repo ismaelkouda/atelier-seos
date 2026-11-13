@@ -22,9 +22,9 @@ import { renderAngularListQueryV2 } from './renderers/angular-list-query-v2-rend
 // Liaisons d'hôte fictives du rendu interne Angular (service du contrat).
 const HOST_BINDINGS = Object.freeze({
     services: Object.freeze({
-        'settings-api': Object.freeze({
+        'directory-api': Object.freeze({
             module: '@fixture/core',
-            token: 'SETTINGS_API_URL',
+            token: 'DIRECTORY_API_URL',
         }),
     }),
 });

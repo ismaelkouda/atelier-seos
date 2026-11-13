@@ -77,7 +77,7 @@ for (const file of files) {
 
     if (!valid) {
         console.error(
-            `❌  ${rel}\n    "name": "${name}"\n    Attendu : @cmz/<module>-<couche> (ex: @cmz/report-states-domain)`
+            `❌  ${rel}\n    "name": "${name}"\n    Attendu : @cmz/<module>-<couche> (ex: @cmz/catalogue-domain)`
         );
         errors++;
     }

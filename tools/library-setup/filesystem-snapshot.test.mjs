@@ -20,21 +20,20 @@ async function workspace(t) {
 // forme exacte qui échouait.
 test('les node_modules imbriqués de Bun sont exclus comme celui de la racine', async (t) => {
     const root = await workspace(t);
-    await mkdir(join(root, 'libs/administrative-boundary/data'), {
+    await mkdir(join(root, 'libs/catalogue/data'), {
         recursive: true,
     });
     await writeFile(
-        join(root, 'libs/administrative-boundary/data/index.ts'),
+        join(root, 'libs/catalogue/data/index.ts'),
         'export const gouverne = 1;\n'
     );
     await mkdir(join(root, 'node_modules/rxjs'), { recursive: true });
     await writeFile(join(root, 'node_modules/rxjs/index.js'), 'racine');
-    await mkdir(
-        join(root, 'libs/administrative-boundary/data/node_modules/@cmz'),
-        { recursive: true }
-    );
+    await mkdir(join(root, 'libs/catalogue/data/node_modules/@cmz'), {
+        recursive: true,
+    });
     await writeFile(
-        join(root, 'libs/administrative-boundary/data/node_modules/@cmz/core'),
+        join(root, 'libs/catalogue/data/node_modules/@cmz/core'),
         'lien-installation'
     );
 
@@ -42,7 +41,7 @@ test('les node_modules imbriqués de Bun sont exclus comme celui de la racine', 
         snapshotFilesystem(root, {
             excludedDirectories: ['node_modules'],
         }).map(({ path }) => path),
-        ['libs/administrative-boundary/data/index.ts']
+        ['libs/catalogue/data/index.ts']
     );
 });
 

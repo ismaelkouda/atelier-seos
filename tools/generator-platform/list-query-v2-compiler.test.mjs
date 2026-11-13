@@ -121,7 +121,7 @@ test('compile un contrat v2 en modèle d’exécution neutre et déterministe', 
     });
     assert.deepEqual(query.transport, {
         operation_id: 'editorial.list-blocks',
-        service_id: 'settings-api',
+        service_id: 'editorial-api',
         method: 'GET',
         path: '/editorial/blocks',
         success_response_status: 200,

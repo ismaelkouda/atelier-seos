@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "https://settings.example.test/",
-      "description": "Settings API selected by the SETTINGS_API_URL host token."
+      "url": "https://directory.example.test/",
+      "description": "Directory API selected by the DIRECTORY_API_URL host token."
     },
     {
       "url": "https://request.example.test/",

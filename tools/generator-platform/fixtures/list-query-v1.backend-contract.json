@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "kind": "backend-contract",
   "contract": {
-    "id": "cmz-settings-api",
-    "title": "Generic settings API migration fixture",
+    "id": "cmz-editorial-api",
+    "title": "Generic editorial API migration fixture",
     "version": "1.0.0",
     "status": "planned",
     "description": "Backend authority fixture used only to prove the list-query v1 to v2 migration."
@@ -20,13 +20,13 @@
   ],
   "services": [
     {
-      "id": "settings-api",
+      "id": "editorial-api",
       "status": "planned",
-      "description": "Settings service used by the generic migration fixture.",
+      "description": "Editorial service used by the generic migration fixture.",
       "base_urls": [
         {
           "environment": "production",
-          "url": "https://settings.example/api/"
+          "url": "https://editorial.example/api/"
         }
       ],
       "evidence": [
@@ -93,7 +93,7 @@
   "operations": [
     {
       "id": "editorial.list-blocks",
-      "service_id": "settings-api",
+      "service_id": "editorial-api",
       "status": "planned",
       "description": "Loads the generic list-query migration fixture.",
       "method": "GET",

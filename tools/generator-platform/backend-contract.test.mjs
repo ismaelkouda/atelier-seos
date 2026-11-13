@@ -46,13 +46,13 @@ function validContract(
         ],
         services: [
             {
-                id: 'base-settings',
+                id: 'catalogue',
                 status: 'planned',
-                description: 'Service CMS public.',
+                description: 'Service éditorial fictif.',
                 base_urls: [
                     {
                         environment: 'production',
-                        url: 'https://cmz-service-api.example/base-settings/v1.0/',
+                        url: 'https://cmz-service-api.example/catalogue/v1.0/',
                     },
                 ],
                 evidence: evidence('$.service'),
@@ -89,9 +89,9 @@ function validContract(
         operations: [
             {
                 id: 'editorial.list-blocks',
-                service_id: 'base-settings',
+                service_id: 'catalogue',
                 status: 'planned',
-                description: "Charge les blocs actifs de l'accueil.",
+                description: 'Charge les blocs éditoriaux actifs.',
                 method: 'GET',
                 path: '/editorial/blocks',
                 access: {
@@ -205,7 +205,7 @@ test('rejette deux identifiants qui décrivent le même endpoint HTTP', () => {
     contract.operations.push(duplicate);
     assert.match(
         validateBackendContract(contract, schema).join('\n'),
-        /duplicate \["base-settings","GET","\/editorial\/blocks"\] endpoint/
+        /duplicate \["catalogue","GET","\/editorial\/blocks"\] endpoint/
     );
 });
 
@@ -222,12 +222,12 @@ test('borne les valeurs d’un tableau primitif au niveau de chaque item', () =>
     const contract = validContract();
     contract.models[0].fields[0] = {
         ...contract.models[0].fields[0],
-        name: 'operators',
+        name: 'channels',
         type: {
             kind: 'array',
             items: { kind: 'primitive', name: 'string' },
         },
-        allowed_values: ['mtn', 'orange', 'moov'],
+        allowed_values: ['sms', 'email', 'voice'],
     };
     assert.deepEqual(validateBackendContract(contract, schema), []);
 

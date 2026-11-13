@@ -456,7 +456,7 @@ Le parseur natif est utilisé ; aucun parsing streaming n'est revendiqué. Seule
 les opérations sélectionnées et leurs composants de requête/sécurité
 atteignables sont extraits. L'extrait conserve les pointeurs RFC6901 et
 l'empreinte de la source complète. Il est limité à64Kio,8opérations,32modèles.
-Les sources réelles auth229287 et base-settings483822 octets ont motivé cette
+Deux sources réelles, de 229287 et 483822 octets, ont motivé cette
 séparation des budgets ; leur volume ne devient pas un quota de routes dans
 l'IR. Une nouvelle source hors plafond exige une revue, pas une hausse
 implicite. Les limites de données des versions R1 1.0/1.1 restent inchangées.

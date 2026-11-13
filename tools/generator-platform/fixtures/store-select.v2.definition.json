@@ -10,7 +10,7 @@
     "uri": "tools/generator-platform/fixtures/store-select.backend-contract.json",
     "id": "cmz-store-select",
     "version": "1.0.0",
-    "sha256": "95753b36fdb987398738bdf6f8f406f8738541317e48e0e66dc34403103b1396"
+    "sha256": "993cf365b1cebe79c2e9a7967efb0b205e53f65d3cbf00ac48fe96341fc3cf7b"
   },
   "operations": [
     {
