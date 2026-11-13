@@ -525,9 +525,11 @@ jobs:
           NX_NO_CLOUD: ${{ (github.ref != 'refs/heads/main' || secrets.NX_CLOUD_ACCESS_TOKEN == '') && 'true' || 'false' }}
         run: bunx nx affected -t typecheck --base=${{ env.NX_BASE }}
 
-      # strictTemplates bloquant en PR (shift-left), sur le banc Angular.
+      # strictTemplates bloquant en PR (shift-left), sur les deux bancs Angular.
       - name: strictTemplates (ngc)
-        run: bunx ngc -p apps/library-qualification-angular/tsconfig.app.json --noEmit
+        run: |
+          bunx ngc -p apps/library-qualification-angular/tsconfig.app.json --noEmit
+          bunx ngc -p apps/library-qualification-angular-tailwind/tsconfig.app.json --noEmit
 
       # Tests Vitest — ADR-0008. Ne pas passer `--passWithNoTests` ici : Nx
       # le forward à tous les targets ; `@angular/build:unit-test` (app) a un

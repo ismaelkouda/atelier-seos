@@ -192,7 +192,7 @@ jobs:
         if: steps.migrate.outputs.state == 'ready'
         working-directory: ${{ runner.temp }}/nx-candidate
         run: |
-          bun run promote-library-compatibility --app library-qualification-angular --library angular-material | tee "$RUNNER_TEMP/nx-result/material.txt"
+          bun run promote-library-compatibility --app library-qualification-angular-tailwind --library angular-material | tee "$RUNNER_TEMP/nx-result/material.txt"
           git add conventions/libraries/angular/angular-material.compat.json
           git commit -m 'test(deps): requalifier Angular Material après migration Nx'
           test -z "$(git status --porcelain)"
@@ -545,7 +545,7 @@ jobs:
         id: qualification-material
         working-directory: ${{ runner.temp }}/nx-qualified-candidate
         run: |
-          bun run promote-library-compatibility --app library-qualification-angular --library angular-material | tee "$RUNNER_TEMP/nx-qualification/material.txt"
+          bun run promote-library-compatibility --app library-qualification-angular-tailwind --library angular-material | tee "$RUNNER_TEMP/nx-qualification/material.txt"
           git add conventions/libraries/angular/angular-material.compat.json
           git commit -m 'test(deps): requalifier Angular Material après migration Nx'
           test -z "$(git status --porcelain)"

@@ -113,8 +113,10 @@ Chaque app avec un `project.json` **régulier doit** déclarer
 sous la racine du dépôt, en **traversant zéro lien symbolique** (le dossier
 d'app inclus) ; **échoue** si la plateforme Nx est indéterminable, si le
 manifeste manque, ou si une lib gouvernée est utilisée (empreinte détectée) sans
-être déclarée. Le banc `library-qualification-angular` déclare
-`["angular-material"]`. L'i18n native fait
+être déclarée. Deux bancs Angular neutres qualifient les coexistences dans
+les deux sens : `library-qualification-angular` déclare `["angular-material"]`
+et sert à qualifier Tailwind ; `library-qualification-angular-tailwind`
+déclare `["tailwind"]` et sert à qualifier Angular Material. L'i18n native fait
 partie du baseline du shell Angular ; ce n'est pas une bibliothèque opt-in.
 
 Une recette n'est pas obligatoire pour chaque paquet officiel. Elle gouverne un

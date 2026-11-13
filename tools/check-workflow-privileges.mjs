@@ -687,7 +687,7 @@ export function nxQualificationErrors(workflow) {
             'node tools/nx-migration-plan.mjs candidates "$TARGET"',
         ],
         'qualification-material': [
-            'bun run promote-library-compatibility --app library-qualification-angular --library angular-material',
+            'bun run promote-library-compatibility --app library-qualification-angular-tailwind --library angular-material',
         ],
         'qualification-tailwind-angular': [
             'bun run promote-library-compatibility --app library-qualification-angular --library tailwind',
